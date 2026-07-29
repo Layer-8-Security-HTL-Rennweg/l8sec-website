@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>L8S — Layer 8 Security</title>
+<link rel="stylesheet" href="shared.css">
+<style>
+  body { overflow: hidden; height: 100vh; }
+
+  /* ─── SITE NAV override: transparent on hero ─── */
+  .sitenav { background: rgba(10,10,10,.4); border-bottom-color: transparent; }
+
+  /* ─── HERO ─── */
+  .hero {
+    height: 100vh;
+    display: flex; flex-direction: column;
+    align-items: center; justify-content: center;
+    position: relative; overflow: hidden;
+    background: linear-gradient(160deg, #0f0f0f 0%, #0a0a0a 60%, #111 100%);
+  }
+  .hero-grid {
+    position: absolute; inset: 0; pointer-events: none;
+    background-image:
+      linear-gradient(rgba(255,255,255,.035) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(255,255,255,.035) 1px, transparent 1px);
+    background-size: 56px 56px;
+    mask-image: radial-gradient(ellipse 85% 85% at 50% 50%, black 20%, transparent 100%);
+  }
+  .hero-glow {
+    position: absolute; inset: 0; pointer-events: none;
+    transition: background .06s linear;
+  }
+
+  /* content */
+  .hero-content {
+    position: relative; z-index: 1;
+    display: flex; flex-direction: column; align-items: center;
+  }
+  .hero-logo {
+    width: clamp(120px, 16vw, 200px);
+    filter: invert(1);
+    opacity: 0; transform: scale(.88);
+    animation: hero-pop .9s .1s cubic-bezier(.34,1.4,.64,1) forwards;
+  }
+  @keyframes hero-pop { to { opacity:1; transform:scale(1); } }
+
+  .hero-name {
+    font-size: clamp(1.1rem, 2.8vw, 1.7rem); font-weight: 800; letter-spacing: -1.5px;
+    margin-top: 28px;
+    opacity: 0; transform: translateY(10px);
+    animation: fadein .6s .6s ease forwards;
+  }
+  .hero-sub {
+    font-family: 'IBM Plex Mono', monospace; font-size: .7rem;
+    color: rgb(176,174,174);
+    text-transform: uppercase; letter-spacing: 4px; margin-top: 10px;
+    opacity: 0; transform: translateY(8px);
+    animation: fadein .6s .75s ease forwards;
+  }
+
+  /* chips */
+  .hero-chips {
+    display: flex; gap: 10px; margin-top: 44px; flex-wrap: wrap; justify-content: center;
+    opacity: 0; animation: fadein .5s .95s ease forwards;
+  }
+  .chip {
+    background: linear-gradient(145deg, #1c1c1c, #121212);
+    border: 1px solid #282828; border-radius: 10px;
+    padding: 12px 18px; text-align: center; min-width: 108px;
+    transition: transform .2s, border-color .2s, box-shadow .2s;
+  }
+  .chip:hover {
+    transform: translateY(-3px);
+    border-color: #404040;
+    box-shadow: 0 10px 32px rgba(0,0,0,.5);
+  }
+  .chip-num {
+    font-family: 'IBM Plex Mono', monospace; font-size: 1.5rem; font-weight: 700; line-height: 1;
+  }
+  .chip-label {
+    font-size: .6rem; font-weight: 600; text-transform: uppercase;
+    letter-spacing: 1.5px; color: var(--ink-dim); margin-top: 5px;
+  }
+
+  /* nav cards */
+  .hero-nav {
+    display: flex; gap: 12px; margin-top: 52px;
+    opacity: 0; animation: fadein .5s 1.15s ease forwards;
+  }
+  .nav-card {
+    display: flex; flex-direction: column; gap: 4px;
+    background: linear-gradient(145deg, #1c1c1c, #111);
+    border: 1px solid #282828; border-radius: 14px;
+    padding: 18px 22px; min-width: 155px;
+    text-decoration: none; color: var(--ink);
+    position: relative; overflow: hidden;
+    transition: transform .22s, border-color .22s, box-shadow .22s;
+  }
+  .nav-card::before {
+    content: ''; position: absolute; inset: 0;
+    background: linear-gradient(135deg, rgba(255,255,255,.05), transparent 60%);
+    opacity: 0; transition: opacity .2s;
+  }
+  .nav-card:hover { transform: translateY(-5px); border-color: #484848; box-shadow: 0 16px 48px rgba(0,0,0,.6); }
+  .nav-card:hover::before { opacity: 1; }
+  .nc-icon { color: var(--ink-dim); margin-bottom: 8px; }
+  .nc-label { font-weight: 700; font-size: .95rem; letter-spacing: -.3px; }
+  .nc-sub { font-size: .65rem; color: var(--ink-dim); font-family: 'IBM Plex Mono', monospace; }
+  .nc-arrow {
+    position: absolute; top: 18px; right: 18px;
+    color: var(--ink-dim); font-size: .85rem;
+    transition: transform .2s, color .2s;
+  }
+  .nav-card:hover .nc-arrow { transform: translate(3px,-3px); color: var(--ink); }
+
+  /* scroll hint */
+  .scroll-hint {
+    position: absolute; bottom: 32px; left: 50%; transform: translateX(-50%);
+    display: flex; flex-direction: column; align-items: center; gap: 6px;
+    font-family: 'IBM Plex Mono', monospace; font-size: .58rem;
+    text-transform: uppercase; letter-spacing: 2.5px; color: var(--ink-dim);
+    opacity: 0; animation: fadein .5s 1.5s ease forwards;
+    cursor: default; z-index: 1;
+  }
+  .scroll-ring {
+    width: 26px; height: 26px; border: 1px solid #333;
+    border-radius: 50%; display: grid; place-items: center;
+    animation: bounce 2.2s 1.8s infinite;
+  }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav class="sitenav">
+  <a class="sitenav-brand" href="index.html">
+    <div class="logo-mark">L8S</div>
+    <span class="brand-name">Layer 8 Security</span>
+  </a>
+  <div class="sitenav-links">
+    <a class="sitenav-link active" href="index.html">Home</a>
+    <a class="sitenav-link" href="ueber-uns.html">Über uns</a>
+    <a class="sitenav-link" href="projektidee.html">Projektidee</a>
+    <a class="sitenav-link" href="uebersicht.html">Übersicht</a>
+  </div>
+  <div class="sitenav-right">
+    <span class="live-tag"><span class="live-dot"></span>Sprint 2 aktiv</span>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-grid"></div>
+  <div class="hero-glow" id="hero-glow"></div>
+
+  <div class="hero-content">
+    <img class="hero-logo" src="assets/l8s-logo.png" alt="L8S Logo">
+    <div class="hero-name">Layer 8 Security</div>
+    <div class="hero-sub">Sprint 2 · Machbarkeitsanalyse · 2026</div>
+
+
+
+    <div class="hero-nav">
+      <a class="nav-card" href="ueber-uns.html">
+        <div class="nc-icon"><svg width="20" height="20" viewBox="0 0 20 20" fill="none"><circle cx="10" cy="7" r="3" stroke="currentColor" stroke-width="1.5"/><path d="M4 17c0-3.314 2.686-6 6-6s6 2.686 6 6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg></div>
+        <div class="nc-label">Über uns</div>
+        <div class="nc-sub">Team &amp; Projekt</div>
+        <div class="nc-arrow">→</div>
+      </a>
+      <a class="nav-card" href="projektidee.html">
+        <div class="nc-icon"><svg width="20" height="20" viewBox="0 0 20 20" fill="none"><circle cx="10" cy="10" r="8" stroke="currentColor" stroke-width="1.5"/><path d="M10 6v4l3 3" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg></div>
+        <div class="nc-label">Projektidee</div>
+        <div class="nc-sub">Konzept &amp; Ziele</div>
+        <div class="nc-arrow">→</div>
+      </a>
+      <a class="nav-card" href="uebersicht.html">
+        <div class="nc-icon"><svg width="20" height="20" viewBox="0 0 20 20" fill="none"><rect x="2" y="2" width="7" height="7" rx="1.5" stroke="currentColor" stroke-width="1.5"/><rect x="11" y="2" width="7" height="7" rx="1.5" stroke="currentColor" stroke-width="1.5"/><rect x="2" y="11" width="7" height="7" rx="1.5" stroke="currentColor" stroke-width="1.5"/><rect x="11" y="11" width="7" height="7" rx="1.5" stroke="currentColor" stroke-width="1.5"/></svg></div>
+        <div class="nc-label">Übersicht</div>
+        <div class="nc-sub">Sprint &amp; Issues</div>
+        <div class="nc-arrow">→</div>
+      </a>
+    </div>
+  </div>
+
+
+</section>
+
+<script>
+// Mouse glow
+const glow = document.getElementById('hero-glow');
+document.addEventListener('mousemove', e => {
+  document.body.style.setProperty('--mx', e.clientX + 'px');
+  document.body.style.setProperty('--my', e.clientY + 'px');
+  const r = glow.getBoundingClientRect();
+  const x = ((e.clientX / window.innerWidth)  * 100).toFixed(1) + '%';
+  const y = ((e.clientY / window.innerHeight) * 100).toFixed(1) + '%';
+  glow.style.background = `radial-gradient(ellipse 600px 500px at ${x} ${y}, rgba(255,255,255,.07) 0%, transparent 65%)`;
+});
+</script>
+</body>
+</html>

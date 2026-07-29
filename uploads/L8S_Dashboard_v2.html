@@ -1,0 +1,335 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>L8S — Layer 8 Security Status</title>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@300;400;500;600;700&family=Outfit:wght@200;300;400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #f5f0e8;
+    --bg-warm: #ede7db;
+    --surface: #ffffff;
+    --surface-alt: #faf7f2;
+    --border: #d4cfc5;
+    --border-light: #e8e3d9;
+    --ink: #1a1612;
+    --ink-mid: #5c554a;
+    --ink-dim: #9a9289;
+    --red: #c0392b;
+    --red-bg: #fdf0ee;
+    --red-border: #f0c4be;
+    --amber: #d4820a;
+    --amber-bg: #fef8ec;
+    --amber-border: #f0ddb0;
+    --green: #1a7a4c;
+    --green-bg: #eef8f2;
+    --green-border: #b8dfc8;
+    --blue: #2563a8;
+    --blue-bg: #eef4fb;
+    --blue-border: #b0cfe8;
+    --violet: #7c3aad;
+    --violet-bg: #f5eefb;
+    --violet-border: #d0b8e8;
+  }
+
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body { background:var(--bg); color:var(--ink); font-family:'Outfit',sans-serif; min-height:100vh; -webkit-font-smoothing:antialiased; }
+
+  /* NAV */
+  .topnav {
+    position:sticky; top:0; z-index:100;
+    background:rgba(245,240,232,.92); backdrop-filter:blur(16px);
+    border-bottom:1px solid var(--border);
+    padding:0 32px;
+    display:flex; align-items:center; justify-content:space-between;
+  }
+  .topnav-brand { font-weight:800; font-size:1.1rem; letter-spacing:-1px; padding:14px 0; }
+  .topnav-brand span { color:var(--ink-dim); font-weight:400; font-size:.8rem; letter-spacing:0; margin-left:8px; }
+  .topnav-right { display:flex; align-items:center; gap:12px; }
+  .live-tag {
+    display:inline-flex; align-items:center; gap:6px;
+    background:var(--green-bg); border:1px solid var(--green-border); color:var(--green);
+    padding:4px 12px; border-radius:100px;
+    font-family:'IBM Plex Mono',monospace; font-size:.65rem; font-weight:600;
+    text-transform:uppercase; letter-spacing:1px;
+  }
+  .live-tag::before { content:''; width:7px; height:7px; background:var(--green); border-radius:50%; animation:blink 2s infinite; }
+  @keyframes blink { 0%, 49%, 100% { opacity:1; } 50%, 99% { opacity:0.3; } }
+  .update-time { font-family:'IBM Plex Mono',monospace; font-size:.65rem; color:var(--ink-dim); }
+
+  .container { max-width:1400px; margin:0 auto; padding:32px; }
+
+  /* PAGE HEADER */
+  .page-header {
+    display:flex; justify-content:space-between; align-items:flex-end;
+    padding-bottom:28px; border-bottom:2px solid var(--ink); margin-bottom:36px;
+  }
+  .page-header h1 { font-size:2.6rem; font-weight:800; letter-spacing:-2px; line-height:1; }
+  .page-header h1 small { display:block; font-size:.85rem; font-weight:400; letter-spacing:4px; text-transform:uppercase; color:var(--ink-mid); margin-top:4px; }
+  .page-header-meta { text-align:right; font-family:'IBM Plex Mono',monospace; font-size:.72rem; color:var(--ink-dim); line-height:1.8; }
+
+  /* STATS */
+  .stats { display:grid; grid-template-columns:repeat(5,1fr); gap:1px; background:var(--border); border:1px solid var(--border); border-radius:14px; overflow:hidden; margin-bottom:36px; }
+  .stat { background:var(--surface); padding:22px 20px; }
+  .stat-num { font-family:'IBM Plex Mono',monospace; font-size:2.2rem; font-weight:700; line-height:1; }
+  .stat-label { font-size:.68rem; font-weight:500; color:var(--ink-dim); text-transform:uppercase; letter-spacing:1.5px; margin-top:6px; }
+
+  /* SECTION */
+  .section-title {
+    font-size:.68rem; font-weight:600; text-transform:uppercase; letter-spacing:4px;
+    color:var(--ink-dim); margin-bottom:18px; padding-bottom:8px;
+    border-bottom:1px solid var(--border-light);
+    display:flex; align-items:center; gap:10px;
+  }
+  .dot { width:8px; height:8px; border-radius:50%; flex-shrink:0; }
+
+  /* CARD */
+  .card { background:var(--surface); border:1px solid var(--border-light); border-radius:12px; padding:24px; margin-bottom:24px; }
+
+  /* EPIC PROGRESS */
+  .epic-row {
+    display:grid; grid-template-columns:1fr 1.5fr auto; gap:16px; align-items:center;
+    padding:14px 0; border-bottom:1px solid var(--border-light);
+  }
+  .epic-row:last-child { border-bottom:none; }
+  .epic-name { font-weight:600; font-size:.95rem; }
+  .epic-key { font-size:.75rem; color:var(--ink-mid); font-family:'IBM Plex Mono',monospace; }
+  .progress-track {
+    background:var(--surface-alt); border:1px solid var(--border-light); border-radius:4px;
+    height:8px; overflow:hidden;
+  }
+  .progress-fill { height:100%; border-radius:4px; transition:width .3s ease; }
+  .epic-pct { font-weight:600; font-size:.85rem; }
+
+  /* TABLE */
+  .story-table { width:100%; border-collapse:collapse; }
+  .story-table th { font-size:.62rem; font-weight:600; text-transform:uppercase; letter-spacing:2px; color:var(--ink-dim); text-align:left; padding:8px 10px; border-bottom:2px solid var(--border); }
+  .story-table td { padding:9px 10px; font-size:.8rem; border-bottom:1px solid var(--border-light); vertical-align:middle; }
+  .story-table tr:last-child td { border-bottom:none; }
+  .story-table tr:hover td { background:var(--surface-alt); }
+  .story-key { font-family:'IBM Plex Mono',monospace; font-weight:600; color:var(--violet); }
+  .status-badge { display:inline-block; padding:3px 8px; border-radius:4px; font-size:.7rem; font-weight:600; }
+  .status-done { background:var(--green-bg); color:var(--green); border:1px solid var(--green-border); }
+  .status-progress { background:var(--blue-bg); color:var(--blue); border:1px solid var(--blue-border); }
+  .status-todo { background:var(--amber-bg); color:var(--amber); border:1px solid var(--amber-border); }
+  .new-badge {
+    display:inline-block; padding:2px 6px; border-radius:3px; font-size:.6rem; font-weight:700;
+    background:var(--green); color:#fff; margin-left:6px; vertical-align:middle;
+    text-transform:uppercase; letter-spacing:.5px;
+  }
+  .type-badge {
+    display:inline-block; padding:2px 6px; border-radius:3px; font-size:.6rem; font-weight:600;
+    background:var(--surface-alt); color:var(--ink-mid); border:1px solid var(--border-light);
+    text-transform:uppercase; letter-spacing:.5px;
+  }
+</style>
+</head>
+<body>
+  <div class="topnav">
+    <div class="topnav-brand">L8S <span>Layer 8 Security</span></div>
+    <div class="topnav-right">
+      <span class="live-tag">Jira Live-Daten</span>
+      <span class="update-time">Stand: 21. April 2026</span>
+    </div>
+  </div>
+
+  <div class="container">
+    <div class="page-header">
+      <div>
+        <h1>L8S Dashboard<small>Sprint 2 — Machbarkeitsanalyse</small></h1>
+      </div>
+      <div class="page-header-meta">
+        Auftraggeber: Bernhard Nickel<br>
+        Auftragnehmer: Filip Tomsik<br>
+        <strong>Stand: 21. April 2026</strong>
+      </div>
+    </div>
+
+    <!-- STATS -->
+    <div class="stats">
+      <div class="stat">
+        <div class="stat-num" style="color:var(--ink);">48</div>
+        <div class="stat-label">Gesamt Issues</div>
+      </div>
+      <div class="stat">
+        <div class="stat-num" style="color:var(--green);">29</div>
+        <div class="stat-label">Erledigt</div>
+      </div>
+      <div class="stat">
+        <div class="stat-num" style="color:var(--blue);">1</div>
+        <div class="stat-label">In Bearbeitung</div>
+      </div>
+      <div class="stat">
+        <div class="stat-num" style="color:var(--amber);">18</div>
+        <div class="stat-label">Zu erledigen</div>
+      </div>
+      <div class="stat">
+        <div class="stat-num" style="color:var(--violet);">61.8%</div>
+        <div class="stat-label">Sprint 2 Fortschritt</div>
+      </div>
+    </div>
+
+    <!-- EPIC ROADMAP -->
+    <div class="card">
+      <div class="section-title"><span class="dot" style="background:var(--violet);"></span> Epic-Roadmap</div>
+
+      <div class="epic-row">
+        <div>
+          <div class="epic-name">Recherche</div>
+          <div class="epic-key">L8S-5 · 8/8 Stories</div>
+        </div>
+        <div class="progress-track">
+          <div class="progress-fill" style="width:100%;background:var(--green);"></div>
+        </div>
+        <div class="epic-pct" style="color:var(--green);">100% ✓</div>
+      </div>
+
+      <div class="epic-row">
+        <div>
+          <div class="epic-name">Machbarkeitsanalyse</div>
+          <div class="epic-key">L8S-15 · 1/4 Stories erledigt</div>
+        </div>
+        <div class="progress-track">
+          <div class="progress-fill" style="width:25%;background:var(--blue);"></div>
+        </div>
+        <div class="epic-pct" style="color:var(--blue);">25%</div>
+      </div>
+
+      <div class="epic-row">
+        <div>
+          <div class="epic-name">Human-Engineering-Simulation</div>
+          <div class="epic-key">L8S-22 · 1/4 Stories erledigt</div>
+        </div>
+        <div class="progress-track">
+          <div class="progress-fill" style="width:25%;background:var(--amber);"></div>
+        </div>
+        <div class="epic-pct" style="color:var(--amber);">25%</div>
+      </div>
+
+      <div class="epic-row">
+        <div>
+          <div class="epic-name">Dokumentation &amp; Abgabe</div>
+          <div class="epic-key">L8S-24 · 0/4 Stories</div>
+        </div>
+        <div class="progress-track">
+          <div class="progress-fill" style="width:0%;background:var(--amber);"></div>
+        </div>
+        <div class="epic-pct" style="color:var(--amber);">0%</div>
+      </div>
+
+      <div class="epic-row">
+        <div>
+          <div class="epic-name">Optionale Ziele</div>
+          <div class="epic-key">L8S-39 · 0/3 Stories</div>
+        </div>
+        <div class="progress-track">
+          <div class="progress-fill" style="width:0%;background:var(--violet);"></div>
+        </div>
+        <div class="epic-pct" style="color:var(--violet);">0%</div>
+      </div>
+    </div>
+
+    <!-- ERLEDIGT -->
+    <div class="card">
+      <div class="section-title"><span class="dot" style="background:var(--green);"></span> Erledigt (10 Stories · 3 Tasks)</div>
+      <table class="story-table">
+        <thead>
+          <tr><th>Key</th><th>Summary</th><th>Typ</th><th>Status</th><th>Assignee</th></tr>
+        </thead>
+        <tbody>
+          <tr><td><span class="story-key">L8S-6</span></td><td>Datenschutzanforderungen für sensible Dokumente</td><td><span class="type-badge">Story</span></td><td><span class="status-badge status-done">Erledigt</span></td><td>Andrija Pavlovic</td></tr>
+          <tr><td><span class="story-key">L8S-7</span></td><td>Technische Umsetzungsansätze vergleichen</td><td><span class="type-badge">Story</span></td><td><span class="status-badge status-done">Erledigt</span></td><td>Diego Saadaoui Srioui</td></tr>
+          <tr><td><span class="story-key">L8S-8</span></td><td>Schulungsformate und Lernziele definieren</td><td><span class="type-badge">Story</span></td><td><span class="status-badge status-done">Erledigt</span></td><td>Filip Tomsik</td></tr>
+          <tr><td><span class="story-key">L8S-9</span></td><td>Tools, Scope und Aufwand bewerten</td><td><span class="type-badge">Story</span></td><td><span class="status-badge status-done">Erledigt</span></td><td>Berk Temür</td></tr>
+          <tr><td><span class="story-key">L8S-11</span></td><td>KI-gestützte Übung zum Datenschutz</td><td><span class="type-badge">Story</span></td><td><span class="status-badge status-done">Erledigt</span></td><td>Andrija Pavlovic</td></tr>
+          <tr><td><span class="story-key">L8S-12</span></td><td>Technische Funktionsweise KI-Übung <span class="new-badge">neu</span></td><td><span class="type-badge">Story</span></td><td><span class="status-badge status-done">Erledigt</span></td><td>Diego Saadaoui Srioui</td></tr>
+          <tr><td><span class="story-key">L8S-13</span></td><td>Übungsformate für KI-Plattform auswählen</td><td><span class="type-badge">Story</span></td><td><span class="status-badge status-done">Erledigt</span></td><td>Filip Tomsik</td></tr>
+          <tr><td><span class="story-key">L8S-14</span></td><td>Analyse Projektumfang und Umsetzbarkeit</td><td><span class="type-badge">Story</span></td><td><span class="status-badge status-done">Erledigt</span></td><td>Berk Temür</td></tr>
+          <tr><td><span class="story-key">L8S-19</span></td><td>Trainingsszenarien bewerten <span class="new-badge">neu</span></td><td><span class="type-badge">Story</span></td><td><span class="status-badge status-done">Erledigt</span></td><td>Filip Tomsik</td></tr>
+          <tr><td><span class="story-key">L8S-37</span></td><td>Human-Engineering-Szenarien analysieren <span class="new-badge">neu</span></td><td><span class="type-badge">Story</span></td><td><span class="status-badge status-done">Erledigt</span></td><td>Filip Tomsik</td></tr>
+          <tr><td><span class="story-key">L8S-58</span></td><td>Präsentation fürs Vorstellungsgespräch bei CANCOM <span class="new-badge">neu</span></td><td><span class="type-badge">Task</span></td><td><span class="status-badge status-done">Erledigt</span></td><td>Diego Saadaoui Srioui</td></tr>
+          <tr><td><span class="story-key">L8S-59</span></td><td>Status-Webseite Prototyp erstellt <span class="new-badge">neu</span></td><td><span class="type-badge">Task</span></td><td><span class="status-badge status-done">Erledigt</span></td><td>Berk Temür</td></tr>
+          <tr><td><span class="story-key">L8S-60</span></td><td>Instagram-Account für Social-Media-Präsenz erstellt <span class="new-badge">neu</span></td><td><span class="type-badge">Task</span></td><td><span class="status-badge status-done">Erledigt</span></td><td>Diego Saadaoui Srioui</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- IN BEARBEITUNG -->
+    <div class="card">
+      <div class="section-title"><span class="dot" style="background:var(--blue);"></span> In Bearbeitung (1)</div>
+      <table class="story-table">
+        <thead>
+          <tr><th>Key</th><th>Summary</th><th>Epic</th><th>Status</th><th>Assignee</th></tr>
+        </thead>
+        <tbody>
+          <tr><td><span class="story-key">L8S-18</span></td><td>Technische Machbarkeit KI-Workflow</td><td>Machbarkeitsanalyse</td><td><span class="status-badge status-progress">In Bearbeitung</span></td><td>Diego Saadaoui Srioui</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- ZU ERLEDIGEN -->
+    <div class="card">
+      <div class="section-title"><span class="dot" style="background:var(--amber);"></span> Zu erledigen (18)</div>
+      <table class="story-table">
+        <thead>
+          <tr><th>Key</th><th>Summary</th><th>Typ</th><th>Epic / Sprint</th><th>Assignee</th></tr>
+        </thead>
+        <tbody>
+          <!-- Sprint 2 -->
+          <tr style="background:var(--blue-bg);">
+            <td colspan="5" style="font-size:.65rem;font-weight:700;text-transform:uppercase;letter-spacing:2px;color:var(--blue);padding:6px 10px;">
+              Sprint 2 — Mihailo (aktiv)
+            </td>
+          </tr>
+          <tr><td><span class="story-key">L8S-17</span></td><td>Sicherheits- und Datenschutzrisiken bewerten</td><td><span class="type-badge">Story</span></td><td>Machbarkeitsanalyse</td><td>Andrija Pavlovic</td></tr>
+          <tr><td><span class="story-key">L8S-20</span></td><td>Go-/No-Go-Empfehlung zur Machbarkeit</td><td><span class="type-badge">Story</span></td><td>Machbarkeitsanalyse</td><td>Berk Temür</td></tr>
+
+          <!-- Dokumentation -->
+          <tr style="background:var(--surface-alt);">
+            <td colspan="5" style="font-size:.65rem;font-weight:700;text-transform:uppercase;letter-spacing:2px;color:var(--ink-dim);padding:6px 10px;">
+              Dokumentation &amp; Abgabe
+            </td>
+          </tr>
+          <tr><td><span class="story-key">L8S-25</span></td><td>Dokumentierte Sicherheits- und Datenschutzanalyse</td><td><span class="type-badge">Story</span></td><td>Dokumentation</td><td>Andrija Pavlovic</td></tr>
+          <tr><td><span class="story-key">L8S-26</span></td><td>Technische Dokumentation Setup/Workflow</td><td><span class="type-badge">Story</span></td><td>Dokumentation</td><td>Diego Saadaoui Srioui</td></tr>
+          <tr><td><span class="story-key">L8S-27</span></td><td>Dokumentation Trainings- und Übungsszenarien</td><td><span class="type-badge">Story</span></td><td>Dokumentation</td><td>Filip Tomsik</td></tr>
+          <tr><td><span class="story-key">L8S-28</span></td><td>Strukturiertes Gesamtdokument und Präsentation</td><td><span class="type-badge">Story</span></td><td>Dokumentation</td><td>Berk Temür</td></tr>
+
+          <!-- HE-Simulation -->
+          <tr style="background:var(--surface-alt);">
+            <td colspan="5" style="font-size:.65rem;font-weight:700;text-transform:uppercase;letter-spacing:2px;color:var(--ink-dim);padding:6px 10px;">
+              Human-Engineering-Simulation
+            </td>
+          </tr>
+          <tr><td><span class="story-key">L8S-35</span></td><td>Ethische und sicherheitstechnische Richtlinien</td><td><span class="type-badge">Story</span></td><td>HE-Simulation</td><td>Andrija Pavlovic</td></tr>
+          <tr><td><span class="story-key">L8S-36</span></td><td>Technische Rahmenbedingungen analysieren</td><td><span class="type-badge">Story</span></td><td>HE-Simulation</td><td>Diego Saadaoui Srioui</td></tr>
+          <tr><td><span class="story-key">L8S-38</span></td><td>Awareness-Maßnahmen mit dokumentierter KI</td><td><span class="type-badge">Story</span></td><td>HE-Simulation</td><td>Berk Temür</td></tr>
+
+          <!-- Optionale Ziele -->
+          <tr style="background:var(--surface-alt);">
+            <td colspan="5" style="font-size:.65rem;font-weight:700;text-transform:uppercase;letter-spacing:2px;color:var(--ink-dim);padding:6px 10px;">
+              Optionale Ziele
+            </td>
+          </tr>
+          <tr><td><span class="story-key">L8S-40</span></td><td>Cisco Cybersecurity Zertifikate</td><td><span class="type-badge">Story</span></td><td>Optionale Ziele</td><td>—</td></tr>
+          <tr><td><span class="story-key">L8S-41</span></td><td>Übungen an Firma/Schule anpassen</td><td><span class="type-badge">Story</span></td><td>Optionale Ziele</td><td>—</td></tr>
+          <tr><td><span class="story-key">L8S-42</span></td><td>Self-Study-Guide mit Screenshots/Beispielen</td><td><span class="type-badge">Story</span></td><td>Optionale Ziele</td><td>—</td></tr>
+
+          <!-- Sprint 3 -->
+          <tr style="background:var(--surface-alt);">
+            <td colspan="5" style="font-size:.65rem;font-weight:700;text-transform:uppercase;letter-spacing:2px;color:var(--ink-dim);padding:6px 10px;">
+              Sprint 3 — Hans (geplant)
+            </td>
+          </tr>
+          <tr><td><span class="story-key">L8S-61</span></td><td>Recherche von Hardware</td><td><span class="type-badge">Task</span></td><td>Sprint 3</td><td>Filip Tomsik</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div style="text-align:center; padding:32px 0; font-size:.75rem; color:var(--ink-dim);">
+      Last updated: 2026-04-21 · Data source: Jira · layer8security.atlassian.net
+    </div>
+  </div>
+</body>
+</html>

@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>L8S — Über uns</title>
+<link rel="stylesheet" href="shared.css">
+<style>
+  .page { min-height: 100vh; }
+
+  .hero-section {
+    min-height: 40vh;
+    display: flex; align-items: flex-end;
+    padding: 0 60px 48px;
+    background: linear-gradient(160deg, #0f0f0f 0%, #0a0a0a 100%);
+    border-bottom: 1px solid var(--border);
+    position: relative; overflow: hidden;
+  }
+  .hero-section::before {
+    content: '';
+    position: absolute; inset: 0; pointer-events: none;
+    background-image:
+      linear-gradient(rgba(255,255,255,.03) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(255,255,255,.03) 1px, transparent 1px);
+    background-size: 56px 56px;
+    mask-image: radial-gradient(ellipse 100% 100% at 0% 100%, black 20%, transparent 80%);
+  }
+  .hero-glow { position: absolute; inset: 0; pointer-events: none; transition: background .06s; }
+
+  .page-tag {
+    display: inline-block;
+    font-family: 'IBM Plex Mono', monospace; font-size: .6rem; font-weight: 700;
+    text-transform: uppercase; letter-spacing: 4px; color: var(--ink-dim);
+    border: 1px solid var(--border); border-radius: 6px; padding: 4px 10px;
+    margin-bottom: 16px;
+    opacity: 0; transform: translateY(10px);
+    animation: fadein .5s .1s ease forwards;
+  }
+  .page-title {
+    font-size: clamp(2.5rem, 6vw, 5rem); font-weight: 800; letter-spacing: -4px; line-height: .95;
+    background: linear-gradient(135deg, #f0f0f0 0%, #666 100%);
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+    opacity: 0; transform: translateY(14px);
+    animation: fadein .5s .2s ease forwards;
+  }
+  .page-sub {
+    font-size: .85rem; color: var(--ink-dim); margin-top: 14px; max-width: 480px; line-height: 1.6;
+    opacity: 0; transform: translateY(10px);
+    animation: fadein .5s .35s ease forwards;
+  }
+
+  .content { max-width: 1100px; margin: 0 auto; padding: 60px 60px 80px; position: relative; z-index: 1; }
+
+  /* Team grid */
+  .team-grid {
+    display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; margin-bottom: 60px;
+    opacity: 0; transform: translateY(16px);
+    animation: fadein .5s .5s ease forwards;
+  }
+  .team-card {
+    background: linear-gradient(160deg, #181818, #111);
+    border: 1px solid var(--border); border-radius: 16px;
+    padding: 28px 20px; text-align: center;
+    transition: transform .2s, border-color .2s, box-shadow .2s;
+  }
+  .team-card:hover {
+    transform: translateY(-4px); border-color: #404040;
+    box-shadow: 0 12px 40px rgba(0,0,0,.5);
+  }
+  .team-avatar {
+    width: 96px; height: 96px; border-radius: 50%;
+    background: linear-gradient(135deg, #282828, #1a1a1a);
+    border: none;
+    display: flex; align-items: center; justify-content: center;
+    font-weight: 700; font-size: 1rem; color: var(--ink-mid);
+    margin: 0 auto 16px; letter-spacing: .5px;
+    overflow: hidden;
+  }
+  .team-avatar img {
+    width: 100%; height: 100%; object-fit: cover; object-position: center 15%;
+  }
+  .team-name { font-weight: 700; font-size: .9rem; margin-bottom: 5px; }
+  .team-role {
+    font-size: .68rem; color: var(--ink-dim);
+    font-family: 'IBM Plex Mono', monospace;
+    border: 1px dashed var(--border); border-radius: 4px;
+    padding: 3px 8px; display: inline-block;
+  }
+
+  /* Hidden Claude card */
+  .team-card.claude-card {
+    display: none;
+    border-color: #7c3aed44;
+    background: linear-gradient(160deg, #1a1025, #110e1a);
+  }
+  .team-card.claude-card.revealed {
+    display: block;
+    animation: fadein .5s ease forwards;
+  }
+  .team-card.claude-card .team-role {
+    border-color: #7c3aed66; color: #a78bfa;
+  }
+  .claude-avatar {
+    width: 96px; height: 96px; border-radius: 50%;
+    background: linear-gradient(135deg, #4c1d95, #1e1b4b);
+    display: flex; align-items: center; justify-content: center;
+    margin: 0 auto 16px;
+    box-shadow: 0 0 24px #7c3aed44;
+  }
+  /* Secret trigger */
+  .secret-trigger {
+    display: block; margin: -32px auto 0;
+    background: none; border: 1px dashed #2a2a2a;
+    border-radius: 8px; padding: 8px 18px;
+    color: #2a2a2a; font-family: 'IBM Plex Mono', monospace;
+    font-size: .6rem; letter-spacing: 3px; cursor: pointer;
+    transition: color .3s, border-color .3s;
+  }
+  .secret-trigger:hover { color: #7c3aed; border-color: #7c3aed55; }
+
+  /* Placeholder content blocks */
+  .content-placeholder {
+    border: 1px dashed var(--border); border-radius: 16px;
+    padding: 40px; text-align: center;
+    opacity: 0; animation: fadein .5s .65s ease forwards;
+  }
+  .ph-icon { color: var(--border); margin-bottom: 16px; }
+  .ph-title {
+    font-family: 'IBM Plex Mono', monospace; font-size: .7rem; font-weight: 700;
+    text-transform: uppercase; letter-spacing: 3px; color: var(--ink-dim);
+    margin-bottom: 10px;
+  }
+  .ph-desc { font-size: .82rem; color: var(--ink-dim); line-height: 1.6; }
+  .ph-lines { margin-top: 28px; display: flex; flex-direction: column; gap: 10px; align-items: center; }
+  .ph-line {
+    height: 10px; border-radius: 5px; background: #1e1e1e;
+    animation: shimmer 2s infinite;
+  }
+  .ph-line.w100 { width: 100%; }
+  .ph-line.w70  { width: 70%; }
+  .ph-line.w85  { width: 85%; }
+  .ph-line.w50  { width: 50%; }
+  @keyframes shimmer {
+    0%,100% { background: #1e1e1e; }
+    50%      { background: #262626; }
+  }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav class="sitenav">
+  <a class="sitenav-brand" href="index.html">
+    <div class="logo-mark">L8S</div>
+    <span class="brand-name">Layer 8 Security</span>
+  </a>
+  <div class="sitenav-links">
+    <a class="sitenav-link" href="index.html">Home</a>
+    <a class="sitenav-link active" href="ueber-uns.html">Über uns</a>
+    <a class="sitenav-link" href="projektidee.html">Projektidee</a>
+    <a class="sitenav-link" href="uebersicht.html">Übersicht</a>
+  </div>
+  <div class="sitenav-right">
+    <span class="live-tag"><span class="live-dot"></span>Sprint 2 aktiv</span>
+  </div>
+</nav>
+
+<div class="page">
+  <!-- HERO SECTION -->
+  <div class="hero-section">
+    <div class="hero-glow" id="hero-glow"></div>
+    <div style="position:relative;z-index:1;">
+      <div class="page-tag">Über uns</div>
+      <h1 class="page-title">Das Team</h1>
+      <p class="page-sub">Wer steckt hinter Layer 8 Security? </p>
+    </div>
+  </div>
+
+  <!-- CONTENT -->
+  <div class="content">
+    <div class="team-grid">
+      <div class="team-card">
+        <div class="team-avatar"><img src="uploads/Filip.jpeg" alt="Filip Tomsik" style="object-position: center 30%;"></div>
+        <div class="team-name">Filip Tomsik</div>
+        <div class="team-role">Product Owner</div>
+      </div>
+      <div class="team-card">
+        <div class="team-avatar"><img src="uploads/Berk.jpeg" alt="Berk Temür" style="object-position: center 10%;"></div>
+        <div class="team-name">Berk Temür</div>
+        <div class="team-role">Scrum Master</div>
+      </div>
+      <div class="team-card">
+        <div class="team-avatar"><img src="uploads/Andi.jpeg" alt="Andrija Pavlovic"></div>
+        <div class="team-name">Andrija Pavlovic</div>
+        <div class="team-role">Mitarbeiter</div>
+      </div>
+      <div class="team-card">
+        <div class="team-avatar"><img src="uploads/Diego.jpeg" alt="Diego Saadaoui Srioui"></div>
+        <div class="team-name">Diego Saadaoui Srioui</div>
+        <div class="team-role">Mitarbeiter</div>
+      </div>
+          <div class="team-card claude-card" id="claude-card">
+        <div class="claude-avatar">
+          <svg width="48" height="48" viewBox="0 0 48 48" fill="none">
+            <circle cx="24" cy="24" r="20" fill="#4c1d95" opacity=".6"/>
+            <path d="M16 28c0-4.418 3.582-8 8-8s8 3.582 8 8" stroke="#a78bfa" stroke-width="1.8" stroke-linecap="round"/>
+            <circle cx="24" cy="18" r="3" fill="#a78bfa"/>
+            <circle cx="18" cy="24" r="1.5" fill="#7c3aed"/>
+            <circle cx="30" cy="24" r="1.5" fill="#7c3aed"/>
+          </svg>
+        </div>
+        <div class="team-name">Claude</div>
+        <div class="team-role">KI-Assistent</div>
+      </div>
+    </div>
+    <button class="secret-trigger" id="secret-btn">• • •</button>
+
+    <div style="opacity:0;animation:fadein .5s .65s ease forwards;">
+      <p style="font-size:.88rem;color:var(--ink-dim);line-height:1.85;max-width:780px;margin:0 0 20px;">
+        Wir sind vier Schüler der Klasse 4CN an der HTL Wien 3 Rennweg im Ausbildungszweig Netzwerktechnik. Im Rahmen unseres Vorprojekts entwickeln wir Layer 8 Security — eine KI-gestützte Plattform zur Simulation von Social-Engineering-Angriffen.
+      </p>
+      <p style="font-size:.88rem;color:var(--ink-dim);line-height:1.85;max-width:780px;margin:0 0 32px;">
+        Die Idee entstand aus dem Alltag der Netzwerktechnik: Firewalls, IDS und Verschlüsselung schützen Systeme — aber nicht den Menschen dahinter. Unser Ziel ist es, genau diese Lücke zu schließen und dabei alles anzuwenden, was wir im Laufe unserer Ausbildung über Netzwerke, Sicherheit und Systemintegration gelernt haben.
+      </p>
+      <div style="display:grid;grid-template-columns:repeat(2,1fr);gap:12px;max-width:640px;">
+        <div style="background:linear-gradient(160deg,#181818,#111);border:1px solid var(--border);border-radius:12px;padding:18px 20px;">
+          <div style="font-family:'IBM Plex Mono',monospace;font-size:.6rem;font-weight:700;text-transform:uppercase;letter-spacing:2px;color:var(--ink-dim);margin-bottom:6px;">Schule</div>
+          <div style="font-size:.85rem;color:var(--ink-mid);font-weight:600;">HTL Wien 3 Rennweg</div>
+        </div>
+        <div style="background:linear-gradient(160deg,#181818,#111);border:1px solid var(--border);border-radius:12px;padding:18px 20px;">
+          <div style="font-family:'IBM Plex Mono',monospace;font-size:.6rem;font-weight:700;text-transform:uppercase;letter-spacing:2px;color:var(--ink-dim);margin-bottom:6px;">Zweig</div>
+          <div style="font-size:.85rem;color:var(--ink-mid);font-weight:600;">Netzwerktechnik</div>
+        </div>
+        <div style="background:linear-gradient(160deg,#181818,#111);border:1px solid var(--border);border-radius:12px;padding:18px 20px;">
+          <div style="font-family:'IBM Plex Mono',monospace;font-size:.6rem;font-weight:700;text-transform:uppercase;letter-spacing:2px;color:var(--ink-dim);margin-bottom:6px;">Klasse</div>
+          <div style="font-size:.85rem;color:var(--ink-mid);font-weight:600;">4CN — Schuljahr 2025/26</div>
+        </div>
+        <div style="background:linear-gradient(160deg,#181818,#111);border:1px solid var(--border);border-radius:12px;padding:18px 20px;">
+          <div style="font-family:'IBM Plex Mono',monospace;font-size:.6rem;font-weight:700;text-transform:uppercase;letter-spacing:2px;color:var(--ink-dim);margin-bottom:6px;">Betreuer</div>
+          <div style="font-size:.85rem;color:var(--ink-mid);font-weight:600;">Prof. Bernhard Nickel</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+  const btn = document.getElementById('secret-btn');
+  const card = document.getElementById('claude-card');
+  if (btn && card) btn.addEventListener('click', () => card.classList.toggle('revealed'));
+});
+
+document.addEventListener('mousemove', e => {
+  document.body.style.setProperty('--mx', e.clientX + 'px');
+  document.body.style.setProperty('--my', e.clientY + 'px');
+  const glow = document.getElementById('hero-glow');
+  if (glow) {
+    const r = glow.parentElement.getBoundingClientRect();
+    const x = ((e.clientX - r.left) / r.width  * 100).toFixed(1) + '%';
+    const y = ((e.clientY - r.top)  / r.height * 100).toFixed(1) + '%';
+    glow.style.background = `radial-gradient(ellipse 500px 400px at ${x} ${y}, rgba(255,255,255,.06) 0%, transparent 65%)`;
+  }
+});
+</script>
+</body>
+</html>

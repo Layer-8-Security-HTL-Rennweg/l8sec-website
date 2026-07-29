@@ -1,0 +1,333 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>L8S — Übersicht</title>
+<link rel="stylesheet" href="shared.css">
+<style>
+  .page { min-height: 100vh; }
+
+  /* ─── CONTAINER ─── */
+  .container { max-width: 1380px; margin: 0 auto; padding: 40px 40px 60px; position: relative; z-index: 1; }
+
+  /* ─── PAGE HEADER ─── */
+  .page-header {
+    display: flex; justify-content: space-between; align-items: flex-end;
+    padding-bottom: 28px; border-bottom: 2px solid var(--ink); margin-bottom: 40px;
+    opacity: 0; transform: translateY(16px);
+    animation: fadein .5s ease forwards;
+  }
+  .page-header h1 { font-size: clamp(2rem, 3.5vw, 3rem); font-weight: 800; letter-spacing: -2.5px; line-height: 1; }
+  .page-header h1 small { display: block; font-size: .82rem; font-weight: 400; letter-spacing: 4px; text-transform: uppercase; color: var(--ink-mid); margin-top: 6px; }
+  .page-header-meta { text-align: right; font-family: 'IBM Plex Mono', monospace; font-size: .68rem; color: var(--ink-dim); line-height: 2; }
+  .page-header-meta strong { color: var(--ink); }
+
+  /* ─── STATS ─── */
+  .stats {
+    display: grid; grid-template-columns: repeat(5, 1fr);
+    gap: 1px; background: var(--border); border: 1px solid var(--border);
+    border-radius: 16px; overflow: hidden; margin-bottom: 36px;
+    opacity: 0; animation: fadein .5s .1s ease forwards;
+  }
+  .stat {
+    background: linear-gradient(160deg, #181818, #111); padding: 26px 22px;
+    position: relative; overflow: hidden; cursor: default; transition: background .2s;
+  }
+  .stat:hover { background: var(--surface-alt); }
+  .stat-num { font-family: 'IBM Plex Mono', monospace; font-size: 2.4rem; font-weight: 700; line-height: 1; transition: transform .2s; }
+  .stat:hover .stat-num { transform: scale(1.04); }
+  .stat-label { font-size: .65rem; font-weight: 500; color: var(--ink-dim); text-transform: uppercase; letter-spacing: 1.5px; margin-top: 8px; }
+  .stat-bar { position: absolute; bottom: 0; left: 0; height: 3px; width: 0; transition: width 1.2s cubic-bezier(.22,1,.36,1); }
+
+  /* ─── CARDS ─── */
+  .card {
+    background: linear-gradient(160deg, #181818 0%, #111 100%); border: 1px solid var(--border-light);
+    border-radius: 16px; padding: 28px; margin-bottom: 24px;
+    opacity: 0; transform: translateY(20px); transition: box-shadow .25s;
+  }
+  .card:hover { box-shadow: 0 4px 32px rgba(0,0,0,.5), 0 0 0 1px rgba(255,255,255,.04); }
+  .card.visible { animation: fadein-up .45s ease forwards; }
+
+  .section-title {
+    font-size: .65rem; font-weight: 700; text-transform: uppercase; letter-spacing: 4px; color: var(--ink-dim);
+    margin-bottom: 22px; padding-bottom: 12px; border-bottom: 1px solid var(--border-light);
+    display: flex; align-items: center; gap: 10px;
+  }
+  .dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
+
+  /* ─── EPIC ─── */
+  .sprint-visual { display: flex; align-items: center; gap: 32px; margin-bottom: 28px; }
+  .ring-wrap { position: relative; width: 88px; height: 88px; flex-shrink: 0; }
+  .ring-wrap svg { transform: rotate(-90deg); }
+  .ring-bg { fill: none; stroke: var(--border-light); stroke-width: 10; }
+  .ring-fg { fill: none; stroke-width: 10; stroke-linecap: round; stroke-dasharray: 0 251.2; transition: stroke-dasharray 1.6s cubic-bezier(.22,1,.36,1); }
+  .ring-label { position: absolute; inset: 0; display: grid; place-items: center; font-family: 'IBM Plex Mono', monospace; font-weight: 700; font-size: 1.1rem; }
+  .sprint-meta h3 { font-size: 1.4rem; font-weight: 800; letter-spacing: -1px; margin-bottom: 4px; }
+  .sprint-meta p { font-size: .78rem; color: var(--ink-mid); }
+
+  .epic-row { display: grid; grid-template-columns: 220px 1fr auto; gap: 20px; align-items: center; padding: 16px 0; border-bottom: 1px solid var(--border-light); }
+  .epic-row:last-child { border-bottom: none; }
+  .epic-name { font-weight: 600; font-size: .92rem; }
+  .epic-key { font-size: .7rem; color: var(--ink-mid); font-family: 'IBM Plex Mono', monospace; margin-top: 3px; }
+  .progress-wrap { display: flex; flex-direction: column; gap: 6px; }
+  .progress-track { background: var(--surface-alt); border: 1px solid var(--border-light); border-radius: 99px; height: 10px; overflow: hidden; }
+  .progress-fill { height: 100%; border-radius: 99px; width: 0; transition: width 1.4s cubic-bezier(.22,1,.36,1); }
+  .progress-sub { font-family: 'IBM Plex Mono', monospace; font-size: .62rem; color: var(--ink-dim); }
+  .epic-pct { font-family: 'IBM Plex Mono', monospace; font-weight: 700; font-size: 1rem; min-width: 52px; text-align: right; }
+
+  /* ─── TABLES ─── */
+  .story-table { width: 100%; border-collapse: collapse; }
+  .story-table th { font-size: .6rem; font-weight: 700; text-transform: uppercase; letter-spacing: 2px; color: var(--ink-dim); text-align: left; padding: 8px 12px; border-bottom: 2px solid var(--border); }
+  .story-table td { padding: 10px 12px; font-size: .8rem; border-bottom: 1px solid var(--border-light); vertical-align: middle; transition: background .15s; }
+  .story-table tr:last-child td { border-bottom: none; }
+  .story-table tbody tr { cursor: pointer; }
+  .story-table tbody tr:hover td { background: var(--surface-alt); }
+
+  .story-key { font-family: 'IBM Plex Mono', monospace; font-weight: 600; color: var(--violet); font-size: .75rem; }
+  .status-badge { display: inline-flex; align-items: center; gap: 5px; padding: 3px 9px; border-radius: 6px; font-size: .68rem; font-weight: 600; }
+  .status-badge::before { content: ''; width: 5px; height: 5px; border-radius: 50%; flex-shrink: 0; }
+  .status-done     { background: var(--green-bg); color: var(--green); border: 1px solid var(--green-border); }
+  .status-done::before { background: var(--green); border-radius: 50%; }
+  .status-progress { background: var(--blue-bg); color: var(--blue); border: 1px solid var(--blue-border); }
+  .status-progress::before { background: var(--blue); border-radius: 50%; animation: pulse-dot 1.5s infinite; }
+  .status-todo     { background: var(--amber-bg); color: var(--amber); border: 1px solid var(--amber-border); }
+  .status-todo::before { background: var(--amber); border-radius: 50%; }
+
+  .new-badge { display: inline-block; padding: 2px 6px; border-radius: 4px; font-size: .58rem; font-weight: 700; background: var(--green); color: #000; margin-left: 6px; vertical-align: middle; text-transform: uppercase; letter-spacing: .5px; animation: pop-in .4s cubic-bezier(.34,1.56,.64,1) both; }
+  .type-badge { display: inline-block; padding: 2px 7px; border-radius: 4px; font-size: .6rem; font-weight: 600; background: var(--surface-alt); color: var(--ink-mid); border: 1px solid var(--border-light); text-transform: uppercase; letter-spacing: .5px; }
+
+  .group-row td { font-size: .62rem; font-weight: 700; text-transform: uppercase; letter-spacing: 2px; padding: 7px 12px; border-bottom: 1px solid var(--border-light); cursor: default !important; }
+  .group-row:hover td { background: inherit !important; }
+  .group-sprint td { background: var(--blue-bg); color: var(--blue); }
+  .group-section td { background: var(--surface-alt); color: var(--ink-dim); }
+
+  .assignee { display: inline-flex; align-items: center; gap: 6px; font-size: .78rem; }
+  .avatar { width: 22px; height: 22px; border-radius: 50%; display: inline-flex; align-items: center; justify-content: center; font-size: .6rem; font-weight: 700; color: #fff; flex-shrink: 0; }
+
+  .collapse-btn { background: none; border: none; cursor: pointer; font-family: 'IBM Plex Mono', monospace; font-size: .6rem; font-weight: 600; color: var(--ink-dim); display: flex; align-items: center; gap: 6px; padding: 4px 8px; border-radius: 6px; margin-left: auto; transition: background .15s, color .15s; text-transform: uppercase; letter-spacing: 1.5px; }
+  .collapse-btn:hover { background: var(--surface-alt); color: var(--ink); }
+  .collapse-btn .chevron { transition: transform .25s; display: inline-block; }
+  .collapse-btn.collapsed .chevron { transform: rotate(-90deg); }
+
+  footer { text-align: center; padding: 32px 0 0; font-family: 'IBM Plex Mono', monospace; font-size: .65rem; color: var(--ink-dim); border-top: 1px solid var(--border-light); margin-top: 16px; line-height: 2; }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav class="sitenav">
+  <a class="sitenav-brand" href="index.html">
+    <div class="logo-mark">L8S</div>
+    <span class="brand-name">Layer 8 Security</span>
+  </a>
+  <div class="sitenav-links">
+    <a class="sitenav-link" href="index.html">Home</a>
+    <a class="sitenav-link" href="ueber-uns.html">Über uns</a>
+    <a class="sitenav-link" href="projektidee.html">Projektidee</a>
+    <a class="sitenav-link active" href="uebersicht.html">Übersicht</a>
+  </div>
+  <div class="sitenav-right">
+    <span class="live-tag"><span class="live-dot"></span>Jira Live-Daten</span>
+  </div>
+</nav>
+
+<div class="page">
+<div class="container">
+
+  <div class="page-header">
+    <div>
+      <h1>L8S Dashboard<small>Sprint 2 — Machbarkeitsanalyse</small></h1>
+    </div>
+    <div class="page-header-meta">
+      Auftraggeber: Bernhard Nickel<br>
+      Auftragnehmer: Filip Tomsik<br>
+      <strong>Stand: 19. Mai 2026</strong>
+    </div>
+  </div>
+
+  <!-- STATS -->
+  <div class="stats" id="stats">
+    <div class="stat"><div class="stat-num" style="color:var(--ink);" data-target="49">0</div><div class="stat-label">Gesamt Issues</div><div class="stat-bar" style="background:var(--ink);"></div></div>
+    <div class="stat"><div class="stat-num" style="color:var(--green);" data-target="36">0</div><div class="stat-label">Erledigt</div><div class="stat-bar" style="background:var(--green);"></div></div>
+    <div class="stat"><div class="stat-num" style="color:var(--blue);" data-target="2">0</div><div class="stat-label">In Bearbeitung</div><div class="stat-bar" style="background:var(--blue);"></div></div>
+    <div class="stat"><div class="stat-num" style="color:var(--amber);" data-target="11">0</div><div class="stat-label">Zu erledigen</div><div class="stat-bar" style="background:var(--amber);"></div></div>
+    <div class="stat"><div class="stat-num" style="color:var(--violet);" data-pct="73.5">0%</div><div class="stat-label">Gesamtfortschritt</div><div class="stat-bar" style="background:var(--violet);"></div></div>
+  </div>
+
+  <!-- EPIC ROADMAP -->
+  <div class="card" data-delay="0">
+    <div class="section-title"><span class="dot" style="background:var(--violet);"></span> Epic-Roadmap</div>
+    <div class="sprint-visual">
+      <div class="ring-wrap">
+        <svg width="88" height="88" viewBox="0 0 88 88">
+          <circle class="ring-bg" cx="44" cy="44" r="40"/>
+          <circle class="ring-fg" id="ring-fg" cx="44" cy="44" r="40" stroke="var(--violet)"/>
+        </svg>
+        <div class="ring-label" style="color:var(--violet);">73.5%</div>
+      </div>
+      <div class="sprint-meta">
+        <h3>Sprint 2 läuft</h3>
+        <p>36 von 49 Issues abgeschlossen · 2 in Bearbeitung · 11 offen</p>
+        <p style="margin-top:6px;font-size:.72rem;color:var(--ink-dim);">Stand: 19. Mai 2026</p>
+      </div>
+    </div>
+    <div>
+      <div class="epic-row"><div><div class="epic-name">Recherche</div><div class="epic-key">L8S-5</div></div><div class="progress-wrap"><div class="progress-track"><div class="progress-fill" data-width="100" style="background:var(--green);"></div></div><div class="progress-sub">8 / 8 Stories</div></div><div class="epic-pct" style="color:var(--green);">100%</div></div>
+      <div class="epic-row"><div><div class="epic-name">Machbarkeitsanalyse</div><div class="epic-key">L8S-15</div></div><div class="progress-wrap"><div class="progress-track"><div class="progress-fill" data-width="100" style="background:var(--green);"></div></div><div class="progress-sub">4 / 4 Stories</div></div><div class="epic-pct" style="color:var(--green);">100% ✓</div></div>
+      <div class="epic-row"><div><div class="epic-name">Human-Engineering-Simulation</div><div class="epic-key">L8S-22</div></div><div class="progress-wrap"><div class="progress-track"><div class="progress-fill" data-width="25" style="background:var(--amber);"></div></div><div class="progress-sub">1 / 4 Stories</div></div><div class="epic-pct" style="color:var(--amber);">25%</div></div>
+      <div class="epic-row"><div><div class="epic-name">Dokumentation &amp; Abgabe</div><div class="epic-key">L8S-24</div></div><div class="progress-wrap"><div class="progress-track"><div class="progress-fill" data-width="0" style="background:var(--amber);"></div></div><div class="progress-sub">0 / 4 Stories</div></div><div class="epic-pct" style="color:var(--ink-dim);">0%</div></div>
+      <div class="epic-row"><div><div class="epic-name">Social Media</div><div class="epic-key">L8S-63</div></div><div class="progress-wrap"><div class="progress-track"><div class="progress-fill" data-width="100" style="background:var(--green);"></div></div><div class="progress-sub">2 / 2 Tasks</div></div><div class="epic-pct" style="color:var(--green);">100% ✓</div></div>
+      <div class="epic-row"><div><div class="epic-name">Kooperationen <span class="new-badge">neu</span></div><div class="epic-key">L8S-64</div></div><div class="progress-wrap"><div class="progress-track"><div class="progress-fill" data-width="100" style="background:var(--green);"></div></div><div class="progress-sub">CANCOM abgeschlossen</div></div><div class="epic-pct" style="color:var(--green);">100%</div></div>
+      <div class="epic-row"><div><div class="epic-name">Optionale Ziele</div><div class="epic-key">L8S-39</div></div><div class="progress-wrap"><div class="progress-track"><div class="progress-fill" data-width="0" style="background:var(--violet);"></div></div><div class="progress-sub">0 / 3 Stories</div></div><div class="epic-pct" style="color:var(--ink-dim);">0%</div></div>
+      <div class="epic-row"><div><div class="epic-name">Mainquest <span class="new-badge">neu</span></div><div class="epic-key">L8S-69</div></div><div class="progress-wrap"><div class="progress-track"><div class="progress-fill" data-width="0" style="background:var(--blue);"></div></div><div class="progress-sub">In Planung</div></div><div class="epic-pct" style="color:var(--ink-dim);">0%</div></div>
+    </div>
+  </div>
+
+  <!-- ERLEDIGT -->
+  <div class="card" data-delay="1">
+    <div class="section-title">
+      <span class="dot" style="background:var(--green);"></span>
+      Erledigt <span style="color:var(--green);margin-left:4px;">36</span>
+      <button class="collapse-btn" data-target="done-tbody"><span class="chevron">▾</span> Einklappen</button>
+    </div>
+    <table class="story-table">
+      <thead><tr><th>Key</th><th>Summary</th><th>Typ</th><th>Status</th><th>Assignee</th></tr></thead>
+      <tbody id="done-tbody">
+        <tr class="group-row group-sprint"><td colspan="5">Neu erledigt seit 5. Mai 2026</td></tr>
+        <tr><td><span class="story-key">L8S-20</span></td><td>Go-/No-Go-Empfehlung zur Machbarkeit <span class="new-badge">neu</span></td><td><span class="type-badge">Story</span></td><td><span class="status-badge status-done">Erledigt</span></td><td><span class="assignee"><span class="avatar" style="background:#c87a08;">BT</span>Berk Temür</span></td></tr>
+        <tr><td><span class="story-key">L8S-65</span></td><td>Recherche für Umsetzung <span class="new-badge">neu</span></td><td><span class="type-badge">Task</span></td><td><span class="status-badge status-done">Erledigt</span></td><td><span class="assignee">—</span></td></tr>
+        <tr><td><span class="story-key">L8S-66</span></td><td>Testen vom Tower-Server <span class="new-badge">neu</span></td><td><span class="type-badge">Task</span></td><td><span class="status-badge status-done">Erledigt</span></td><td><span class="assignee">—</span></td></tr>
+        <tr><td><span class="story-key">L8S-67</span></td><td>Socialmedia <span class="new-badge">neu</span></td><td><span class="type-badge">Task</span></td><td><span class="status-badge status-done">Erledigt</span></td><td><span class="assignee"><span class="avatar" style="background:#2060a0;">DS</span>Diego Saadaoui Srioui</span></td></tr>
+        <tr class="group-row group-section"><td colspan="5">Bereits erledigt</td></tr>
+        <tr><td><span class="story-key">L8S-6</span></td><td>Datenschutzanforderungen für sensible Dokumente</td><td><span class="type-badge">Story</span></td><td><span class="status-badge status-done">Erledigt</span></td><td><span class="assignee"><span class="avatar" style="background:#6a4c93;">AP</span>Andrija Pavlovic</span></td></tr>
+        <tr><td><span class="story-key">L8S-7</span></td><td>Technische Umsetzungsansätze vergleichen</td><td><span class="type-badge">Story</span></td><td><span class="status-badge status-done">Erledigt</span></td><td><span class="assignee"><span class="avatar" style="background:#2060a0;">DS</span>Diego Saadaoui Srioui</span></td></tr>
+        <tr><td><span class="story-key">L8S-8</span></td><td>Schulungsformate und Lernziele definieren</td><td><span class="type-badge">Story</span></td><td><span class="status-badge status-done">Erledigt</span></td><td><span class="assignee"><span class="avatar" style="background:#1a7a4c;">FT</span>Filip Tomsik</span></td></tr>
+        <tr><td><span class="story-key">L8S-9</span></td><td>Tools, Scope und Aufwand bewerten</td><td><span class="type-badge">Story</span></td><td><span class="status-badge status-done">Erledigt</span></td><td><span class="assignee"><span class="avatar" style="background:#c87a08;">BT</span>Berk Temür</span></td></tr>
+        <tr><td><span class="story-key">L8S-11</span></td><td>KI-gestützte Übung zum Datenschutz</td><td><span class="type-badge">Story</span></td><td><span class="status-badge status-done">Erledigt</span></td><td><span class="assignee"><span class="avatar" style="background:#6a4c93;">AP</span>Andrija Pavlovic</span></td></tr>
+        <tr><td><span class="story-key">L8S-12</span></td><td>Technische Funktionsweise KI-Übung</td><td><span class="type-badge">Story</span></td><td><span class="status-badge status-done">Erledigt</span></td><td><span class="assignee"><span class="avatar" style="background:#2060a0;">DS</span>Diego Saadaoui Srioui</span></td></tr>
+        <tr><td><span class="story-key">L8S-13</span></td><td>Übungsformate für KI-Plattform auswählen</td><td><span class="type-badge">Story</span></td><td><span class="status-badge status-done">Erledigt</span></td><td><span class="assignee"><span class="avatar" style="background:#1a7a4c;">FT</span>Filip Tomsik</span></td></tr>
+        <tr><td><span class="story-key">L8S-14</span></td><td>Analyse Projektumfang und Umsetzbarkeit</td><td><span class="type-badge">Story</span></td><td><span class="status-badge status-done">Erledigt</span></td><td><span class="assignee"><span class="avatar" style="background:#c87a08;">BT</span>Berk Temür</span></td></tr>
+        <tr><td><span class="story-key">L8S-19</span></td><td>Trainingsszenarien bewerten</td><td><span class="type-badge">Story</span></td><td><span class="status-badge status-done">Erledigt</span></td><td><span class="assignee"><span class="avatar" style="background:#1a7a4c;">FT</span>Filip Tomsik</span></td></tr>
+        <tr><td><span class="story-key">L8S-37</span></td><td>Human-Engineering-Szenarien analysieren</td><td><span class="type-badge">Story</span></td><td><span class="status-badge status-done">Erledigt</span></td><td><span class="assignee"><span class="avatar" style="background:#1a7a4c;">FT</span>Filip Tomsik</span></td></tr>
+        <tr><td><span class="story-key">L8S-57</span></td><td>Kooperationsanfrage CANCOM verfassen</td><td><span class="type-badge">Task</span></td><td><span class="status-badge status-done">Erledigt</span></td><td><span class="assignee"><span class="avatar" style="background:#1a7a4c;">FT</span>Filip Tomsik</span></td></tr>
+        <tr><td><span class="story-key">L8S-58</span></td><td>Präsentation fürs Vorstellungsgespräch bei CANCOM</td><td><span class="type-badge">Task</span></td><td><span class="status-badge status-done">Erledigt</span></td><td><span class="assignee"><span class="avatar" style="background:#2060a0;">DS</span>Diego Saadaoui Srioui</span></td></tr>
+        <tr><td><span class="story-key">L8S-59</span></td><td>Status-Webseite Prototyp erstellt</td><td><span class="type-badge">Task</span></td><td><span class="status-badge status-done">Erledigt</span></td><td><span class="assignee"><span class="avatar" style="background:#c87a08;">BT</span>Berk Temür</span></td></tr>
+        <tr><td><span class="story-key">L8S-60</span></td><td>Instagram-Account für Social-Media-Präsenz erstellt</td><td><span class="type-badge">Task</span></td><td><span class="status-badge status-done">Erledigt</span></td><td><span class="assignee"><span class="avatar" style="background:#2060a0;">DS</span>Diego Saadaoui Srioui</span></td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- IN BEARBEITUNG -->
+  <div class="card" data-delay="2" style="border-color:var(--blue-border);">
+    <div class="section-title" style="border-color:var(--blue-border);">
+      <span class="dot" style="background:var(--blue);animation:pulse-dot 1.5s infinite;"></span>
+      In Bearbeitung <span style="color:var(--blue);margin-left:4px;">2</span>
+    </div>
+    <table class="story-table">
+      <thead><tr><th>Key</th><th>Summary</th><th>Epic</th><th>Status</th><th>Assignee</th></tr></thead>
+      <tbody>
+        <tr><td><span class="story-key">L8S-68</span></td><td>Diplomarbeits Ansuchen schreiben <span class="new-badge">neu</span></td><td>—</td><td><span class="status-badge status-progress">In Bearbeitung</span></td><td><span class="assignee">—</span></td></tr>
+        <tr><td><span class="story-key">L8S-70</span></td><td>Verbesserung der Webseite <span class="new-badge">neu</span></td><td>Mainquest</td><td><span class="status-badge status-progress">In Bearbeitung</span></td><td><span class="assignee"><span class="avatar" style="background:#c87a08;">BT</span>Berk Temür</span></td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- ZU ERLEDIGEN -->
+  <div class="card" data-delay="3">
+    <div class="section-title">
+      <span class="dot" style="background:var(--amber);"></span>
+      Zu erledigen <span style="color:var(--amber);margin-left:4px;">11</span>
+      <button class="collapse-btn" data-target="todo-tbody"><span class="chevron">▾</span> Einklappen</button>
+    </div>
+    <table class="story-table">
+      <thead><tr><th>Key</th><th>Summary</th><th>Typ</th><th>Epic / Sprint</th><th>Assignee</th></tr></thead>
+      <tbody id="todo-tbody">
+        <tr class="group-row group-section"><td colspan="5">Dokumentation &amp; Abgabe</td></tr>
+        <tr><td><span class="story-key">L8S-25</span></td><td>Dokumentierte Sicherheits- und Datenschutzanalyse</td><td><span class="type-badge">Story</span></td><td>Dokumentation</td><td><span class="assignee"><span class="avatar" style="background:#6a4c93;">AP</span>Andrija Pavlovic</span></td></tr>
+        <tr><td><span class="story-key">L8S-26</span></td><td>Technische Dokumentation Setup/Workflow</td><td><span class="type-badge">Story</span></td><td>Dokumentation</td><td><span class="assignee"><span class="avatar" style="background:#2060a0;">DS</span>Diego Saadaoui Srioui</span></td></tr>
+        <tr><td><span class="story-key">L8S-27</span></td><td>Dokumentation Trainings- und Übungsszenarien</td><td><span class="type-badge">Story</span></td><td>Dokumentation</td><td><span class="assignee"><span class="avatar" style="background:#1a7a4c;">FT</span>Filip Tomsik</span></td></tr>
+        <tr><td><span class="story-key">L8S-28</span></td><td>Strukturiertes Gesamtdokument und Präsentation</td><td><span class="type-badge">Story</span></td><td>Dokumentation</td><td><span class="assignee"><span class="avatar" style="background:#c87a08;">BT</span>Berk Temür</span></td></tr>
+        <tr class="group-row group-section"><td colspan="5">Human-Engineering-Simulation</td></tr>
+        <tr><td><span class="story-key">L8S-35</span></td><td>Ethische und sicherheitstechnische Richtlinien</td><td><span class="type-badge">Story</span></td><td>HE-Simulation</td><td><span class="assignee"><span class="avatar" style="background:#6a4c93;">AP</span>Andrija Pavlovic</span></td></tr>
+        <tr><td><span class="story-key">L8S-36</span></td><td>Technische Rahmenbedingungen analysieren</td><td><span class="type-badge">Story</span></td><td>HE-Simulation</td><td><span class="assignee"><span class="avatar" style="background:#2060a0;">DS</span>Diego Saadaoui Srioui</span></td></tr>
+        <tr><td><span class="story-key">L8S-38</span></td><td>Awareness-Maßnahmen mit dokumentierter KI</td><td><span class="type-badge">Story</span></td><td>HE-Simulation</td><td><span class="assignee"><span class="avatar" style="background:#c87a08;">BT</span>Berk Temür</span></td></tr>
+        <tr class="group-row group-section"><td colspan="5">Optionale Ziele</td></tr>
+        <tr><td><span class="story-key">L8S-40</span></td><td>Cisco Cybersecurity Zertifikate</td><td><span class="type-badge">Story</span></td><td>Optionale Ziele</td><td><span class="assignee">—</span></td></tr>
+        <tr><td><span class="story-key">L8S-41</span></td><td>Übungen an Firma/Schule anpassen</td><td><span class="type-badge">Story</span></td><td>Optionale Ziele</td><td><span class="assignee">—</span></td></tr>
+        <tr><td><span class="story-key">L8S-42</span></td><td>Self-Study-Guide mit Screenshots/Beispielen</td><td><span class="type-badge">Story</span></td><td>Optionale Ziele</td><td><span class="assignee">—</span></td></tr>
+        <tr class="group-row group-sprint"><td colspan="5">Sprint 3 — geplant</td></tr>
+        <tr><td><span class="story-key">L8S-61</span></td><td>Recherche von Hardware</td><td><span class="type-badge">Task</span></td><td>Sprint 3</td><td><span class="assignee"><span class="avatar" style="background:#1a7a4c;">FT</span>Filip Tomsik</span></td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <footer>Last updated: 2026-05-19 · Data source: Jira · layer8security.atlassian.net</footer>
+</div>
+</div>
+
+<script>
+// Mouse glow
+document.addEventListener('mousemove', e => {
+  document.body.style.setProperty('--mx', e.clientX + 'px');
+  document.body.style.setProperty('--my', e.clientY + 'px');
+});
+
+// Scroll reveal
+const obs = new IntersectionObserver(entries => {
+  entries.forEach(e => {
+    if (e.isIntersecting) {
+      setTimeout(() => e.target.classList.add('visible'), (parseInt(e.target.dataset.delay)||0)*80);
+      obs.unobserve(e.target);
+    }
+  });
+}, { threshold: 0.08 });
+document.querySelectorAll('.card').forEach(c => obs.observe(c));
+
+// Counter
+function animCount(el, t, d=900) {
+  let s=null;
+  const step = ts => { if(!s)s=ts; const p=Math.min((ts-s)/d,1); const e=1-Math.pow(1-p,3); el.textContent=Math.round(e*t); if(p<1)requestAnimationFrame(step); };
+  requestAnimationFrame(step);
+}
+function animPct(el, t, d=1200) {
+  let s=null;
+  const step = ts => { if(!s)s=ts; const p=Math.min((ts-s)/d,1); const e=1-Math.pow(1-p,3); el.textContent=(e*t).toFixed(1)+'%'; if(p<1)requestAnimationFrame(step); };
+  requestAnimationFrame(step);
+}
+const statsObs = new IntersectionObserver(entries => {
+  entries.forEach(e => {
+    if (!e.isIntersecting) return;
+    document.querySelectorAll('.stat-num[data-target]').forEach(el => animCount(el, parseInt(el.dataset.target)));
+    document.querySelectorAll('.stat-num[data-pct]').forEach(el => animPct(el, parseFloat(el.dataset.pct)));
+    const vals = [100,73.5,4.1,22.4,73.5];
+    document.querySelectorAll('.stat-bar').forEach((bar,i) => setTimeout(() => bar.style.width = vals[i]+'%', 100+i*60));
+    statsObs.unobserve(e.target);
+  });
+}, { threshold: 0.5 });
+statsObs.observe(document.getElementById('stats'));
+
+// Progress bars + ring
+const progObs = new IntersectionObserver(entries => {
+  entries.forEach(e => {
+    if (!e.isIntersecting) return;
+    e.target.querySelectorAll('.progress-fill[data-width]').forEach((bar,i) => setTimeout(() => bar.style.width = bar.dataset.width+'%', i*120));
+    const ring = document.getElementById('ring-fg');
+    if (ring) setTimeout(() => { const c=2*Math.PI*40; ring.style.strokeDasharray=`${c*.735} ${c*.265}`; }, 200);
+    progObs.unobserve(e.target);
+  });
+}, { threshold: 0.3 });
+document.querySelectorAll('.card').forEach(c => progObs.observe(c));
+
+// Collapsible
+document.querySelectorAll('.collapse-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    const tbody = document.getElementById(btn.dataset.target);
+    const collapsed = btn.classList.toggle('collapsed');
+    tbody.style.display = collapsed ? 'none' : '';
+    btn.childNodes[2].textContent = collapsed ? ' Ausklappen' : ' Einklappen';
+  });
+});
+</script>
+</body>
+</html>

@@ -1,0 +1,1107 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>L8S — Layer 8 Security Status</title>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@300;400;500;600;700&family=Outfit:wght@200;300;400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg:           #0a0a0a;
+    --bg-warm:      #111111;
+    --surface:      #141414;
+    --surface-alt:  #1a1a1a;
+    --border:       #2a2a2a;
+    --border-light: #222222;
+    --ink:          #f0f0f0;
+    --ink-mid:      #888888;
+    --ink-dim:      #707070;
+    --red:          #ff4444;
+    --red-bg:       #1a0f0f;
+    --red-border:   #3a1515;
+    --amber:        #e0a020;
+    --amber-bg:     #181208;
+    --amber-border: #382808;
+    --green:        #38c878;
+    --green-bg:     #081810;
+    --green-border: #0f3020;
+    --blue:         #60a0e8;
+    --blue-bg:      #081018;
+    --blue-border:  #102038;
+    --violet:       #a878e8;
+    --violet-bg:    #100818;
+    --violet-border:#281838;
+    --logo-filter:  invert(1);
+  }
+
+  *, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
+
+  body {
+    background: var(--bg);
+    color: var(--ink);
+    font-family: 'Outfit', sans-serif;
+    min-height: 100vh;
+    -webkit-font-smoothing: antialiased;
+    overflow-x: hidden;
+  }
+
+  /* ─── MOUSE GRADIENT OVERLAY ─── */
+  body::before {
+    content: '';
+    position: fixed; inset: 0; pointer-events: none; z-index: 0;
+    background: radial-gradient(
+      ellipse 600px 600px at var(--mx, 50%) var(--my, 50%),
+      rgba(255,255,255,.045) 0%,
+      transparent 70%
+    );
+    transition: background .05s linear;
+  }
+
+  /* ─── NAV ─── */
+  .topnav {
+    position: sticky; top: 0; z-index: 100;
+    background: rgba(10,10,10,.88);
+    backdrop-filter: blur(20px);
+    border-bottom: 1px solid var(--border);
+    padding: 0 40px;
+    display: flex; align-items: center; justify-content: space-between;
+    height: 56px;
+  }
+  .topnav-brand {
+    font-weight: 800; font-size: 1.1rem; letter-spacing: -1px;
+    display: flex; align-items: center; gap: 10px;
+  }
+  .topnav-brand .logo-mark {
+    width: 28px; height: 28px; background: var(--ink); border-radius: 6px;
+    display: grid; place-items: center;
+    font-family: 'IBM Plex Mono', monospace; color: var(--bg); font-size: .7rem; font-weight: 700;
+  }
+  .topnav-brand .sub { color: var(--ink-dim); font-weight: 400; font-size: .78rem; letter-spacing: 0; }
+  .topnav-right { display: flex; align-items: center; gap: 16px; }
+  .live-tag {
+    display: inline-flex; align-items: center; gap: 7px;
+    background: var(--green-bg); border: 1px solid var(--green-border); color: var(--green);
+    padding: 5px 13px; border-radius: 100px;
+    font-family: 'IBM Plex Mono', monospace; font-size: .63rem; font-weight: 600;
+    text-transform: uppercase; letter-spacing: 1px;
+  }
+  .live-dot {
+    width: 7px; height: 7px; background: var(--green); border-radius: 50%;
+    animation: pulse-dot 2s infinite;
+  }
+  @keyframes pulse-dot {
+    0%, 100% { opacity: 1; transform: scale(1); box-shadow: 0 0 0 0 rgba(26,122,76,.5); }
+    50%       { opacity: .5; transform: scale(.8); box-shadow: 0 0 0 4px rgba(26,122,76,0); }
+  }
+  .update-time { font-family: 'IBM Plex Mono', monospace; font-size: .63rem; color: var(--ink-dim); }
+
+  /* ─── CONTAINER ─── */
+  .container { max-width: 1380px; margin: 0 auto; padding: 40px 40px 60px; }
+
+  /* ─── PAGE HEADER ─── */
+  .page-header {
+    display: flex; justify-content: space-between; align-items: flex-end;
+    padding-bottom: 28px; border-bottom: 2px solid var(--ink); margin-bottom: 40px;
+    opacity: 0; transform: translateY(16px);
+    animation: fadein .5s ease forwards;
+  }
+  .page-header h1 {
+    font-size: clamp(2rem, 3.5vw, 3rem); font-weight: 800; letter-spacing: -2.5px; line-height: 1;
+  }
+  .page-header h1 small {
+    display: block; font-size: .82rem; font-weight: 400;
+    letter-spacing: 4px; text-transform: uppercase; color: var(--ink-mid); margin-top: 6px;
+  }
+  .page-header-meta {
+    text-align: right; font-family: 'IBM Plex Mono', monospace;
+    font-size: .68rem; color: var(--ink-dim); line-height: 2;
+  }
+  .page-header-meta strong { color: var(--ink); }
+
+  /* ─── STATS GRID ─── */
+  .stats {
+    display: grid; grid-template-columns: repeat(5, 1fr);
+    gap: 1px; background: var(--border); border: 1px solid var(--border);
+    border-radius: 16px; overflow: hidden; margin-bottom: 36px;
+    opacity: 0; animation: fadein .5s .1s ease forwards;
+  }
+  .stat {
+    background: linear-gradient(160deg, #181818, #111111); padding: 26px 22px;
+    position: relative; overflow: hidden; cursor: default;
+    transition: background .2s;
+  }
+  .stat::after {
+    content: ''; position: absolute; inset: 0;
+    background: currentColor; opacity: 0; transition: opacity .2s;
+  }
+  .stat:hover { background: var(--surface-alt); }
+  .stat-num {
+    font-family: 'IBM Plex Mono', monospace; font-size: 2.4rem; font-weight: 700; line-height: 1;
+    transition: transform .2s;
+  }
+  .stat:hover .stat-num { transform: scale(1.04); }
+  .stat-label {
+    font-size: .65rem; font-weight: 500; color: var(--ink-dim);
+    text-transform: uppercase; letter-spacing: 1.5px; margin-top: 8px;
+  }
+  .stat-bar {
+    position: absolute; bottom: 0; left: 0; height: 3px;
+    transition: width 1.2s cubic-bezier(.22,1,.36,1);
+    width: 0;
+  }
+
+  /* ─── SECTION CARDS ─── */
+  .card {
+    background: linear-gradient(160deg, #181818 0%, #111111 100%); border: 1px solid var(--border-light);
+    border-radius: 16px; padding: 28px; margin-bottom: 24px;
+    opacity: 0; transform: translateY(20px);
+    transition: box-shadow .25s;
+  }
+  .card:hover { box-shadow: 0 4px 32px rgba(0,0,0,.5), 0 0 0 1px rgba(255,255,255,.04); }
+  .card.visible { animation: fadein-up .45s ease forwards; }
+
+  @keyframes fadein { to { opacity:1; transform: translateY(0); } }
+  @keyframes fadein-up { to { opacity:1; transform: translateY(0); } }
+
+  .section-title {
+    font-size: .65rem; font-weight: 700; text-transform: uppercase;
+    letter-spacing: 4px; color: var(--ink-dim);
+    margin-bottom: 22px; padding-bottom: 12px;
+    border-bottom: 1px solid var(--border-light);
+    display: flex; align-items: center; gap: 10px;
+  }
+  .dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
+
+  /* ─── EPIC ROWS ─── */
+  .epic-list { display: flex; flex-direction: column; gap: 0; }
+  .epic-row {
+    display: grid; grid-template-columns: 220px 1fr auto;
+    gap: 20px; align-items: center; padding: 16px 0;
+    border-bottom: 1px solid var(--border-light);
+    position: relative;
+  }
+  .epic-row:last-child { border-bottom: none; }
+  .epic-name { font-weight: 600; font-size: .92rem; }
+  .epic-key {
+    font-size: .7rem; color: var(--ink-mid);
+    font-family: 'IBM Plex Mono', monospace; margin-top: 3px;
+  }
+  .progress-wrap { display: flex; flex-direction: column; gap: 6px; }
+  .progress-track {
+    background: var(--surface-alt); border: 1px solid var(--border-light);
+    border-radius: 99px; height: 10px; overflow: hidden;
+  }
+  .progress-fill {
+    height: 100%; border-radius: 99px;
+    width: 0;
+    transition: width 1.4s cubic-bezier(.22,1,.36,1);
+  }
+  .progress-sub {
+    font-family: 'IBM Plex Mono', monospace; font-size: .62rem; color: var(--ink-dim);
+  }
+  .epic-pct {
+    font-family: 'IBM Plex Mono', monospace; font-weight: 700; font-size: 1rem;
+    min-width: 52px; text-align: right;
+  }
+
+  /* ─── RING CHART ─── */
+  .sprint-visual {
+    display: flex; align-items: center; gap: 32px; margin-bottom: 28px;
+  }
+  .ring-wrap { position: relative; width: 88px; height: 88px; flex-shrink: 0; }
+  .ring-wrap svg { transform: rotate(-90deg); }
+  .ring-bg { fill: none; stroke: var(--border-light); stroke-width: 10; }
+  .ring-fg {
+    fill: none; stroke-width: 10; stroke-linecap: round;
+    stroke-dasharray: 0 251.2;
+    transition: stroke-dasharray 1.6s cubic-bezier(.22,1,.36,1);
+  }
+  .ring-label {
+    position: absolute; inset: 0; display: grid; place-items: center;
+    font-family: 'IBM Plex Mono', monospace; font-weight: 700; font-size: 1.1rem;
+  }
+  .sprint-meta { flex: 1; }
+  .sprint-meta h3 { font-size: 1.4rem; font-weight: 800; letter-spacing: -1px; margin-bottom: 4px; }
+  .sprint-meta p { font-size: .78rem; color: var(--ink-mid); }
+
+  /* ─── TABLES ─── */
+  .story-table { width: 100%; border-collapse: collapse; }
+  .story-table th {
+    font-size: .6rem; font-weight: 700; text-transform: uppercase;
+    letter-spacing: 2px; color: var(--ink-dim); text-align: left;
+    padding: 8px 12px; border-bottom: 2px solid var(--border);
+  }
+  .story-table td {
+    padding: 10px 12px; font-size: .8rem;
+    border-bottom: 1px solid var(--border-light); vertical-align: middle;
+    transition: background .15s;
+  }
+  .story-table tr:last-child td { border-bottom: none; }
+  .story-table tbody tr {
+    cursor: pointer;
+    transition: transform .15s;
+  }
+  .story-table tbody tr:hover td { background: var(--surface-alt); }
+  .story-table tbody tr:active td { background: var(--bg-warm); }
+
+  .story-key {
+    font-family: 'IBM Plex Mono', monospace; font-weight: 600; color: var(--violet);
+    font-size: .75rem;
+  }
+
+  .status-badge {
+    display: inline-flex; align-items: center; gap: 5px;
+    padding: 3px 9px; border-radius: 6px; font-size: .68rem; font-weight: 600;
+  }
+  .status-badge::before {
+    content: ''; width: 5px; height: 5px; border-radius: 50; flex-shrink: 0;
+  }
+  .status-done     { background: var(--green-bg);  color: var(--green);  border: 1px solid var(--green-border); }
+  .status-done::before     { background: var(--green); border-radius: 50%; }
+  .status-progress { background: var(--blue-bg);   color: var(--blue);   border: 1px solid var(--blue-border); }
+  .status-progress::before { background: var(--blue); border-radius: 50%; animation: pulse-dot 1.5s infinite; }
+  .status-todo     { background: var(--amber-bg);  color: var(--amber);  border: 1px solid var(--amber-border); }
+  .status-todo::before     { background: var(--amber); border-radius: 50%; }
+
+  .new-badge {
+    display: inline-block; padding: 2px 6px; border-radius: 4px;
+    font-size: .58rem; font-weight: 700; background: var(--green); color: #fff;
+    margin-left: 6px; vertical-align: middle; text-transform: uppercase; letter-spacing: .5px;
+    animation: pop-in .4s cubic-bezier(.34,1.56,.64,1) both;
+  }
+  @keyframes pop-in { from { transform: scale(0); opacity: 0; } to { transform: scale(1); opacity: 1; } }
+
+  .type-badge {
+    display: inline-block; padding: 2px 7px; border-radius: 4px; font-size: .6rem; font-weight: 600;
+    background: var(--surface-alt); color: var(--ink-mid); border: 1px solid var(--border-light);
+    text-transform: uppercase; letter-spacing: .5px;
+  }
+
+  /* group rows */
+  .group-row td {
+    font-size: .62rem; font-weight: 700; text-transform: uppercase;
+    letter-spacing: 2px; padding: 7px 12px;
+    border-bottom: 1px solid var(--border-light);
+    cursor: default !important;
+  }
+  .group-row:hover td { background: inherit !important; }
+  .group-sprint td { background: var(--blue-bg); color: var(--blue); }
+  .group-section td { background: var(--surface-alt); color: var(--ink-dim); }
+
+  /* ─── ASSIGNEE ─── */
+  .assignee {
+    display: inline-flex; align-items: center; gap: 6px; font-size: .78rem;
+  }
+  .avatar {
+    width: 22px; height: 22px; border-radius: 50%;
+    display: inline-flex; align-items: center; justify-content: center;
+    font-size: .6rem; font-weight: 700; color: #fff; flex-shrink: 0;
+  }
+
+  /* ─── COLLAPSIBLE ─── */
+  .collapse-btn {
+    background: none; border: none; cursor: pointer;
+    font-family: 'IBM Plex Mono', monospace; font-size: .6rem; font-weight: 600;
+    color: var(--ink-dim); display: flex; align-items: center; gap: 6px;
+    padding: 4px 8px; border-radius: 6px; margin-left: auto;
+    transition: background .15s, color .15s;
+    text-transform: uppercase; letter-spacing: 1.5px;
+  }
+  .collapse-btn:hover { background: var(--surface-alt); color: var(--ink); }
+  .collapse-btn .chevron { transition: transform .25s; display: inline-block; }
+  .collapse-btn.collapsed .chevron { transform: rotate(-90deg); }
+
+  /* ─── FOOTER ─── */
+  footer {
+    text-align: center; padding: 32px 0 0;
+    font-family: 'IBM Plex Mono', monospace; font-size: .65rem; color: var(--ink-dim);
+    border-top: 1px solid var(--border-light); margin-top: 16px;
+    line-height: 2;
+  }
+
+  /* ─── HERO ─── */
+  .hero {
+    height: 100vh; min-height: 600px;
+    display: flex; flex-direction: column;
+    align-items: center; justify-content: center;
+    position: relative; overflow: hidden;
+    background: linear-gradient(160deg, #0f0f0f 0%, #0a0a0a 50%, #111111 100%);
+  }
+  .hero-bg-grid {
+    position: absolute; inset: 0; pointer-events: none;
+    background-image:
+      linear-gradient(rgba(255,255,255,.04) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(255,255,255,.04) 1px, transparent 1px);
+    background-size: 48px 48px;
+    mask-image: radial-gradient(ellipse 80% 80% at 50% 50%, black 30%, transparent 100%);
+  }
+  .hero-mouse-glow {
+    position: absolute; inset: 0; pointer-events: none;
+    background: radial-gradient(
+      ellipse 500px 500px at var(--hx, 50%) var(--hy, 50%),
+      rgba(255,255,255,.07) 0%,
+      transparent 65%
+    );
+    transition: background .08s linear;
+  }
+  .hero-logo {
+    width: clamp(140px, 18vw, 220px);
+    opacity: 0; transform: scale(.85);
+    animation: hero-logo-in .8s .1s cubic-bezier(.34,1.4,.64,1) forwards;
+    position: relative; z-index: 1;
+    filter: var(--logo-filter, none);
+  }
+  @keyframes hero-logo-in {
+    to { opacity: 1; transform: scale(1); }
+  }
+  .hero-name {
+    font-size: clamp(1rem, 2.5vw, 1.5rem); font-weight: 800; letter-spacing: -1px;
+    margin-top: 24px; position: relative; z-index: 1;
+    opacity: 0; transform: translateY(12px);
+    animation: fadein .6s .55s ease forwards;
+  }
+  .hero-sub {
+    font-family: 'IBM Plex Mono', monospace; font-size: .72rem; color: var(--ink-dim);
+    text-transform: uppercase; letter-spacing: 4px; margin-top: 8px;
+    position: relative; z-index: 1;
+    opacity: 0; transform: translateY(10px);
+    animation: fadein .6s .7s ease forwards;
+  }
+  .hero-chips {
+    display: flex; gap: 12px; margin-top: 40px; flex-wrap: wrap; justify-content: center;
+    position: relative; z-index: 1;
+    opacity: 0; animation: fadein .6s .9s ease forwards;
+  }
+  .hero-chip {
+    background: linear-gradient(145deg, #1a1a1a, #111111);
+    border: 1px solid var(--border);
+    border-radius: 12px; padding: 14px 22px; text-align: center; min-width: 120px;
+    transition: transform .2s, box-shadow .2s, border-color .2s;
+  }
+  .hero-chip:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 32px rgba(0,0,0,.6), 0 0 0 1px rgba(255,255,255,.08);
+    border-color: rgba(255,255,255,.15);
+  }
+  .hero-chip-num {
+    font-family: 'IBM Plex Mono', monospace; font-size: 1.6rem; font-weight: 700; line-height: 1;
+  }
+  .hero-chip-label {
+    font-size: .62rem; font-weight: 600; text-transform: uppercase;
+    letter-spacing: 1.5px; color: var(--ink-dim); margin-top: 5px;
+  }
+  .hero-scroll {
+    position: absolute; bottom: 36px; left: 50%; transform: translateX(-50%);
+    display: flex; flex-direction: column; align-items: center; gap: 6px;
+    font-family: 'IBM Plex Mono', monospace; font-size: .6rem;
+    text-transform: uppercase; letter-spacing: 2px; color: var(--ink-dim);
+    opacity: 0; animation: fadein .6s 1.3s ease forwards;
+    cursor: pointer; z-index: 1;
+    transition: color .2s;
+  }
+  .hero-scroll:hover { color: var(--ink); }
+  .scroll-arrow {
+    width: 28px; height: 28px; border: 1.5px solid var(--border);
+    border-radius: 50%; display: grid; place-items: center;
+    animation: bounce 2s 1.5s infinite;
+  }
+  @keyframes bounce {
+    0%, 100% { transform: translateY(0); }
+    50%       { transform: translateY(5px); }
+  }
+
+  /* ─── HERO NAV CARDS ─── */
+  .hero-nav {
+    display: flex; gap: 14px; margin-top: 48px; flex-wrap: wrap; justify-content: center;
+    position: relative; z-index: 1;
+    opacity: 0; animation: fadein .6s 1.1s ease forwards;
+  }
+  .hero-nav-card {
+    background: linear-gradient(145deg, #1c1c1c, #121212);
+    border: 1px solid #2a2a2a;
+    border-radius: 14px; padding: 18px 24px;
+    min-width: 160px; cursor: pointer;
+    display: flex; flex-direction: column; gap: 4px;
+    transition: transform .2s, box-shadow .2s, border-color .2s;
+    position: relative; overflow: hidden;
+  }
+  .hero-nav-card::before {
+    content: ''; position: absolute; inset: 0;
+    background: linear-gradient(135deg, rgba(255,255,255,.04) 0%, transparent 60%);
+    opacity: 0; transition: opacity .2s;
+  }
+  .hero-nav-card:hover { transform: translateY(-4px); box-shadow: 0 12px 40px rgba(0,0,0,.6); border-color: #404040; }
+  .hero-nav-card:hover::before { opacity: 1; }
+  .hero-nav-card--active {
+    border-color: #404040;
+    background: linear-gradient(145deg, #222, #161616);
+    box-shadow: 0 0 0 1px rgba(255,255,255,.06);
+  }
+  .hnc-icon { color: var(--ink-dim); margin-bottom: 6px; }
+  .hero-nav-card--active .hnc-icon { color: var(--ink-mid); }
+  .hnc-label { font-weight: 700; font-size: .95rem; letter-spacing: -.3px; }
+  .hnc-sub { font-size: .68rem; color: var(--ink-dim); font-family: 'IBM Plex Mono', monospace; }
+  .hnc-arrow {
+    position: absolute; top: 18px; right: 18px;
+    color: var(--ink-dim); font-size: .9rem;
+    transition: transform .2s, color .2s;
+  }
+  .hero-nav-card:hover .hnc-arrow { transform: translate(3px,-3px); color: var(--ink); }
+
+  /* ─── SUBPAGE SECTIONS ─── */
+  .subpage {
+    min-height: 100vh; background: #0a0a0a;
+    border-top: 1px solid #1e1e1e;
+    display: flex; align-items: center; justify-content: center;
+    padding: 80px 40px;
+  }
+  .subpage-inner { max-width: 900px; width: 100%; }
+  .subpage-header { margin-bottom: 48px; }
+  .subpage-tag {
+    display: inline-block;
+    font-family: 'IBM Plex Mono', monospace; font-size: .62rem; font-weight: 700;
+    text-transform: uppercase; letter-spacing: 4px; color: var(--ink-dim);
+    border: 1px solid #2a2a2a; border-radius: 6px; padding: 4px 10px;
+    margin-bottom: 16px;
+  }
+  .subpage-title {
+    font-size: clamp(2rem, 4vw, 3.5rem); font-weight: 800; letter-spacing: -3px; line-height: 1;
+    margin-bottom: 14px;
+    background: linear-gradient(135deg, #f0f0f0 0%, #888 100%);
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+  }
+  .subpage-desc { font-size: .88rem; color: var(--ink-dim); max-width: 500px; line-height: 1.6; }
+
+  /* placeholder grid */
+  .placeholder-grid {
+    display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; margin-bottom: 40px;
+  }
+  .placeholder-card {
+    background: linear-gradient(160deg, #181818, #111); border: 1px solid #222;
+    border-radius: 12px; padding: 22px 18px; text-align: center;
+  }
+  .ph-avatar {
+    width: 52px; height: 52px; border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-weight: 700; font-size: .85rem; color: #888; margin: 0 auto 12px;
+    border: 1px solid #2a2a2a; letter-spacing: .5px;
+  }
+  .ph-name { font-weight: 600; font-size: .82rem; margin-bottom: 4px; }
+  .ph-role { font-size: .68rem; color: var(--ink-dim); font-family: 'IBM Plex Mono', monospace; }
+
+  /* placeholder lines */
+  .ph-text-block, .ph-content-blocks .ph-block { }
+  .ph-line {
+    height: 10px; border-radius: 5px; background: #1e1e1e;
+    animation: ph-shimmer 2s infinite;
+  }
+  .ph-line.long  { width: 100%; }
+  .ph-line.med   { width: 65%; }
+  .ph-line.short { width: 40%; }
+  @keyframes ph-shimmer {
+    0%, 100% { background: #1e1e1e; }
+    50%       { background: #252525; }
+  }
+
+  .ph-content-blocks {
+    display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px;
+  }
+  .ph-block {
+    background: linear-gradient(160deg, #181818, #111); border: 1px solid #222;
+    border-radius: 12px; padding: 24px;
+  }
+  .ph-block-icon { color: #444; margin-bottom: 12px; }
+  .ph-block-title { font-weight: 700; font-size: .85rem; color: var(--ink-mid); margin-bottom: 6px; }
+
+  /* ─── TWEAKS PANEL ─── */
+  #tweaks-panel {
+    display: none; position: fixed; bottom: 24px; right: 24px;
+    background: var(--surface); border: 1px solid var(--border);
+    border-radius: 14px; padding: 20px; width: 240px;
+    box-shadow: 0 8px 32px rgba(0,0,0,.12); z-index: 999;
+    font-size: .8rem;
+  }
+  #tweaks-panel h4 {
+    font-size: .65rem; text-transform: uppercase; letter-spacing: 3px;
+    color: var(--ink-dim); margin-bottom: 14px; font-weight: 700;
+  }
+  .tweak-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; }
+  .tweak-row label { color: var(--ink-mid); font-size: .75rem; }
+  .tweak-toggle {
+    width: 36px; height: 20px; background: var(--border); border-radius: 10px;
+    position: relative; cursor: pointer; border: none; transition: background .2s;
+  }
+  .tweak-toggle.on { background: var(--green); }
+  .tweak-toggle::after {
+    content: ''; position: absolute; top: 2px; left: 2px;
+    width: 16px; height: 16px; border-radius: 50%; background: white;
+    transition: transform .2s;
+  }
+  .tweak-toggle.on::after { transform: translateX(16px); }
+  .tweak-select {
+    font-family: 'Outfit', sans-serif; font-size: .75rem;
+    background: var(--surface-alt); border: 1px solid var(--border-light);
+    border-radius: 6px; padding: 4px 8px; color: var(--ink);
+  }
+</style>
+</head>
+<body>
+
+<!-- HERO -->
+<section class="hero" id="hero">
+  <div class="hero-bg-grid"></div>
+  <div class="hero-mouse-glow" id="hero-glow"></div>
+  <img class="hero-logo" src="assets/l8s-logo.png" alt="L8S Logo">
+  <div class="hero-name">Layer 8 Security</div>
+  <div class="hero-sub" style="color: rgb(176, 174, 174);">Sprint 2 · Machbarkeitsanalyse · 2026</div>
+  <div class="hero-chips">
+    <div class="hero-chip">
+      <div class="hero-chip-num" style="color:var(--ink);">48</div>
+      <div class="hero-chip-label">Issues gesamt</div>
+    </div>
+    <div class="hero-chip">
+      <div class="hero-chip-num" style="color:var(--green);">29</div>
+      <div class="hero-chip-label">Erledigt</div>
+    </div>
+    <div class="hero-chip">
+      <div class="hero-chip-num" style="color:var(--blue);">1</div>
+      <div class="hero-chip-label">In Bearbeitung</div>
+    </div>
+    <div class="hero-chip">
+      <div class="hero-chip-num" style="color:var(--amber);">18</div>
+      <div class="hero-chip-label">Offen</div>
+    </div>
+    <div class="hero-chip">
+      <div class="hero-chip-num" style="color:var(--violet);">61.8%</div>
+      <div class="hero-chip-label">Fortschritt</div>
+    </div>
+  </div>
+  <!-- NAV WINDOWS -->
+  <div class="hero-nav">
+    <div class="hero-nav-card" onclick="document.getElementById('ueber-uns').scrollIntoView({behavior:'smooth'})">
+      <div class="hnc-icon">
+        <svg width="20" height="20" viewBox="0 0 20 20" fill="none"><circle cx="10" cy="7" r="3" stroke="currentColor" stroke-width="1.5"/><path d="M4 17c0-3.314 2.686-6 6-6s6 2.686 6 6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+      </div>
+      <div class="hnc-label">Über uns</div>
+      <div class="hnc-sub">Team &amp; Projekt</div>
+      <div class="hnc-arrow">→</div>
+    </div>
+    <div class="hero-nav-card" onclick="document.getElementById('projektidee').scrollIntoView({behavior:'smooth'})">
+      <div class="hnc-icon">
+        <svg width="20" height="20" viewBox="0 0 20 20" fill="none"><path d="M10 2L12.5 7.5H18L13.5 11L15.5 17L10 13.5L4.5 17L6.5 11L2 7.5H7.5L10 2Z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/></svg>
+      </div>
+      <div class="hnc-label">Projektidee</div>
+      <div class="hnc-sub">Konzept &amp; Ziele</div>
+      <div class="hnc-arrow">→</div>
+    </div>
+    <div class="hero-nav-card hero-nav-card--active" onclick="document.getElementById('dashboard').scrollIntoView({behavior:'smooth'})">
+      <div class="hnc-icon">
+        <svg width="20" height="20" viewBox="0 0 20 20" fill="none"><rect x="2" y="2" width="7" height="7" rx="1.5" stroke="currentColor" stroke-width="1.5"/><rect x="11" y="2" width="7" height="7" rx="1.5" stroke="currentColor" stroke-width="1.5"/><rect x="2" y="11" width="7" height="7" rx="1.5" stroke="currentColor" stroke-width="1.5"/><rect x="11" y="11" width="7" height="7" rx="1.5" stroke="currentColor" stroke-width="1.5"/></svg>
+      </div>
+      <div class="hnc-label">Übersicht</div>
+      <div class="hnc-sub">Sprint &amp; Issues</div>
+      <div class="hnc-arrow">→</div>
+    </div>
+  </div>
+</section>
+
+<!-- ÜBER UNS -->
+<section class="subpage" id="ueber-uns" data-screen-label="Über uns">
+  <div class="subpage-inner">
+    <div class="subpage-header">
+      <div class="subpage-tag">Über uns</div>
+      <h2 class="subpage-title">Das Team</h2>
+      <p class="subpage-desc">Hier kommt euer Team-Content rein — wird via Claude Code befüllt.</p>
+    </div>
+    <div class="placeholder-grid">
+      <div class="placeholder-card">
+        <div class="ph-avatar" style="background:linear-gradient(135deg,#2a2a2a,#1a1a1a);">AP</div>
+        <div class="ph-name">Andrija Pavlovic</div>
+        <div class="ph-role">[ Rolle ]</div>
+      </div>
+      <div class="placeholder-card">
+        <div class="ph-avatar" style="background:linear-gradient(135deg,#2a2a2a,#1a1a1a);">DS</div>
+        <div class="ph-name">Diego Saadaoui Srioui</div>
+        <div class="ph-role">[ Rolle ]</div>
+      </div>
+      <div class="placeholder-card">
+        <div class="ph-avatar" style="background:linear-gradient(135deg,#2a2a2a,#1a1a1a);">FT</div>
+        <div class="ph-name">Filip Tomsik</div>
+        <div class="ph-role">[ Rolle ]</div>
+      </div>
+      <div class="placeholder-card">
+        <div class="ph-avatar" style="background:linear-gradient(135deg,#2a2a2a,#1a1a1a);">BT</div>
+        <div class="ph-name">Berk Temür</div>
+        <div class="ph-role">[ Rolle ]</div>
+      </div>
+    </div>
+    <div class="ph-text-block">
+      <div class="ph-line long"></div>
+      <div class="ph-line med"></div>
+      <div class="ph-line long"></div>
+      <div class="ph-line short"></div>
+    </div>
+  </div>
+</section>
+
+<!-- PROJEKTIDEE -->
+<section class="subpage" id="projektidee" data-screen-label="Projektidee">
+  <div class="subpage-inner">
+    <div class="subpage-header">
+      <div class="subpage-tag">Projektidee</div>
+      <h2 class="subpage-title">Layer 8 Security</h2>
+      <p class="subpage-desc">Konzept, Ziele und Hintergrund — wird via Claude Code befüllt.</p>
+    </div>
+    <div class="ph-content-blocks">
+      <div class="ph-block">
+        <div class="ph-block-icon">
+          <svg width="22" height="22" viewBox="0 0 22 22" fill="none"><path d="M11 2L13.5 8H20L14.5 12L16.5 18L11 14.5L5.5 18L7.5 12L2 8H8.5L11 2Z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/></svg>
+        </div>
+        <div class="ph-block-title">[ Idee / Problem ]</div>
+        <div class="ph-line med" style="margin-top:10px;"></div>
+        <div class="ph-line long" style="margin-top:6px;"></div>
+        <div class="ph-line short" style="margin-top:6px;"></div>
+      </div>
+      <div class="ph-block">
+        <div class="ph-block-icon">
+          <svg width="22" height="22" viewBox="0 0 22 22" fill="none"><circle cx="11" cy="11" r="9" stroke="currentColor" stroke-width="1.5"/><path d="M11 7v4l3 3" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+        </div>
+        <div class="ph-block-title">[ Ziele ]</div>
+        <div class="ph-line long" style="margin-top:10px;"></div>
+        <div class="ph-line med" style="margin-top:6px;"></div>
+        <div class="ph-line long" style="margin-top:6px;"></div>
+      </div>
+      <div class="ph-block">
+        <div class="ph-block-icon">
+          <svg width="22" height="22" viewBox="0 0 22 22" fill="none"><rect x="3" y="3" width="16" height="16" rx="3" stroke="currentColor" stroke-width="1.5"/><path d="M7 11h8M7 7h8M7 15h5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+        </div>
+        <div class="ph-block-title">[ Lösung ]</div>
+        <div class="ph-line short" style="margin-top:10px;"></div>
+        <div class="ph-line long" style="margin-top:6px;"></div>
+        <div class="ph-line med" style="margin-top:6px;"></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- NAV -->
+<nav class="topnav" id="dashboard">
+  <div class="topnav-brand">
+    <div class="logo-mark">L8S</div>
+    <span>Layer 8 Security</span>
+    <span class="sub">/ Status Dashboard</span>
+  </div>
+  <div class="topnav-right">
+    <span class="live-tag"><span class="live-dot"></span>Jira Live-Daten</span>
+    <span class="update-time">Stand: 21. April 2026</span>
+  </div>
+</nav>
+
+<div class="container">
+
+  <!-- HEADER -->
+  <div class="page-header">
+    <div>
+      <h1>L8S Dashboard<small>Sprint 2 — Machbarkeitsanalyse</small></h1>
+    </div>
+    <div class="page-header-meta">
+      Auftraggeber: Bernhard Nickel<br>
+      Auftragnehmer: Filip Tomsik<br>
+      <strong>Stand: 21. April 2026</strong>
+    </div>
+  </div>
+
+  <!-- STATS -->
+  <div class="stats" id="stats">
+    <div class="stat">
+      <div class="stat-num" style="color:var(--ink);" data-target="48">0</div>
+      <div class="stat-label">Gesamt Issues</div>
+      <div class="stat-bar" style="background:var(--ink);"></div>
+    </div>
+    <div class="stat">
+      <div class="stat-num" style="color:var(--green);" data-target="29">0</div>
+      <div class="stat-label">Erledigt</div>
+      <div class="stat-bar" style="background:var(--green);"></div>
+    </div>
+    <div class="stat">
+      <div class="stat-num" style="color:var(--blue);" data-target="1">0</div>
+      <div class="stat-label">In Bearbeitung</div>
+      <div class="stat-bar" style="background:var(--blue);"></div>
+    </div>
+    <div class="stat">
+      <div class="stat-num" style="color:var(--amber);" data-target="18">0</div>
+      <div class="stat-label">Zu erledigen</div>
+      <div class="stat-bar" style="background:var(--amber);"></div>
+    </div>
+    <div class="stat">
+      <div class="stat-num" style="color:var(--violet);" data-pct="61.8">0%</div>
+      <div class="stat-label">Sprint 2 Fortschritt</div>
+      <div class="stat-bar" style="background:var(--violet);"></div>
+    </div>
+  </div>
+
+  <!-- EPIC ROADMAP -->
+  <div class="card" data-delay="0">
+    <div class="section-title">
+      <span class="dot" style="background:var(--violet);"></span> Epic-Roadmap
+    </div>
+
+    <!-- Ring + Sprint summary -->
+    <div class="sprint-visual">
+      <div class="ring-wrap">
+        <svg width="88" height="88" viewBox="0 0 88 88">
+          <circle class="ring-bg" cx="44" cy="44" r="40"/>
+          <circle class="ring-fg" id="ring-fg" cx="44" cy="44" r="40" stroke="var(--violet)"/>
+        </svg>
+        <div class="ring-label" style="color:var(--violet);">61.8%</div>
+      </div>
+      <div class="sprint-meta">
+        <h3>Sprint 2 läuft</h3>
+        <p>29 von 48 Issues abgeschlossen · 1 in Bearbeitung · 18 offen</p>
+        <p style="margin-top:6px;font-size:.72rem;color:var(--ink-dim);">Mihailo — aktiver Sprint</p>
+      </div>
+    </div>
+
+    <div class="epic-list">
+      <div class="epic-row">
+        <div>
+          <div class="epic-name">Recherche</div>
+          <div class="epic-key">L8S-5</div>
+        </div>
+        <div class="progress-wrap">
+          <div class="progress-track"><div class="progress-fill" data-width="100" style="background:var(--green);"></div></div>
+          <div class="progress-sub">8 / 8 Stories</div>
+        </div>
+        <div class="epic-pct" style="color:var(--green);">100%</div>
+      </div>
+      <div class="epic-row">
+        <div>
+          <div class="epic-name">Machbarkeitsanalyse</div>
+          <div class="epic-key">L8S-15</div>
+        </div>
+        <div class="progress-wrap">
+          <div class="progress-track"><div class="progress-fill" data-width="25" style="background:var(--blue);"></div></div>
+          <div class="progress-sub">1 / 4 Stories</div>
+        </div>
+        <div class="epic-pct" style="color:var(--blue);">25%</div>
+      </div>
+      <div class="epic-row">
+        <div>
+          <div class="epic-name">Human-Engineering-Simulation</div>
+          <div class="epic-key">L8S-22</div>
+        </div>
+        <div class="progress-wrap">
+          <div class="progress-track"><div class="progress-fill" data-width="25" style="background:var(--amber);"></div></div>
+          <div class="progress-sub">1 / 4 Stories</div>
+        </div>
+        <div class="epic-pct" style="color:var(--amber);">25%</div>
+      </div>
+      <div class="epic-row">
+        <div>
+          <div class="epic-name">Dokumentation &amp; Abgabe</div>
+          <div class="epic-key">L8S-24</div>
+        </div>
+        <div class="progress-wrap">
+          <div class="progress-track"><div class="progress-fill" data-width="0" style="background:var(--amber);"></div></div>
+          <div class="progress-sub">0 / 4 Stories</div>
+        </div>
+        <div class="epic-pct" style="color:var(--ink-dim);">0%</div>
+      </div>
+      <div class="epic-row">
+        <div>
+          <div class="epic-name">Optionale Ziele</div>
+          <div class="epic-key">L8S-39</div>
+        </div>
+        <div class="progress-wrap">
+          <div class="progress-track"><div class="progress-fill" data-width="0" style="background:var(--violet);"></div></div>
+          <div class="progress-sub">0 / 3 Stories</div>
+        </div>
+        <div class="epic-pct" style="color:var(--ink-dim);">0%</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ERLEDIGT -->
+  <div class="card" data-delay="1">
+    <div class="section-title">
+      <span class="dot" style="background:var(--green);"></span>
+      Erledigt <span style="color:var(--green);margin-left:4px;">13</span>
+      <button class="collapse-btn" data-target="done-tbody">
+        <span class="chevron">▾</span> Einklappen
+      </button>
+    </div>
+    <table class="story-table">
+      <thead>
+        <tr><th>Key</th><th>Summary</th><th>Typ</th><th>Status</th><th>Assignee</th></tr>
+      </thead>
+      <tbody id="done-tbody">
+        <tr><td><span class="story-key">L8S-6</span></td><td>Datenschutzanforderungen für sensible Dokumente</td><td><span class="type-badge">Story</span></td><td><span class="status-badge status-done">Erledigt</span></td><td><span class="assignee"><span class="avatar" style="background:#6a4c93;">AP</span>Andrija Pavlovic</span></td></tr>
+        <tr><td><span class="story-key">L8S-7</span></td><td>Technische Umsetzungsansätze vergleichen</td><td><span class="type-badge">Story</span></td><td><span class="status-badge status-done">Erledigt</span></td><td><span class="assignee"><span class="avatar" style="background:#2060a0;">DS</span>Diego Saadaoui Srioui</span></td></tr>
+        <tr><td><span class="story-key">L8S-8</span></td><td>Schulungsformate und Lernziele definieren</td><td><span class="type-badge">Story</span></td><td><span class="status-badge status-done">Erledigt</span></td><td><span class="assignee"><span class="avatar" style="background:#1a7a4c;">FT</span>Filip Tomsik</span></td></tr>
+        <tr><td><span class="story-key">L8S-9</span></td><td>Tools, Scope und Aufwand bewerten</td><td><span class="type-badge">Story</span></td><td><span class="status-badge status-done">Erledigt</span></td><td><span class="assignee"><span class="avatar" style="background:#c87a08;">BT</span>Berk Temür</span></td></tr>
+        <tr><td><span class="story-key">L8S-11</span></td><td>KI-gestützte Übung zum Datenschutz</td><td><span class="type-badge">Story</span></td><td><span class="status-badge status-done">Erledigt</span></td><td><span class="assignee"><span class="avatar" style="background:#6a4c93;">AP</span>Andrija Pavlovic</span></td></tr>
+        <tr><td><span class="story-key">L8S-12</span></td><td>Technische Funktionsweise KI-Übung <span class="new-badge">neu</span></td><td><span class="type-badge">Story</span></td><td><span class="status-badge status-done">Erledigt</span></td><td><span class="assignee"><span class="avatar" style="background:#2060a0;">DS</span>Diego Saadaoui Srioui</span></td></tr>
+        <tr><td><span class="story-key">L8S-13</span></td><td>Übungsformate für KI-Plattform auswählen</td><td><span class="type-badge">Story</span></td><td><span class="status-badge status-done">Erledigt</span></td><td><span class="assignee"><span class="avatar" style="background:#1a7a4c;">FT</span>Filip Tomsik</span></td></tr>
+        <tr><td><span class="story-key">L8S-14</span></td><td>Analyse Projektumfang und Umsetzbarkeit</td><td><span class="type-badge">Story</span></td><td><span class="status-badge status-done">Erledigt</span></td><td><span class="assignee"><span class="avatar" style="background:#c87a08;">BT</span>Berk Temür</span></td></tr>
+        <tr><td><span class="story-key">L8S-19</span></td><td>Trainingsszenarien bewerten <span class="new-badge">neu</span></td><td><span class="type-badge">Story</span></td><td><span class="status-badge status-done">Erledigt</span></td><td><span class="assignee"><span class="avatar" style="background:#1a7a4c;">FT</span>Filip Tomsik</span></td></tr>
+        <tr><td><span class="story-key">L8S-37</span></td><td>Human-Engineering-Szenarien analysieren <span class="new-badge">neu</span></td><td><span class="type-badge">Story</span></td><td><span class="status-badge status-done">Erledigt</span></td><td><span class="assignee"><span class="avatar" style="background:#1a7a4c;">FT</span>Filip Tomsik</span></td></tr>
+        <tr><td><span class="story-key">L8S-58</span></td><td>Präsentation fürs Vorstellungsgespräch bei CANCOM <span class="new-badge">neu</span></td><td><span class="type-badge">Task</span></td><td><span class="status-badge status-done">Erledigt</span></td><td><span class="assignee"><span class="avatar" style="background:#2060a0;">DS</span>Diego Saadaoui Srioui</span></td></tr>
+        <tr><td><span class="story-key">L8S-59</span></td><td>Status-Webseite Prototyp erstellt <span class="new-badge">neu</span></td><td><span class="type-badge">Task</span></td><td><span class="status-badge status-done">Erledigt</span></td><td><span class="assignee"><span class="avatar" style="background:#c87a08;">BT</span>Berk Temür</span></td></tr>
+        <tr><td><span class="story-key">L8S-60</span></td><td>Instagram-Account für Social-Media-Präsenz erstellt <span class="new-badge">neu</span></td><td><span class="type-badge">Task</span></td><td><span class="status-badge status-done">Erledigt</span></td><td><span class="assignee"><span class="avatar" style="background:#2060a0;">DS</span>Diego Saadaoui Srioui</span></td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- IN BEARBEITUNG -->
+  <div class="card" data-delay="2" style="border-color:var(--blue-border);background:var(--blue-bg);">
+    <div class="section-title" style="border-color:var(--blue-border);">
+      <span class="dot" style="background:var(--blue); animation:pulse-dot 1.5s infinite;"></span>
+      In Bearbeitung <span style="color:var(--blue);margin-left:4px;">1</span>
+    </div>
+    <table class="story-table">
+      <thead>
+        <tr><th>Key</th><th>Summary</th><th>Epic</th><th>Status</th><th>Assignee</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><span class="story-key">L8S-18</span></td>
+          <td>Technische Machbarkeit KI-Workflow</td>
+          <td>Machbarkeitsanalyse</td>
+          <td><span class="status-badge status-progress">In Bearbeitung</span></td>
+          <td><span class="assignee"><span class="avatar" style="background:#2060a0;">DS</span>Diego Saadaoui Srioui</span></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- ZU ERLEDIGEN -->
+  <div class="card" data-delay="3">
+    <div class="section-title">
+      <span class="dot" style="background:var(--amber);"></span>
+      Zu erledigen <span style="color:var(--amber);margin-left:4px;">18</span>
+      <button class="collapse-btn" data-target="todo-tbody">
+        <span class="chevron">▾</span> Einklappen
+      </button>
+    </div>
+    <table class="story-table">
+      <thead>
+        <tr><th>Key</th><th>Summary</th><th>Typ</th><th>Epic / Sprint</th><th>Assignee</th></tr>
+      </thead>
+      <tbody id="todo-tbody">
+        <tr class="group-row group-sprint"><td colspan="5">Sprint 2 — Mihailo (aktiv)</td></tr>
+        <tr><td><span class="story-key">L8S-17</span></td><td>Sicherheits- und Datenschutzrisiken bewerten</td><td><span class="type-badge">Story</span></td><td>Machbarkeitsanalyse</td><td><span class="assignee"><span class="avatar" style="background:#6a4c93;">AP</span>Andrija Pavlovic</span></td></tr>
+        <tr><td><span class="story-key">L8S-20</span></td><td>Go-/No-Go-Empfehlung zur Machbarkeit</td><td><span class="type-badge">Story</span></td><td>Machbarkeitsanalyse</td><td><span class="assignee"><span class="avatar" style="background:#c87a08;">BT</span>Berk Temür</span></td></tr>
+
+        <tr class="group-row group-section"><td colspan="5">Dokumentation &amp; Abgabe</td></tr>
+        <tr><td><span class="story-key">L8S-25</span></td><td>Dokumentierte Sicherheits- und Datenschutzanalyse</td><td><span class="type-badge">Story</span></td><td>Dokumentation</td><td><span class="assignee"><span class="avatar" style="background:#6a4c93;">AP</span>Andrija Pavlovic</span></td></tr>
+        <tr><td><span class="story-key">L8S-26</span></td><td>Technische Dokumentation Setup/Workflow</td><td><span class="type-badge">Story</span></td><td>Dokumentation</td><td><span class="assignee"><span class="avatar" style="background:#2060a0;">DS</span>Diego Saadaoui Srioui</span></td></tr>
+        <tr><td><span class="story-key">L8S-27</span></td><td>Dokumentation Trainings- und Übungsszenarien</td><td><span class="type-badge">Story</span></td><td>Dokumentation</td><td><span class="assignee"><span class="avatar" style="background:#1a7a4c;">FT</span>Filip Tomsik</span></td></tr>
+        <tr><td><span class="story-key">L8S-28</span></td><td>Strukturiertes Gesamtdokument und Präsentation</td><td><span class="type-badge">Story</span></td><td>Dokumentation</td><td><span class="assignee"><span class="avatar" style="background:#c87a08;">BT</span>Berk Temür</span></td></tr>
+
+        <tr class="group-row group-section"><td colspan="5">Human-Engineering-Simulation</td></tr>
+        <tr><td><span class="story-key">L8S-35</span></td><td>Ethische und sicherheitstechnische Richtlinien</td><td><span class="type-badge">Story</span></td><td>HE-Simulation</td><td><span class="assignee"><span class="avatar" style="background:#6a4c93;">AP</span>Andrija Pavlovic</span></td></tr>
+        <tr><td><span class="story-key">L8S-36</span></td><td>Technische Rahmenbedingungen analysieren</td><td><span class="type-badge">Story</span></td><td>HE-Simulation</td><td><span class="assignee"><span class="avatar" style="background:#2060a0;">DS</span>Diego Saadaoui Srioui</span></td></tr>
+        <tr><td><span class="story-key">L8S-38</span></td><td>Awareness-Maßnahmen mit dokumentierter KI</td><td><span class="type-badge">Story</span></td><td>HE-Simulation</td><td><span class="assignee"><span class="avatar" style="background:#c87a08;">BT</span>Berk Temür</span></td></tr>
+
+        <tr class="group-row group-section"><td colspan="5">Optionale Ziele</td></tr>
+        <tr><td><span class="story-key">L8S-40</span></td><td>Cisco Cybersecurity Zertifikate</td><td><span class="type-badge">Story</span></td><td>Optionale Ziele</td><td><span class="assignee">—</span></td></tr>
+        <tr><td><span class="story-key">L8S-41</span></td><td>Übungen an Firma/Schule anpassen</td><td><span class="type-badge">Story</span></td><td>Optionale Ziele</td><td><span class="assignee">—</span></td></tr>
+        <tr><td><span class="story-key">L8S-42</span></td><td>Self-Study-Guide mit Screenshots/Beispielen</td><td><span class="type-badge">Story</span></td><td>Optionale Ziele</td><td><span class="assignee">—</span></td></tr>
+
+        <tr class="group-row group-section"><td colspan="5">Sprint 3 — Hans (geplant)</td></tr>
+        <tr><td><span class="story-key">L8S-61</span></td><td>Recherche von Hardware</td><td><span class="type-badge">Task</span></td><td>Sprint 3</td><td><span class="assignee"><span class="avatar" style="background:#1a7a4c;">FT</span>Filip Tomsik</span></td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <footer>
+    Last updated: 2026-04-21 · Data source: Jira · layer8security.atlassian.net
+  </footer>
+</div>
+
+<!-- TWEAKS PANEL -->
+<div id="tweaks-panel">
+  <h4>Tweaks</h4>
+  <div class="tweak-row">
+    <label>Kompakte Tabellen</label>
+    <button class="tweak-toggle" id="t-compact" onclick="toggleTweak('compact')"></button>
+  </div>
+  <div class="tweak-row">
+    <label>Dunkles Theme</label>
+    <button class="tweak-toggle" id="t-dark" onclick="toggleTweak('dark')"></button>
+  </div>
+  <div class="tweak-row">
+    <label>Accentfarbe</label>
+    <select class="tweak-select" id="t-accent" onchange="setAccent(this.value)">
+      <option value="violet">Violet</option>
+      <option value="blue">Blue</option>
+      <option value="green">Green</option>
+    </select>
+  </div>
+</div>
+
+<script>
+// ─── TWEAKS ───────────────────────────────────────
+window.addEventListener('message', e => {
+  if (e.data?.type === '__activate_edit_mode')   document.getElementById('tweaks-panel').style.display = 'block';
+  if (e.data?.type === '__deactivate_edit_mode') document.getElementById('tweaks-panel').style.display = 'none';
+});
+window.parent.postMessage({ type: '__edit_mode_available' }, '*');
+
+const TWEAK_DEFAULTS = /*EDITMODE-BEGIN*/{
+  "compact": true,
+  "dark": false,
+  "accent": "green"
+}/*EDITMODE-END*/;
+let tweaks = { ...TWEAK_DEFAULTS };
+
+function applyTweaks() {
+  // compact
+  document.querySelectorAll('.story-table td').forEach(td => {
+    td.style.padding = tweaks.compact ? '6px 12px' : '';
+  });
+  // dark
+  if (tweaks.dark) {
+    document.documentElement.style.setProperty('--bg', '#141210');
+    document.documentElement.style.setProperty('--surface', '#1e1b18');
+    document.documentElement.style.setProperty('--surface-alt', '#252118');
+    document.documentElement.style.setProperty('--border', '#333028');
+    document.documentElement.style.setProperty('--border-light', '#2a2720');
+    document.documentElement.style.setProperty('--ink', '#f0ebe2');
+    document.documentElement.style.setProperty('--ink-mid', '#9a9288');
+    document.documentElement.style.setProperty('--ink-dim', '#5a5348');
+  } else {
+    ['--bg','--surface','--surface-alt','--border','--border-light','--ink','--ink-mid','--ink-dim'].forEach(v =>
+      document.documentElement.style.removeProperty(v));
+  }
+  // toggle states
+  document.getElementById('t-compact').className = 'tweak-toggle' + (tweaks.compact ? ' on' : '');
+  document.getElementById('t-dark').className    = 'tweak-toggle' + (tweaks.dark    ? ' on' : '');
+}
+
+function toggleTweak(key) {
+  tweaks[key] = !tweaks[key];
+  applyTweaks();
+  window.parent.postMessage({ type: '__edit_mode_set_keys', edits: tweaks }, '*');
+}
+function setAccent(val) {
+  tweaks.accent = val;
+  window.parent.postMessage({ type: '__edit_mode_set_keys', edits: tweaks }, '*');
+}
+applyTweaks();
+
+// ─── MOUSE TRACKING ──────────────────────────────
+const heroEl = document.getElementById('hero');
+const heroGlow = document.getElementById('hero-glow');
+document.addEventListener('mousemove', e => {
+  document.body.style.setProperty('--mx', e.clientX + 'px');
+  document.body.style.setProperty('--my', e.clientY + 'px');
+  if (heroEl && heroGlow) {
+    const r = heroEl.getBoundingClientRect();
+    const x = ((e.clientX - r.left) / r.width  * 100).toFixed(1) + '%';
+    const y = ((e.clientY - r.top)  / r.height * 100).toFixed(1) + '%';
+    heroGlow.style.background = `radial-gradient(ellipse 500px 500px at ${x} ${y}, rgba(255,255,255,.08) 0%, transparent 65%)`;
+  }
+});
+
+// ─── SCROLL REVEAL ───────────────────────────────
+const cards = document.querySelectorAll('.card');
+const obs = new IntersectionObserver(entries => {
+  entries.forEach(e => {
+    if (e.isIntersecting) {
+      const delay = (parseInt(e.target.dataset.delay) || 0) * 80;
+      setTimeout(() => e.target.classList.add('visible'), delay);
+      obs.unobserve(e.target);
+    }
+  });
+}, { threshold: 0.08 });
+cards.forEach(c => obs.observe(c));
+
+// ─── COUNTER ANIMATION ───────────────────────────
+function animateCount(el, target, duration = 900) {
+  let start = null;
+  const step = ts => {
+    if (!start) start = ts;
+    const p = Math.min((ts - start) / duration, 1);
+    const ease = 1 - Math.pow(1 - p, 3);
+    el.textContent = Math.round(ease * target);
+    if (p < 1) requestAnimationFrame(step);
+  };
+  requestAnimationFrame(step);
+}
+function animatePct(el, target, duration = 1200) {
+  let start = null;
+  const step = ts => {
+    if (!start) start = ts;
+    const p = Math.min((ts - start) / duration, 1);
+    const ease = 1 - Math.pow(1 - p, 3);
+    el.textContent = (ease * target).toFixed(1) + '%';
+    if (p < 1) requestAnimationFrame(step);
+  };
+  requestAnimationFrame(step);
+}
+
+const statsObs = new IntersectionObserver(entries => {
+  entries.forEach(e => {
+    if (!e.isIntersecting) return;
+    document.querySelectorAll('.stat-num[data-target]').forEach(el => {
+      animateCount(el, parseInt(el.dataset.target));
+    });
+    document.querySelectorAll('.stat-num[data-pct]').forEach(el => {
+      animatePct(el, parseFloat(el.dataset.pct));
+    });
+    // stat bars
+    const totals = [48, 48, 48, 48, 48];
+    const vals   = [48, 29, 1, 18, 29.7]; // for bar widths
+    document.querySelectorAll('.stat-bar').forEach((bar, i) => {
+      setTimeout(() => {
+        bar.style.width = (vals[i] / totals[i] * 100) + '%';
+      }, 100 + i * 60);
+    });
+    statsObs.unobserve(e.target);
+  });
+}, { threshold: 0.5 });
+statsObs.observe(document.getElementById('stats'));
+
+// ─── PROGRESS BARS ───────────────────────────────
+const progObs = new IntersectionObserver(entries => {
+  entries.forEach(e => {
+    if (!e.isIntersecting) return;
+    e.target.querySelectorAll('.progress-fill[data-width]').forEach((bar, i) => {
+      setTimeout(() => { bar.style.width = bar.dataset.width + '%'; }, i * 120);
+    });
+    // ring chart
+    const ring = document.getElementById('ring-fg');
+    if (ring) {
+      const r = 40, circ = 2 * Math.PI * r;
+      const pct = 0.618;
+      setTimeout(() => {
+        ring.style.strokeDasharray = `${circ * pct} ${circ * (1 - pct)}`;
+      }, 200);
+    }
+    progObs.unobserve(e.target);
+  });
+}, { threshold: 0.3 });
+document.querySelectorAll('.card').forEach(c => progObs.observe(c));
+
+// ─── COLLAPSIBLE ─────────────────────────────────
+document.querySelectorAll('.collapse-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    const tbody = document.getElementById(btn.dataset.target);
+    const isCollapsed = btn.classList.contains('collapsed');
+    if (isCollapsed) {
+      tbody.style.display = '';
+      btn.classList.remove('collapsed');
+      btn.querySelector('.chevron').textContent = '▾';
+      btn.childNodes[2].textContent = ' Einklappen';
+    } else {
+      tbody.style.display = 'none';
+      btn.classList.add('collapsed');
+      btn.querySelector('.chevron').textContent = '▾';
+      btn.childNodes[2].textContent = ' Ausklappen';
+    }
+  });
+});
+</script>
+</body>
+</html>
