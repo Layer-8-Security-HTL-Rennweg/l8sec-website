@@ -42,7 +42,7 @@
   <div class="sync-message" id="sync-message" role="status" aria-live="polite" hidden></div>
 
   <section class="stats" id="stats" aria-label="Jira-Kennzahlen">
-    <div class="stat"><div class="stat-num" id="stat-total" style="color:var(--ink);">—</div><div class="stat-label">Gesamt Issues</div><div class="stat-bar" id="bar-total" style="background:var(--ink);"></div></div>
+    <div class="stat"><div class="stat-num" id="stat-total" style="color:var(--ink);">—</div><div class="stat-label">Vorgänge gesamt</div><div class="stat-bar" id="bar-total" style="background:var(--ink);"></div></div>
     <div class="stat"><div class="stat-num" id="stat-done" style="color:var(--green);">—</div><div class="stat-label">Erledigt</div><div class="stat-bar" id="bar-done" style="background:var(--green);"></div></div>
     <div class="stat"><div class="stat-num" id="stat-progress" style="color:var(--blue);">—</div><div class="stat-label">In Bearbeitung</div><div class="stat-bar" id="bar-progress" style="background:var(--blue);"></div></div>
     <div class="stat"><div class="stat-num" id="stat-todo" style="color:var(--amber);">—</div><div class="stat-label">Zu erledigen</div><div class="stat-bar" id="bar-todo" style="background:var(--amber);"></div></div>
@@ -64,8 +64,8 @@
   </section>
 
   <section class="card visible" aria-labelledby="epics-title">
-    <div class="section-title" id="epics-title"><span class="dot" style="background:var(--violet);"></span> Epic-Roadmap</div>
-    <div class="sprint-visual">
+    <div class="section-title" id="epics-title"><span class="dot" style="background:var(--violet);"></span> Fortschritt nach Projektbereich</div>
+    <div class="project-visual">
       <div class="ring-wrap">
         <svg width="88" height="88" viewBox="0 0 88 88" aria-hidden="true">
           <circle class="ring-bg" cx="44" cy="44" r="40"/>
@@ -73,13 +73,13 @@
         </svg>
         <div class="ring-label" id="ring-label" style="color:var(--violet);">—</div>
       </div>
-      <div class="sprint-meta">
+      <div class="project-meta">
         <h3>Projektfortschritt</h3>
         <p id="progress-summary">Jira-Daten werden geladen …</p>
         <p class="muted" id="jira-updated"></p>
       </div>
     </div>
-    <div id="epic-list"><p class="empty-state">Epics werden geladen …</p></div>
+    <div id="epic-list"><p class="empty-state">Projektbereiche werden geladen …</p></div>
   </section>
 
   <section class="card visible" aria-labelledby="done-title">

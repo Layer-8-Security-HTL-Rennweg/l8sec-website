@@ -47,7 +47,7 @@
     setText('done-count', jira.done);
     setText('progress-count', jira.inProgress);
     setText('todo-count', jira.todo);
-    setText('progress-summary', `${jira.done} von ${jira.total} Issues abgeschlossen · ${jira.inProgress} in Bearbeitung · ${jira.todo} offen`);
+    setText('progress-summary', `${jira.done} von ${jira.total} Vorgängen abgeschlossen · ${jira.inProgress} in Bearbeitung · ${jira.todo} offen`);
     setText('jira-updated', jira.lastUpdated ? `Letzte Jira-Änderung: ${fmtDate(jira.lastUpdated)}` : 'Noch keine Jira-Änderung vorhanden');
 
     const circumference = 2 * Math.PI * 40;
@@ -62,7 +62,7 @@
     if (!epics.length) {
       const empty = document.createElement('p');
       empty.className = 'empty-state';
-      empty.textContent = 'Im Jira-Projekt wurden keine Epics gefunden.';
+      empty.textContent = 'Im Jira-Projekt wurden keine Projektbereiche gefunden.';
       list.append(empty);
       return;
     }
@@ -76,7 +76,7 @@
       const track = document.createElement('div'); track.className = 'progress-track';
       const fill = document.createElement('div'); fill.className = 'progress-fill'; fill.style.width = `${epic.progressPercent}%`;
       track.append(fill);
-      const sub = document.createElement('div'); sub.className = 'progress-sub'; sub.textContent = `${epic.done} / ${epic.total} Issues erledigt`;
+      const sub = document.createElement('div'); sub.className = 'progress-sub'; sub.textContent = `${epic.done} / ${epic.total} Vorgänge erledigt`;
       progress.append(track, sub);
       const pct = document.createElement('div'); pct.className = 'epic-pct'; pct.textContent = `${epic.progressPercent.toLocaleString('de-AT')}%`;
       row.append(identity, progress, pct);
@@ -129,7 +129,7 @@
     tbody.replaceChildren();
     if (!issues.length) {
       const row = document.createElement('tr');
-      const cell = document.createElement('td'); cell.colSpan = 5; cell.className = 'empty-state'; cell.textContent = 'Keine Issues in dieser Kategorie.';
+      const cell = document.createElement('td'); cell.colSpan = 5; cell.className = 'empty-state'; cell.textContent = 'Keine Vorgänge in dieser Kategorie.';
       row.append(cell); tbody.append(row); return;
     }
     issues.forEach(issue => tbody.append(issueRow(issue)));
