@@ -102,16 +102,26 @@
       row.setAttribute('aria-label', `${issue.key} in Jira öffnen`);
       const open = () => window.open(issue.url, '_blank', 'noopener');
       row.addEventListener('click', open);
-      row.addEventListener('keydown', event => { if (event.key === 'Enter' || event.key === ' ') open(); });
+      row.addEventListener('keydown', event => {
+        if (event.key === 'Enter' || event.key === ' ') {
+          event.preventDefault();
+          open();
+        }
+      });
     }
     const keyCell = document.createElement('td');
+    keyCell.dataset.label = 'Key';
     const key = document.createElement('span'); key.className = 'story-key'; key.textContent = issue.key; keyCell.append(key);
     const title = document.createElement('td'); title.textContent = issue.title;
+    title.dataset.label = 'Titel';
     const typeCell = document.createElement('td');
+    typeCell.dataset.label = 'Typ';
     const type = document.createElement('span'); type.className = 'type-badge'; type.textContent = issue.type; typeCell.append(type);
     const statusCell = document.createElement('td');
+    statusCell.dataset.label = 'Status';
     const status = document.createElement('span'); status.className = `status-badge status-${issue.category}`; status.textContent = issue.status; statusCell.append(status);
     const personCell = document.createElement('td');
+    personCell.dataset.label = 'Person';
     if (issue.assignee) {
       const person = document.createElement('span'); person.className = 'assignee';
       const avatar = document.createElement('span'); avatar.className = 'avatar'; avatar.style.background = colorFor(issue.assignee); avatar.textContent = initials(issue.assignee);

@@ -144,6 +144,52 @@
     0%,100% { background: #1e1e1e; }
     50%      { background: #262626; }
   }
+
+  .project-copy { opacity: 0; animation: fadein .5s .65s ease forwards; }
+  .project-copy p { font-size:.88rem; color:var(--ink-dim); line-height:1.85; max-width:780px; }
+  .project-facts { display:grid; grid-template-columns:repeat(2,1fr); gap:12px; max-width:640px; }
+  .fact-card { background:linear-gradient(160deg,#181818,#111); border:1px solid var(--border); border-radius:12px; padding:18px 20px; }
+  .fact-label { font-family:'IBM Plex Mono',monospace; font-size:.6rem; font-weight:700; text-transform:uppercase; letter-spacing:2px; color:var(--ink-dim); margin-bottom:6px; }
+  .fact-value { font-size:.85rem; color:var(--ink-mid); font-weight:600; }
+
+  @media (max-width: 900px) {
+    .hero-section { padding-inline: 32px; }
+    .content { padding: 44px 32px 72px; }
+    .team-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  }
+
+  @media (max-width: 520px) {
+    .hero-section {
+      min-height: 250px;
+      padding: 58px 18px 34px;
+    }
+    .page-title { font-size: clamp(2.35rem, 14vw, 3.5rem); letter-spacing: -2.5px; }
+    .page-sub { font-size: .92rem; }
+    .content { padding: 32px 16px 56px; }
+    .team-grid { grid-template-columns: 1fr; gap: 12px; margin-bottom: 48px; }
+    .team-card {
+      min-height: 128px;
+      padding: 18px;
+      display: grid;
+      grid-template-columns: 88px minmax(0, 1fr);
+      grid-template-rows: auto auto;
+      column-gap: 16px;
+      align-content: center;
+      text-align: left;
+    }
+    .team-avatar, .claude-avatar { width: 88px; height: 88px; margin: 0; grid-row: 1 / 3; }
+    .team-card.claude-card.revealed { display: grid; }
+    .team-name { align-self: end; font-size: 1rem; }
+    .team-role { align-self: start; width: fit-content; max-width: 100%; line-height: 1.45; }
+    .secret-trigger { min-width: 56px; min-height: 44px; margin-top: -28px; }
+    .project-copy p { font-size: .95rem !important; line-height: 1.75 !important; }
+    .project-facts { grid-template-columns: 1fr; }
+    .fact-card { padding: 16px 18px; }
+  }
+
+  @media (hover: none) {
+    .team-card:hover { transform: none; box-shadow: none; }
+  }
 </style>
 </head>
 <body>
@@ -156,7 +202,7 @@
   </a>
   <div class="sitenav-links">
     <a class="sitenav-link" href="index.html">Home</a>
-    <a class="sitenav-link active" href="ueber-uns.html">Über uns</a>
+    <a class="sitenav-link active" href="ueber-uns.html" aria-current="page">Über uns</a>
     <a class="sitenav-link" href="projektidee.html">Projektidee</a>
     <a class="sitenav-link" href="uebersicht.html">Übersicht</a>
   </div>
@@ -199,7 +245,7 @@
         <div class="team-name">Berk Temür</div>
         <div class="team-role">Mitglied</div>
       </div>
-          <div class="team-card claude-card" id="claude-card">
+          <div class="team-card claude-card" id="claude-card" aria-hidden="true">
         <div class="claude-avatar">
           <svg width="48" height="48" viewBox="0 0 48 48" fill="none">
             <circle cx="24" cy="24" r="20" fill="#4c1d95" opacity=".6"/>
@@ -213,31 +259,31 @@
         <div class="team-role">KI-Assistent</div>
       </div>
     </div>
-    <button class="secret-trigger" id="secret-btn">• • •</button>
+    <button class="secret-trigger" id="secret-btn" type="button" aria-label="KI-Assistent ein- oder ausblenden" aria-controls="claude-card" aria-expanded="false">• • •</button>
 
-    <div style="opacity:0;animation:fadein .5s .65s ease forwards;">
+    <div class="project-copy">
       <p style="font-size:.88rem;color:var(--ink-dim);line-height:1.85;max-width:780px;margin:0 0 20px;">
         Wir sind vier Schüler der Klasse 5CN an der HTL Wien 3 Rennweg im Ausbildungszweig Netzwerktechnik. Im Rahmen unseres Vorprojekts entwickeln wir Layer 8 Security — eine KI-gestützte Plattform zur Simulation von Social-Engineering-Angriffen.
       </p>
       <p style="font-size:.88rem;color:var(--ink-dim);line-height:1.85;max-width:780px;margin:0 0 32px;">
         Die Idee entstand aus dem Alltag der Netzwerktechnik: Firewalls, IDS und Verschlüsselung schützen Systeme — aber nicht den Menschen dahinter. Unser Ziel ist es, genau diese Lücke zu schließen und dabei alles anzuwenden, was wir im Laufe unserer Ausbildung über Netzwerke, Sicherheit und Systemintegration gelernt haben.
       </p>
-      <div style="display:grid;grid-template-columns:repeat(2,1fr);gap:12px;max-width:640px;">
-        <div style="background:linear-gradient(160deg,#181818,#111);border:1px solid var(--border);border-radius:12px;padding:18px 20px;">
-          <div style="font-family:'IBM Plex Mono',monospace;font-size:.6rem;font-weight:700;text-transform:uppercase;letter-spacing:2px;color:var(--ink-dim);margin-bottom:6px;">Schule</div>
-          <div style="font-size:.85rem;color:var(--ink-mid);font-weight:600;">HTL Wien 3 Rennweg</div>
+      <div class="project-facts">
+        <div class="fact-card">
+          <div class="fact-label">Schule</div>
+          <div class="fact-value">HTL Wien 3 Rennweg</div>
         </div>
-        <div style="background:linear-gradient(160deg,#181818,#111);border:1px solid var(--border);border-radius:12px;padding:18px 20px;">
-          <div style="font-family:'IBM Plex Mono',monospace;font-size:.6rem;font-weight:700;text-transform:uppercase;letter-spacing:2px;color:var(--ink-dim);margin-bottom:6px;">Zweig</div>
-          <div style="font-size:.85rem;color:var(--ink-mid);font-weight:600;">Netzwerktechnik</div>
+        <div class="fact-card">
+          <div class="fact-label">Zweig</div>
+          <div class="fact-value">Netzwerktechnik</div>
         </div>
-        <div style="background:linear-gradient(160deg,#181818,#111);border:1px solid var(--border);border-radius:12px;padding:18px 20px;">
-          <div style="font-family:'IBM Plex Mono',monospace;font-size:.6rem;font-weight:700;text-transform:uppercase;letter-spacing:2px;color:var(--ink-dim);margin-bottom:6px;">Klasse</div>
-          <div style="font-size:.85rem;color:var(--ink-mid);font-weight:600;">5CN — Schuljahr 2026/27</div>
+        <div class="fact-card">
+          <div class="fact-label">Klasse</div>
+          <div class="fact-value">5CN — Schuljahr 2026/27</div>
         </div>
-        <div style="background:linear-gradient(160deg,#181818,#111);border:1px solid var(--border);border-radius:12px;padding:18px 20px;">
-          <div style="font-family:'IBM Plex Mono',monospace;font-size:.6rem;font-weight:700;text-transform:uppercase;letter-spacing:2px;color:var(--ink-dim);margin-bottom:6px;">Betreuer</div>
-          <div style="font-size:.85rem;color:var(--ink-mid);font-weight:600;">Prof. Bernhard Nickel</div>
+        <div class="fact-card">
+          <div class="fact-label">Betreuer</div>
+          <div class="fact-value">Prof. Bernhard Nickel</div>
         </div>
       </div>
     </div>
@@ -248,7 +294,11 @@
 document.addEventListener('DOMContentLoaded', () => {
   const btn = document.getElementById('secret-btn');
   const card = document.getElementById('claude-card');
-  if (btn && card) btn.addEventListener('click', () => card.classList.toggle('revealed'));
+  if (btn && card) btn.addEventListener('click', () => {
+    const revealed = card.classList.toggle('revealed');
+    btn.setAttribute('aria-expanded', String(revealed));
+    card.setAttribute('aria-hidden', String(!revealed));
+  });
 });
 
 document.addEventListener('mousemove', e => {

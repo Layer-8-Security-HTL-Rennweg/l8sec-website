@@ -35,6 +35,13 @@ body {
   overflow-x: hidden;
 }
 
+img, svg { max-width: 100%; }
+a, button { -webkit-tap-highlight-color: transparent; }
+a:focus-visible, button:focus-visible, [tabindex]:focus-visible {
+  outline: 2px solid var(--blue);
+  outline-offset: 3px;
+}
+
 body::before {
   content: '';
   position: fixed; inset: 0; pointer-events: none; z-index: 0;
@@ -111,3 +118,77 @@ body::before {
 @keyframes fadein-up { to { opacity:1; transform:translateY(0); } }
 @keyframes pop-in    { from { transform:scale(0); opacity:0; } to { transform:scale(1); opacity:1; } }
 @keyframes bounce    { 0%,100% { transform:translateY(0); } 50% { transform:translateY(5px); } }
+
+@media (max-width: 760px) {
+  body::before { display: none; }
+
+  .sitenav {
+    height: 104px;
+    padding: 0;
+    display: grid;
+    grid-template-columns: 1fr auto;
+    grid-template-rows: 52px 52px;
+    background: rgba(10,10,10,.96);
+    border-bottom-color: var(--border);
+    backdrop-filter: blur(16px);
+  }
+  .sitenav-brand {
+    min-width: 0;
+    padding-left: max(16px, env(safe-area-inset-left));
+  }
+  .sitenav-brand .brand-name {
+    display: block;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+  .sitenav-right {
+    display: flex;
+    padding-right: max(16px, env(safe-area-inset-right));
+  }
+  .live-tag {
+    max-width: 150px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  .sitenav-links {
+    grid-column: 1 / -1;
+    width: 100%;
+    align-self: stretch;
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 0;
+    border-top: 1px solid var(--border-light);
+  }
+  .sitenav-link {
+    min-width: 0;
+    min-height: 51px;
+    padding: 0 5px;
+    border-radius: 0;
+    display: grid;
+    place-items: center;
+    text-align: center;
+    font-size: .72rem;
+  }
+  .sitenav-link.active::after {
+    bottom: 0;
+    width: 34px;
+  }
+  .page { padding-top: 104px; }
+}
+
+@media (max-width: 390px) {
+  .sitenav-brand .brand-name { font-size: .88rem; }
+  .live-tag { padding: 4px 8px; font-size: .54rem; letter-spacing: .6px; }
+  .sitenav-link { font-size: .66rem; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    scroll-behavior: auto !important;
+    animation-duration: .01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: .01ms !important;
+  }
+}

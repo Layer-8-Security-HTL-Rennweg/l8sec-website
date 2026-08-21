@@ -100,6 +100,35 @@
   .ph-desc { font-size: .82rem; color: var(--ink-dim); line-height: 1.6; }
   .ph-lines { margin-top: 28px; display: flex; flex-direction: column; gap: 10px; align-items: center; }
   .ph-lines .ph-line { margin: 0; }
+
+  .idea-copy { opacity:0; animation:fadein .5s .7s ease forwards; }
+  .idea-copy > p { font-size:.88rem; color:var(--ink-dim); line-height:1.85; max-width:780px; }
+  .tech-stack { display:flex; gap:12px; flex-wrap:wrap; margin-top:32px; }
+  .tech-tag { font-family:'IBM Plex Mono',monospace; font-size:.65rem; font-weight:700; text-transform:uppercase; letter-spacing:2px; color:var(--ink-dim); border:1px solid var(--border); border-radius:6px; padding:7px 12px; }
+
+  @media (max-width: 900px) {
+    .hero-section { padding-inline: 32px; }
+    .content { padding: 44px 32px 72px; }
+  }
+
+  @media (max-width: 700px) {
+    .hero-section {
+      min-height: 280px;
+      padding: 58px 18px 34px;
+    }
+    .page-title { font-size: clamp(2.2rem, 12vw, 3.35rem); letter-spacing: -2.5px; overflow-wrap: anywhere; }
+    .page-sub { font-size: .92rem; }
+    .content { padding: 32px 16px 56px; }
+    .idea-grid { grid-template-columns: 1fr; gap: 12px; margin-bottom: 36px; }
+    .idea-block { padding: 22px 20px; }
+    .idea-block p, .idea-copy > p { font-size: .95rem !important; line-height: 1.75 !important; }
+    .tech-stack { gap: 8px; margin-top: 24px; }
+    .tech-tag { font-size: .62rem; letter-spacing: 1.2px; padding: 8px 10px; }
+  }
+
+  @media (hover: none) {
+    .idea-block:hover { transform: none; box-shadow: none; }
+  }
 </style>
 </head>
 <body>
@@ -113,7 +142,7 @@
   <div class="sitenav-links">
     <a class="sitenav-link" href="index.html">Home</a>
     <a class="sitenav-link" href="ueber-uns.html">Über uns</a>
-    <a class="sitenav-link active" href="projektidee.html">Projektidee</a>
+    <a class="sitenav-link active" href="projektidee.html" aria-current="page">Projektidee</a>
     <a class="sitenav-link" href="uebersicht.html">Übersicht</a>
   </div>
   <div class="sitenav-right">
@@ -156,20 +185,20 @@
       </div>
     </div>
 
-    <div style="opacity:0;animation:fadein .5s .7s ease forwards;">
+    <div class="idea-copy">
       <p style="font-size:.88rem;color:var(--ink-dim);line-height:1.85;max-width:780px;margin:0 0 24px;">
         Der Name „Layer 8" leitet sich vom OSI-Modell ab — nach den sieben technischen Schichten kommt der Mensch als achte und häufig verwundbarste Ebene. Angriffe wie Phishing, Pretexting oder Vishing zielen gezielt auf diese Schwachstelle ab, weil sie technische Schutzmaßnahmen vollständig umgehen können.
       </p>
       <p style="font-size:.88rem;color:var(--ink-dim);line-height:1.85;max-width:780px;margin:0 0 24px;">
         Layer 8 Security setzt dem eine KI-gestützte Trainingsplattform entgegen. Das System generiert automatisch realistische Social-Engineering-Szenarien auf Basis der Cialdini-Prinzipien (Autorität, Dringlichkeit, soziale Bewährtheit) und passt sie an verschiedene Unternehmenskontexte an. Trainiert und betrieben wird die Plattform lokal — ohne Cloud-Abhängigkeit, ohne Verarbeitung echter Personendaten.
       </p>
-      <div style="display:flex;gap:12px;flex-wrap:wrap;margin-top:32px;">
-        <span style="font-family:'IBM Plex Mono',monospace;font-size:.65rem;font-weight:700;text-transform:uppercase;letter-spacing:2px;color:var(--ink-dim);border:1px solid var(--border);border-radius:6px;padding:5px 12px;">Meta Llama 3</span>
-        <span style="font-family:'IBM Plex Mono',monospace;font-size:.65rem;font-weight:700;text-transform:uppercase;letter-spacing:2px;color:var(--ink-dim);border:1px solid var(--border);border-radius:6px;padding:5px 12px;">LangGraph / CrewAI</span>
-        <span style="font-family:'IBM Plex Mono',monospace;font-size:.65rem;font-weight:700;text-transform:uppercase;letter-spacing:2px;color:var(--ink-dim);border:1px solid var(--border);border-radius:6px;padding:5px 12px;">ChromaDB</span>
-        <span style="font-family:'IBM Plex Mono',monospace;font-size:.65rem;font-weight:700;text-transform:uppercase;letter-spacing:2px;color:var(--ink-dim);border:1px solid var(--border);border-radius:6px;padding:5px 12px;">Docker</span>
-        <span style="font-family:'IBM Plex Mono',monospace;font-size:.65rem;font-weight:700;text-transform:uppercase;letter-spacing:2px;color:var(--ink-dim);border:1px solid var(--border);border-radius:6px;padding:5px 12px;">LoRA / QLoRA</span>
-        <span style="font-family:'IBM Plex Mono',monospace;font-size:.65rem;font-weight:700;text-transform:uppercase;letter-spacing:2px;color:var(--ink-dim);border:1px solid var(--border);border-radius:6px;padding:5px 12px;">Open Source</span>
+      <div class="tech-stack" aria-label="Verwendete Technologien">
+        <span class="tech-tag">Meta Llama 3</span>
+        <span class="tech-tag">LangGraph / CrewAI</span>
+        <span class="tech-tag">ChromaDB</span>
+        <span class="tech-tag">Docker</span>
+        <span class="tech-tag">LoRA / QLoRA</span>
+        <span class="tech-tag">Open Source</span>
       </div>
     </div>
   </div>
