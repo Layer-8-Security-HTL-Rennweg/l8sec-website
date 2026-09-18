@@ -86,38 +86,7 @@
     border: 1px dashed var(--border); border-radius: 4px;
     padding: 3px 8px; display: inline-block;
   }
-
-  /* Hidden Claude card */
-  .team-card.claude-card {
-    display: none;
-    border-color: #7c3aed44;
-    background: linear-gradient(160deg, #1a1025, #110e1a);
-  }
-  .team-card.claude-card.revealed {
-    display: block;
-    animation: fadein .5s ease forwards;
-  }
-  .team-card.claude-card .team-role {
-    border-color: #7c3aed66; color: #a78bfa;
-  }
-  .claude-avatar {
-    width: 96px; height: 96px; border-radius: 50%;
-    background: linear-gradient(135deg, #4c1d95, #1e1b4b);
-    display: flex; align-items: center; justify-content: center;
-    margin: 0 auto 16px;
-    box-shadow: 0 0 24px #7c3aed44;
-  }
-  /* Secret trigger */
-  .secret-trigger {
-    display: block; margin: -32px auto 0;
-    background: none; border: 1px dashed #2a2a2a;
-    border-radius: 8px; padding: 8px 18px;
-    color: #2a2a2a; font-family: 'IBM Plex Mono', monospace;
-    font-size: .6rem; letter-spacing: 3px; cursor: pointer;
-    transition: color .3s, border-color .3s;
-  }
-  .secret-trigger:hover { color: #7c3aed; border-color: #7c3aed55; }
-
+ 
   /* Placeholder content blocks */
   .content-placeholder {
     border: 1px dashed var(--border); border-radius: 16px;
@@ -244,29 +213,15 @@
         <div class="team-avatar"><img src="uploads/Berk.jpeg" alt="Berk Temür" style="object-position: center 10%;"></div>
         <div class="team-name">Berk Temür</div>
         <div class="team-role">Mitglied</div>
-      </div>
-          <div class="team-card claude-card" id="claude-card" aria-hidden="true">
-        <div class="claude-avatar">
-          <svg width="48" height="48" viewBox="0 0 48 48" fill="none">
-            <circle cx="24" cy="24" r="20" fill="#4c1d95" opacity=".6"/>
-            <path d="M16 28c0-4.418 3.582-8 8-8s8 3.582 8 8" stroke="#a78bfa" stroke-width="1.8" stroke-linecap="round"/>
-            <circle cx="24" cy="18" r="3" fill="#a78bfa"/>
-            <circle cx="18" cy="24" r="1.5" fill="#7c3aed"/>
-            <circle cx="30" cy="24" r="1.5" fill="#7c3aed"/>
-          </svg>
-        </div>
-        <div class="team-name">Claude</div>
-        <div class="team-role">KI-Assistent</div>
-      </div>
+      </div>        
     </div>
-    <button class="secret-trigger" id="secret-btn" type="button" aria-label="KI-Assistent ein- oder ausblenden" aria-controls="claude-card" aria-expanded="false">• • •</button>
 
     <div class="project-copy">
       <p style="font-size:.88rem;color:var(--ink-dim);line-height:1.85;max-width:780px;margin:0 0 20px;">
-        Wir sind vier Schüler der Klasse 5CN an der HTL Wien 3 Rennweg im Ausbildungszweig Netzwerktechnik. Im Rahmen unseres Vorprojekts entwickeln wir Layer 8 Security — eine KI-gestützte Plattform zur Simulation von Social-Engineering-Angriffen.
+        Wir sind vier Schüler der Klasse 5CN an der HTL Wien 3 Rennweg im Ausbildungszweig Netzwerktechnik. Im Rahmen unseres Vorprojekts entwickeln wir Layer 8 Security, eine KI-gestützte Plattform zur Simulation von Social-Engineering-Angriffen.
       </p>
       <p style="font-size:.88rem;color:var(--ink-dim);line-height:1.85;max-width:780px;margin:0 0 32px;">
-        Die Idee entstand aus dem Alltag der Netzwerktechnik: Firewalls, IDS und Verschlüsselung schützen Systeme — aber nicht den Menschen dahinter. Unser Ziel ist es, genau diese Lücke zu schließen und dabei alles anzuwenden, was wir im Laufe unserer Ausbildung über Netzwerke, Sicherheit und Systemintegration gelernt haben.
+        Die Idee entstand aus dem Alltag der Netzwerktechnik: Firewalls, IDS und Verschlüsselung schützen Systeme, aber nicht den Menschen dahinter. Unser Ziel ist es, genau diese Lücke zu schließen und dabei alles anzuwenden, was wir im Laufe unserer Ausbildung über Netzwerke, Sicherheit und Systemintegration gelernt haben.
       </p>
       <div class="project-facts">
         <div class="fact-card">
@@ -283,7 +238,7 @@
         </div>
         <div class="fact-card">
           <div class="fact-label">Betreuer</div>
-          <div class="fact-value">Prof. Bernhard Nickel</div>
+          <div class="fact-value">Prof. Nushi Faik \nProf. Bernhard Nickel </div>
         </div>
       </div>
     </div>
