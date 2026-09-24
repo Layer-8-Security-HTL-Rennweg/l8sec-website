@@ -139,6 +139,7 @@ img.logo-freq { transform: translateY(5.3%); }
   .brand-group {
     min-width: 0;
     padding-left: max(16px, env(safe-area-inset-left));
+    grid-column: 1; grid-row: 1;
   }
   .sitenav-brand { min-width: 0; }
   .sitenav-brand .brand-name {
@@ -150,6 +151,7 @@ img.logo-freq { transform: translateY(5.3%); }
   .sitenav-right {
     display: flex;
     padding-right: max(16px, env(safe-area-inset-right));
+    grid-column: 2; grid-row: 1;
   }
   .nav-partner { display: none; }
   .live-tag {
@@ -159,7 +161,7 @@ img.logo-freq { transform: translateY(5.3%); }
     text-overflow: ellipsis;
   }
   .sitenav-links {
-    grid-column: 1 / -1;
+    grid-column: 1 / -1; grid-row: 2;
     width: 100%;
     align-self: stretch;
     position: static; transform: none;
