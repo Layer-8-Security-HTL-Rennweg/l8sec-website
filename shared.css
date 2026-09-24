@@ -54,7 +54,7 @@ body::before {
 /* ─── SITE NAV ─── */
 .sitenav {
   position: fixed; top: 0; left: 0; right: 0; z-index: 200;
-  height: 52px;
+  height: 60px;
   background: rgba(10,10,10,.85);
   backdrop-filter: blur(20px);
   border-bottom: 1px solid var(--border);
@@ -65,17 +65,21 @@ body::before {
   display: flex; align-items: center; gap: 10px;
   text-decoration: none; color: var(--ink);
 }
-.sitenav-brand .logo-mark {
-  width: 26px; height: 26px; background: var(--ink); border-radius: 6px;
-  display: grid; place-items: center;
-  font-family: 'IBM Plex Mono', monospace; color: var(--bg);
-  font-size: .65rem; font-weight: 700;
-}
 .sitenav-brand .brand-name {
   font-weight: 800; font-size: 1rem; letter-spacing: -0.5px;
 }
+.brand-group { display: flex; align-items: center; min-width: 0; }
+.partner-link { display: inline-flex; align-items: center; }
+img.logo-freq { transform: translateY(5.3%); }
+.nav-partner {
+  display: inline-flex; align-items: center; gap: 12px;
+  margin-left: 12px; padding-left: 12px;
+  border-left: 1px solid var(--border);
+}
+.nav-partner img { height: 14px; width: auto; display: block; }
 .sitenav-links {
   display: flex; align-items: center; gap: 4px;
+  position: absolute; left: 50%; transform: translateX(-50%);
 }
 .sitenav-link {
   text-decoration: none; color: var(--ink-dim);
@@ -108,7 +112,7 @@ body::before {
 }
 
 /* ─── PAGE WRAPPER ─── */
-.page { padding-top: 52px; }
+.page { padding-top: 60px; }
 
 /* ─── MOUSE TRACKING ─── */
 /* JS sets --mx/--my on body */
@@ -123,19 +127,20 @@ body::before {
   body::before { display: none; }
 
   .sitenav {
-    height: 104px;
+    height: 120px;
     padding: 0;
     display: grid;
     grid-template-columns: 1fr auto;
-    grid-template-rows: 52px 52px;
+    grid-template-rows: 60px 60px;
     background: rgba(10,10,10,.96);
     border-bottom-color: var(--border);
     backdrop-filter: blur(16px);
   }
-  .sitenav-brand {
+  .brand-group {
     min-width: 0;
     padding-left: max(16px, env(safe-area-inset-left));
   }
+  .sitenav-brand { min-width: 0; }
   .sitenav-brand .brand-name {
     display: block;
     overflow: hidden;
@@ -146,6 +151,7 @@ body::before {
     display: flex;
     padding-right: max(16px, env(safe-area-inset-right));
   }
+  .nav-partner { display: none; }
   .live-tag {
     max-width: 150px;
     white-space: nowrap;
@@ -156,6 +162,7 @@ body::before {
     grid-column: 1 / -1;
     width: 100%;
     align-self: stretch;
+    position: static; transform: none;
     display: grid;
     grid-template-columns: repeat(4, minmax(0, 1fr));
     gap: 0;
@@ -163,7 +170,7 @@ body::before {
   }
   .sitenav-link {
     min-width: 0;
-    min-height: 51px;
+    min-height: 59px;
     padding: 0 5px;
     border-radius: 0;
     display: grid;
@@ -175,7 +182,7 @@ body::before {
     bottom: 0;
     width: 34px;
   }
-  .page { padding-top: 104px; }
+  .page { padding-top: 120px; }
 }
 
 @media (max-width: 390px) {

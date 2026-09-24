@@ -5,7 +5,9 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>L8S — Projektidee</title>
 <link rel="stylesheet" href="shared.css">
+<link rel="stylesheet" href="cookies.css">
 <style>
+  :root { color-scheme: dark; }
   .page { min-height: 100vh; }
 
   .hero-section {
@@ -38,22 +40,26 @@
   }
   .page-title {
     font-size: clamp(2.5rem, 6vw, 5rem); font-weight: 800; letter-spacing: -4px; line-height: .95;
-    background: linear-gradient(135deg, #f0f0f0 0%, #666 100%);
-    -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+    color: #f0f0f0; text-wrap: balance;
     opacity: 0; transform: translateY(14px);
     animation: fadein .5s .2s ease forwards;
   }
   .page-sub {
-    font-size: .85rem; color: var(--ink-dim); margin-top: 14px; max-width: 520px; line-height: 1.6;
+    font-size: .88rem; color: #bdbdbd; margin-top: 14px; max-width: 560px; line-height: 1.65;
     opacity: 0; transform: translateY(10px);
     animation: fadein .5s .35s ease forwards;
   }
 
   .content { max-width: 1100px; margin: 0 auto; padding: 60px 60px 80px; }
 
-  /* Three blocks */
+  /* Ruhige Sektionsüberschriften, Satzschreibung statt Labels */
+  .section-head { max-width: 720px; margin: 56px 0 20px; opacity: 0; animation: fadein .5s .6s ease forwards; }
+  .section-head:first-child { margin-top: 0; }
+  .section-head h2 { font-size: 1.35rem; font-weight: 800; letter-spacing: -.5px; color: #f0f0f0; text-wrap: balance; }
+
+  /* Drei Aspekte, bewusst identisch ruhig */
   .idea-grid {
-    display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin-bottom: 48px;
+    display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin-bottom: 20px;
     opacity: 0; animation: fadein .5s .5s ease forwards;
   }
   .idea-block {
@@ -62,16 +68,18 @@
     transition: transform .2s, border-color .2s, box-shadow .2s;
   }
   .idea-block:hover {
-    transform: translateY(-4px); border-color: #404040;
+    transform: translateY(-4px); border-color: #484848;
     box-shadow: 0 12px 40px rgba(0,0,0,.5);
   }
-  .idea-icon { color: var(--ink-dim); margin-bottom: 16px; }
-  .idea-title {
-    font-weight: 700; font-size: .95rem; margin-bottom: 16px;
-    color: var(--ink-mid);
-    font-family: 'IBM Plex Mono', monospace; font-size: .72rem;
-    text-transform: uppercase; letter-spacing: 2px;
+  .idea-icon {
+    width: 42px; height: 42px; border-radius: 11px; display: grid; place-items: center;
+    background: #161616; border: 1px solid var(--border); color: #c9c9c9;
+    margin-bottom: 16px;
   }
+  .idea-block h3 {
+    font-size: .92rem; font-weight: 700; letter-spacing: -.2px; color: #f0f0f0; margin-bottom: 10px;
+  }
+  .idea-block p { font-size: .84rem; color: #b9b9b9; line-height: 1.7; margin: 0; }
   .ph-line {
     height: 9px; border-radius: 5px;
     animation: shimmer 2s infinite;
@@ -101,10 +109,79 @@
   .ph-lines { margin-top: 28px; display: flex; flex-direction: column; gap: 10px; align-items: center; }
   .ph-lines .ph-line { margin: 0; }
 
-  .idea-copy { opacity:0; animation:fadein .5s .7s ease forwards; }
-  .idea-copy > p { font-size:.88rem; color:var(--ink-dim); line-height:1.85; max-width:780px; }
-  .tech-stack { display:flex; gap:12px; flex-wrap:wrap; margin-top:32px; }
-  .tech-tag { font-family:'IBM Plex Mono',monospace; font-size:.65rem; font-weight:700; text-transform:uppercase; letter-spacing:2px; color:var(--ink-dim); border:1px solid var(--border); border-radius:6px; padding:7px 12px; }
+  .idea-copy { opacity:0; animation:fadein .5s .7s ease forwards; max-width: 760px; }
+  .idea-copy > p { font-size:.92rem; color:#c9c9c9; line-height:1.8; }
+  .idea-copy > p + p { margin-top: 16px; }
+  .tech-stack { display:flex; gap:10px; flex-wrap:wrap; margin-top:26px; margin-bottom:8px; }
+  .tech-tag {
+    font-family:'IBM Plex Mono',monospace; font-size:.64rem; font-weight:600; letter-spacing:1px;
+    color:#c9c9c9; border:1px solid var(--border); border-radius:100px; padding:8px 14px; background:#141414;
+  }
+
+  /* Abbildungen im Stil der Arbeit: Tafel mit Beschriftung */
+  .figure {
+    border:1px solid #2e2e2e; border-radius:18px; overflow:hidden;
+    margin-bottom:22px; opacity:0; animation:fadein .5s .8s ease forwards;
+    background:#101010;
+  }
+  .figure-body { padding:38px; }
+  .figure h2 { font-size:1.35rem; font-weight:800; letter-spacing:-.5px; color:#f0f0f0; text-wrap:balance; margin-bottom:10px; }
+  .figure-lede { font-size:.89rem; color:#bcbcbc; line-height:1.7; max-width:700px; margin-bottom:30px; }
+
+  /* Architektur als Schema mit beschrifteten Verbindungen */
+  .arch-flow { display:grid; grid-template-columns:1fr auto 1fr auto 1fr auto 1fr; gap:8px; align-items:stretch; }
+  .arch-node {
+    background:#131313; border:1px solid #333; border-radius:14px; padding:22px 16px;
+    text-align:center; display:flex; flex-direction:column; align-items:center; gap:9px;
+    transition:border-color .2s, transform .2s;
+  }
+  .arch-node:hover { transform:translateY(-3px); border-color:#555; }
+  .arch-node.core { border-color:var(--amber); }
+  .arch-icon {
+    width:44px; height:44px; border-radius:12px; display:grid; place-items:center;
+    background:#181818; border:1px solid #383838; color:#d5d5d5;
+  }
+  .arch-node.core .arch-icon { color:var(--amber); border-color:#5a451a; background:#1a150c; }
+  .arch-step { font-family:'IBM Plex Mono',monospace; font-size:.62rem; color:#8f8f8f; font-variant-numeric:tabular-nums; }
+  .arch-node.core .arch-step { color:var(--amber); }
+  .arch-label { font-weight:700; font-size:.9rem; color:#f0f0f0; }
+  .arch-sub { font-size:.75rem; color:#a8a8a8; line-height:1.6; }
+  .arch-link { display:flex; flex-direction:column; align-items:center; justify-content:center; gap:6px; min-width:34px; }
+  .arch-link .wire { color:#555; font-size:1.1rem; }
+  .arch-link .what { font-family:'IBM Plex Mono',monospace; font-size:.58rem; color:#777; white-space:nowrap; }
+
+  /* OSI als Protokolltafel: ruhig, eine einzige Signalfarbe für Layer 8 */
+  .osi-layout { display:grid; grid-template-columns:320px 1fr; gap:30px; align-items:start; }
+  .osi-stack { display:flex; flex-direction:column; gap:7px; background:#0d0d0d; border:1px solid #2b2b2b; border-radius:14px; padding:14px; }
+  .osi-layer {
+    display:flex; align-items:center; gap:12px;
+    border:1px solid #2c2c2c; border-radius:10px; padding:10px 14px;
+    background:#151515; font-size:.82rem;
+  }
+  .osi-layer .osi-num {
+    font-family:'IBM Plex Mono',monospace; font-size:.62rem; font-weight:600;
+    background:#242424; border-radius:6px; padding:4px 8px; color:#d8d8d8; min-width:34px; text-align:center;
+    font-variant-numeric:tabular-nums;
+  }
+  .osi-layer .osi-name { color:#e6e6e6; font-weight:600; overflow-wrap:anywhere; }
+  .osi-layer .osi-tech { margin-left:auto; font-family:'IBM Plex Mono',monospace; font-size:.6rem; color:#909090; white-space:nowrap; }
+  .osi-note { text-align:center; color:#8f8f8f; font-size:.68rem; letter-spacing:1.5px; font-family:'IBM Plex Mono',monospace; padding:8px 0 2px; }
+  .osi-layer.l8 {
+    background:#191209;
+    border-color:var(--amber);
+  }
+  .osi-layer.l8 .osi-num { background:var(--amber); color:#191209; font-weight:700; }
+  .osi-layer.l8 .osi-name { color:#fff; font-weight:700; }
+  .osi-layer.l8 .osi-tech { color:var(--amber); }
+  .osi-copy p { font-size:.9rem; color:#c9c9c9; line-height:1.8; margin:0 0 16px; }
+  .osi-copy .lead { font-size:1.02rem; color:#f0f0f0; font-weight:700; letter-spacing:-.2px; text-wrap:balance; }
+  .attack-list { list-style:none; margin:20px 0 0; padding:0; display:grid; gap:10px; }
+  .attack-list li {
+    display:grid; grid-template-columns:132px 1fr; gap:14px; align-items:baseline;
+    border-top:1px solid #262626; padding-top:12px; font-size:.84rem;
+  }
+  .attack-list dt, .attack-list .a-name { font-weight:700; color:#f0f0f0; }
+  .attack-list .a-desc { color:#a8a8a8; line-height:1.65; }
 
   @media (max-width: 900px) {
     .hero-section { padding-inline: 32px; }
@@ -121,9 +198,17 @@
     .content { padding: 32px 16px 56px; }
     .idea-grid { grid-template-columns: 1fr; gap: 12px; margin-bottom: 36px; }
     .idea-block { padding: 22px 20px; }
-    .idea-block p, .idea-copy > p { font-size: .95rem !important; line-height: 1.75 !important; }
-    .tech-stack { gap: 8px; margin-top: 24px; }
-    .tech-tag { font-size: .62rem; letter-spacing: 1.2px; padding: 8px 10px; }
+    .idea-block p, .idea-copy > p { font-size: .92rem !important; line-height: 1.75 !important; }
+    .tech-stack { gap: 8px; margin-top: 20px; }
+    .tech-tag { font-size: .6rem; letter-spacing: .8px; padding: 8px 11px; }
+    .figure-body { padding: 26px 18px; }
+    .figure h2 { font-size: 1.2rem; }
+    .section-head { margin: 40px 0 16px; }
+    .arch-flow { grid-template-columns: 1fr; gap: 8px; }
+    .arch-link { flex-direction: row; padding: 2px 0; }
+    .arch-link .wire { transform: rotate(90deg); display: inline-block; }
+    .osi-layout { grid-template-columns: 1fr; }
+    .attack-list li { grid-template-columns: 1fr; gap: 4px; }
   }
 
   @media (hover: none) {
@@ -135,10 +220,12 @@
 
 <!-- NAV -->
 <nav class="sitenav">
+  <div class="brand-group">
   <a class="sitenav-brand" href="index.html">
-    <div class="logo-mark">L8S</div>
     <span class="brand-name">Layer 8 Security</span>
   </a>
+    <span class="nav-partner"><a class="partner-link" href="https://www.cancom.de/" target="_blank" rel="noopener" aria-label="Cancom Homepage (extern)"><img src="assets/cancom-logo.png" alt="Cancom" height="14" onerror="this.style.display='none'"></a><a class="partner-link" href="https://www.frequentis.com" target="_blank" rel="noopener" aria-label="Frequentis Homepage (extern)"><img class="logo-freq" src="assets/frequentis-logo.png" alt="Frequentis" height="14" onerror="this.style.display='none'"></a></span>
+  </div>
   <div class="sitenav-links">
     <a class="sitenav-link" href="index.html">Home</a>
     <a class="sitenav-link" href="ueber-uns.html">Über uns</a>
@@ -161,36 +248,39 @@
   </div>
 
   <div class="content">
+    <div class="section-head">
+      <h2>Worum es geht</h2>
+    </div>
     <div class="idea-grid">
       <div class="idea-block">
-        <div class="idea-icon">
-          <svg width="24" height="24" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="1.5"/><path d="M12 8v4l3 3" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+        <div class="idea-icon" aria-hidden="true">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="1.7"/><path d="M12 7.5V12l3 2.5" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/></svg>
         </div>
-        <div class="idea-title">[ Idee / Problem ]</div>
-        <p style="font-size:.82rem;color:var(--ink-dim);line-height:1.7;margin:0;">Menschen sind das schwächste Glied in der IT-Sicherheit. Social Engineering, das gezielte Manipulieren von Personen, umgeht selbst die beste technische Infrastruktur. Realistische Trainingsszenarien fehlen in der Praxis fast vollständig.</p>
+        <h3>Das Problem</h3>
+        <p>Der Mensch ist das schwächste Glied der IT-Sicherheit: Social Engineering umgeht Firewalls, IDS und Verschlüsselung, indem es gezielt Personen manipuliert. Für realistisches, wiederholbares Training fehlt in Schulen und KMU bislang eine praxisnahe, datenschutzkonforme Lösung.</p>
       </div>
       <div class="idea-block">
-        <div class="idea-icon">
-          <svg width="24" height="24" viewBox="0 0 24 24" fill="none"><path d="M12 2l2.4 7.4H22l-6.2 4.5 2.4 7.4L12 17l-6.2 4.3 2.4-7.4L2 9.4h7.6L12 2z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/></svg>
+        <div class="idea-icon" aria-hidden="true">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none"><path d="M12 2.5l2.3 7.1H22l-6.1 4.4 2.3 7.1-6.2-4.5-6.2 4.5 2.3-7.1L2 9.6h7.7L12 2.5z" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/></svg>
         </div>
-        <div class="idea-title">[ Ziele ]</div>
-        <p style="font-size:.82rem;color:var(--ink-dim);line-height:1.7;margin:0;">Mitarbeiter durch realistische, KI-generierte Phishing- und Social-Engineering-Simulationen schulen. Awareness schaffen, ohne echte Personen oder Daten zu gefährden. Sicherheitskultur nachhaltig stärken.</p>
+        <h3>Das Ziel</h3>
+        <p>Mitarbeitende und Schüler:innen durch realistische, KI-generierte Phishing-, Pretexting- und Vishing-Simulationen schulen, ohne echte Personen oder Daten zu gefährden. Messbare Awareness schaffen und eine nachhaltige Sicherheitskultur aufbauen.</p>
       </div>
       <div class="idea-block">
-        <div class="idea-icon">
-          <svg width="24" height="24" viewBox="0 0 24 24" fill="none"><rect x="3" y="3" width="18" height="18" rx="3" stroke="currentColor" stroke-width="1.5"/><path d="M8 12h8M8 8h8M8 16h5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+        <div class="idea-icon" aria-hidden="true">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none"><rect x="3.5" y="3.5" width="17" height="17" rx="4" stroke="currentColor" stroke-width="1.6"/><path d="M8.5 12.5l2.5 2.5 4.5-5" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg>
         </div>
-        <div class="idea-title">[ Lösung ]</div>
-        <p style="font-size:.82rem;color:var(--ink-dim);line-height:1.7;margin:0;">Eine Plattform auf Basis von Meta Llama 3, die mithilfe von KI-Agenten (LangGraph/CrewAI) automatisch Angriffsszenarien nach Cialdini-Prinzipien generiert, lokal deploybar, DSGVO-konform, vollständig Open Source.</p>
+        <h3>Der Weg</h3>
+        <p>Plattform auf Basis von Meta Llama 3 mit KI-Agenten (LangGraph / CrewAI): generiert automatisch Angriffsszenarien nach Cialdini-Prinzipien, läuft lokal in Docker, DSGVO-konform und vollständig Open Source.</p>
       </div>
     </div>
 
     <div class="idea-copy">
-      <p style="font-size:.88rem;color:var(--ink-dim);line-height:1.85;max-width:780px;margin:0 0 24px;">
-        Der Name „Layer 8 Security" leitet sich vom OSI-Modell ab, nach den sieben technischen Schichten kommt der Mensch als achte und häufig verwundbarste Ebene. Angriffe wie Phishing, Pretexting oder Vishing zielen gezielt auf diese Schwachstelle ab, weil sie technische Schutzmaßnahmen vollständig umgehen können.
+      <p>
+        Der Name „Layer 8 Security“ leitet sich vom OSI-Modell ab: Nach den sieben technischen Schichten steht der Mensch als achte und häufig verwundbarste Ebene. Angriffe wie Phishing, Pretexting oder Vishing zielen genau auf diese Schwachstelle, weil sie technische Schutzmaßnahmen vollständig umgehen können.
       </p>
-      <p style="font-size:.88rem;color:var(--ink-dim);line-height:1.85;max-width:780px;margin:0 0 24px;">
-        Layer 8 Security setzt dem eine KI-gestützte Trainingsplattform entgegen. Das System generiert automatisch realistische Social-Engineering-Szenarien auf Basis der Cialdini-Prinzipien (Autorität, Dringlichkeit, soziale Bewährtheit) und passt sie an verschiedene Unternehmenskontexte an. Trainiert und betrieben wird die Plattform lokal, ohne Cloud-Abhängigkeit, ohne Verarbeitung echter Personendaten.
+      <p>
+        Layer 8 Security setzt dem eine KI-gestützte Trainingsplattform entgegen. Das System generiert automatisch realistische Social-Engineering-Szenarien auf Basis der Cialdini-Prinzipien (Autorität, Dringlichkeit, soziale Bewährtheit) und passt sie an unterschiedliche Unternehmens- und Schulkontexte an. Betrieb und Training erfolgen lokal, ohne Cloud-Abhängigkeit und ohne Verarbeitung echter Personendaten.
       </p>
       <div class="tech-stack" aria-label="Verwendete Technologien">
         <span class="tech-tag">Meta Llama 3</span>
@@ -201,6 +291,80 @@
         <span class="tech-tag">Open Source</span>
       </div>
     </div>
+
+    <!-- Architektur -->
+    <div class="section-head">
+      <h2>Wie das System arbeitet</h2>
+    </div>
+    <figure class="figure" aria-labelledby="arch-title">
+      <div class="figure-body">
+        <h2 id="arch-title">Vom lokalen Modell zum Mitarbeitertraining</h2>
+        <p class="figure-lede">Das Sprachmodell liefert die Sprachfähigkeit, Agenten orkestrieren Angriffslogik und Didaktik, der Szenario-Generator passt an den jeweiligen Kontext an. Trainiert wird am simulierten Mitarbeiter, nicht am echten.</p>
+        <div class="arch-flow" role="img" aria-label="Architektur: Llama 3, KI-Agenten, Szenario-Generator, Mitarbeitertraining">
+          <div class="arch-node">
+            <div class="arch-icon" aria-hidden="true"><svg width="22" height="22" viewBox="0 0 24 24" fill="none"><rect x="4" y="4" width="16" height="16" rx="4" stroke="currentColor" stroke-width="1.7"/><path d="M9 9.5h6v5H9z" stroke="currentColor" stroke-width="1.7"/><path d="M9 1.5v2.5M15 1.5v2.5M9 20v2.5M15 20v2.5M1.5 9H4M1.5 15H4M20 9h2.5M20 15h2.5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg></div>
+            <div class="arch-step">Stufe 1</div>
+            <div class="arch-label">Meta Llama 3</div>
+            <div class="arch-sub">Lokales LLM, feinjustiert via LoRA / QLoRA. Keine Cloud, keine echten Personendaten.</div>
+          </div>
+          <div class="arch-link" aria-hidden="true"><span class="wire">→</span><span class="what">Gewichte</span></div>
+          <div class="arch-node">
+            <div class="arch-icon" aria-hidden="true"><svg width="22" height="22" viewBox="0 0 24 24" fill="none"><circle cx="8" cy="8" r="3" stroke="currentColor" stroke-width="1.7"/><circle cx="16" cy="8" r="3" stroke="currentColor" stroke-width="1.7"/><circle cx="12" cy="16.5" r="3" stroke="currentColor" stroke-width="1.7"/><path d="M10.5 10l1 3.7M13.5 10l-1 3.7" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg></div>
+            <div class="arch-step">Stufe 2</div>
+            <div class="arch-label">KI-Agenten</div>
+            <div class="arch-sub">LangGraph / CrewAI: Angreifer-, Opfer- und Bewertungs-Agent mit ChromaDB-Wissen.</div>
+          </div>
+          <div class="arch-link" aria-hidden="true"><span class="wire">→</span><span class="what">Dialoge</span></div>
+          <div class="arch-node core">
+            <div class="arch-icon" aria-hidden="true"><svg width="22" height="22" viewBox="0 0 24 24" fill="none"><path d="M4 5.5h16v13H4z" stroke="currentColor" stroke-width="1.7"/><path d="M8 9.5h8M8 13h8M8 16.5h5" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/></svg></div>
+            <div class="arch-step">Stufe 3</div>
+            <div class="arch-label">Szenario-Generator</div>
+            <div class="arch-sub">Cialdini-Prinzipien mal Unternehmenskontext: Phishing, Pretexting, Vishing.</div>
+          </div>
+          <div class="arch-link" aria-hidden="true"><span class="wire">→</span><span class="what">Training</span></div>
+          <div class="arch-node">
+            <div class="arch-icon" aria-hidden="true"><svg width="22" height="22" viewBox="0 0 20 20" fill="none"><circle cx="10" cy="6.5" r="3" stroke="currentColor" stroke-width="1.6"/><path d="M3.5 17c0-3.4 2.9-6 6.5-6s6.5 2.6 6.5 6" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg></div>
+            <div class="arch-step">Stufe 4</div>
+            <div class="arch-label">Mitarbeitertraining</div>
+            <div class="arch-sub">Interaktive Simulation mit Auswertung: Erkennung, Reaktion, Awareness-Score.</div>
+          </div>
+        </div>
+      </div>
+    </figure>
+
+    <!-- OSI -->
+    <div class="section-head">
+      <h2>Warum „Layer 8“?</h2>
+    </div>
+    <figure class="figure" aria-labelledby="osi-title">
+      <div class="figure-body">
+        <h2 id="osi-title">Sieben Schichten Technik. Eine Schicht Mensch.</h2>
+        <p class="figure-lede">Firewalls, Verschlüsselung und IDS decken L1 bis L7 zuverlässig ab. Doch kein Filter erkennt eine glaubwürdig formulierte Nachricht vom vermeintlichen Chef. Genau dort setzt das Training an.</p>
+        <div class="osi-layout">
+          <div class="osi-stack" role="img" aria-label="OSI model, layers 1 to 7, plus layer 8: the human">
+            <div class="osi-layer"><span class="osi-num">L7</span><span class="osi-name">Application</span><span class="osi-tech">HTTP, SMTP</span></div>
+            <div class="osi-layer"><span class="osi-num">L6</span><span class="osi-name">Presentation</span><span class="osi-tech">TLS, Encoding</span></div>
+            <div class="osi-layer"><span class="osi-num">L5</span><span class="osi-name">Session</span><span class="osi-tech">Sessions</span></div>
+            <div class="osi-layer"><span class="osi-num">L4</span><span class="osi-name">Transport</span><span class="osi-tech">TCP, UDP</span></div>
+            <div class="osi-layer"><span class="osi-num">L3</span><span class="osi-name">Network</span><span class="osi-tech">IP, Routing</span></div>
+            <div class="osi-layer"><span class="osi-num">L2</span><span class="osi-name">Data Link</span><span class="osi-tech">Ethernet, MAC</span></div>
+            <div class="osi-layer"><span class="osi-num">L1</span><span class="osi-name">Physical</span><span class="osi-tech">Cable, Wireless</span></div>
+            <div class="osi-note" aria-hidden="true">Technik, abgesichert</div>
+            <div class="osi-layer l8"><span class="osi-num">L8</span><span class="osi-name">The Human</span><span class="osi-tech">Training focus</span></div>
+          </div>
+          <div class="osi-copy">
+            <p class="lead">Technik ist berechenbar, Menschen nicht.</p>
+            <p>Firewalls blocken Pakete, aber keine überzeugend formulierte E-Mail vom vermeintlichen Chef. Social Engineering nutzt Autorität, Zeitdruck und Vertrauen gezielt aus.</p>
+            <p>Layer 8 Security macht solche Angriffe erlebbar, ohne Schaden anzurichten: simulierte Phishing-Mails, Pretexting-Anrufe und Vishing-Dialoge, erzeugt vom lokalen Modell, bewertet von Agenten, aufbereitet als Training mit konkretem Feedback.</p>
+            <ul class="attack-list">
+              <li><span class="a-name">Phishing</span><span class="a-desc">Gefälschte Mails und Seiten, die auf Klicks und Zugangsdaten zielen.</span></li>
+              <li><span class="a-name">Pretexting</span><span class="a-desc">Vorgetäuschte Identitäten und Vorwände am Telefon oder im Chat.</span></li>
+              <li><span class="a-name">Vishing</span><span class="a-desc">Stimmenbasierte Manipulation, z. B. der dringende Anruf aus der „IT“.</span></li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </figure>
   </div>
 </div>
 
@@ -217,5 +381,12 @@ document.addEventListener('mousemove', e => {
   }
 });
 </script>
+<footer class="l8s-footer">
+  <span>© 2026 Layer 8 Security · HTL Wien 3 Rennweg · 5CN</span>
+  <span class="sep">·</span><a href="datenschutz.html">Datenschutz</a>
+  <span class="sep">·</span><a href="impressum.html">Impressum</a>
+  <span class="sep">·</span><button type="button" id="l8s-footer-cookies">Cookie-Einstellungen</button>
+</footer>
+<script src="cookies.js"></script>
 </body>
 </html>

@@ -6,15 +6,18 @@
 <meta name="description" content="Live-Projektübersicht von Layer 8 Security mit Daten aus Jira und Clockify.">
 <title>L8S — Live-Übersicht</title>
 <link rel="stylesheet" href="shared.css">
+<link rel="stylesheet" href="cookies.css">
 <link rel="stylesheet" href="dashboard.css">
 </head>
 <body>
 
 <nav class="sitenav">
+  <div class="brand-group">
   <a class="sitenav-brand" href="index.html">
-    <div class="logo-mark">L8S</div>
     <span class="brand-name">Layer 8 Security</span>
   </a>
+    <span class="nav-partner"><a class="partner-link" href="https://www.cancom.de/" target="_blank" rel="noopener" aria-label="Cancom Homepage (extern)"><img src="assets/cancom-logo.png" alt="Cancom" height="14" onerror="this.style.display='none'"></a><a class="partner-link" href="https://www.frequentis.com" target="_blank" rel="noopener" aria-label="Frequentis Homepage (extern)"><img class="logo-freq" src="assets/frequentis-logo.png" alt="Frequentis" height="14" onerror="this.style.display='none'"></a></span>
+  </div>
   <div class="sitenav-links">
     <a class="sitenav-link" href="index.html">Home</a>
     <a class="sitenav-link" href="ueber-uns.html">Über uns</a>
@@ -120,5 +123,12 @@
 
 <script src="dashboard-config.js"></script>
 <script src="dashboard.js"></script>
+<footer class="l8s-footer">
+  <span>© 2026 Layer 8 Security · HTL Wien 3 Rennweg · 5CN</span>
+  <span class="sep">·</span><a href="datenschutz.html">Datenschutz</a>
+  <span class="sep">·</span><a href="impressum.html">Impressum</a>
+  <span class="sep">·</span><button type="button" id="l8s-footer-cookies">Cookie-Einstellungen</button>
+</footer>
+<script src="cookies.js"></script>
 </body>
 </html>

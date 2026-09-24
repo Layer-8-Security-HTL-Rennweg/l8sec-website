@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>L8S — Datenschutz</title>
+<link rel="stylesheet" href="shared.css">
+<link rel="stylesheet" href="cookies.css">
+<style>
+  .page { min-height: 100vh; }
+  .hero-section { min-height: 32vh; display:flex; align-items:flex-end; padding:0 60px 40px;
+    background:linear-gradient(160deg,#0f0f0f 0%,#0a0a0a 100%); border-bottom:1px solid var(--border); position:relative; overflow:hidden; }
+  .hero-section::before { content:''; position:absolute; inset:0; pointer-events:none;
+    background-image:linear-gradient(rgba(255,255,255,.03) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.03) 1px,transparent 1px);
+    background-size:56px 56px; mask-image:radial-gradient(ellipse 100% 100% at 0% 100%,black 20%,transparent 80%); }
+  .page-tag { display:inline-block; font-family:'IBM Plex Mono',monospace; font-size:.6rem; font-weight:700;
+    text-transform:uppercase; letter-spacing:4px; color:var(--ink-dim); border:1px solid var(--border);
+    border-radius:6px; padding:4px 10px; margin-bottom:16px; }
+  .page-title { font-size:clamp(2rem,5vw,3.6rem); font-weight:800; letter-spacing:-3px; line-height:.95;
+    background:linear-gradient(135deg,#f0f0f0 0%,#666 100%); -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text; }
+  .content { max-width:860px; margin:0 auto; padding:52px 60px 90px; }
+  .legal-card { background:linear-gradient(160deg,#181818,#111); border:1px solid var(--border); border-radius:16px; padding:32px; margin-bottom:18px; }
+  .legal-card h2 { font-size:1.05rem; font-weight:800; letter-spacing:-.3px; margin-bottom:12px; }
+  .legal-card p, .legal-card li { font-size:.85rem; color:var(--ink-dim); line-height:1.75; }
+  .legal-card ul { padding-left:20px; margin:8px 0; }
+  .legal-card table { width:100%; border-collapse:collapse; margin-top:12px; font-size:.78rem; }
+  .legal-card th, .legal-card td { text-align:left; border:1px solid var(--border); padding:8px 10px; color:var(--ink-dim); }
+  .legal-card th { color:var(--ink); background:#161616; font-family:'IBM Plex Mono',monospace; font-size:.66rem; text-transform:uppercase; letter-spacing:1px; }
+  .legal-card code { font-family:'IBM Plex Mono',monospace; font-size:.72rem; background:#0e0e0e; border:1px solid var(--border); border-radius:5px; padding:1px 6px; }
+  .legal-card a { color:var(--ink); }
+  @media (max-width:700px){ .hero-section{padding:58px 18px 30px;} .content{padding:32px 16px 64px;} .legal-card{padding:24px 20px;} }
+</style>
+</head>
+<body>
+<nav class="sitenav">
+  <div class="brand-group">
+  <a class="sitenav-brand" href="index.html"><span class="brand-name">Layer 8 Security</span></a>
+    <span class="nav-partner"><a class="partner-link" href="https://www.cancom.de/" target="_blank" rel="noopener" aria-label="Cancom Homepage (extern)"><img src="assets/cancom-logo.png" alt="Cancom" height="14" onerror="this.style.display='none'"></a><a class="partner-link" href="https://www.frequentis.com" target="_blank" rel="noopener" aria-label="Frequentis Homepage (extern)"><img class="logo-freq" src="assets/frequentis-logo.png" alt="Frequentis" height="14" onerror="this.style.display='none'"></a></span>
+  </div>
+  <div class="sitenav-links">
+    <a class="sitenav-link" href="index.html">Home</a>
+    <a class="sitenav-link" href="ueber-uns.html">Über uns</a>
+    <a class="sitenav-link" href="projektidee.html">Projektidee</a>
+    <a class="sitenav-link" href="uebersicht.html">Übersicht</a>
+  </div>
+  <div class="sitenav-right"><span class="live-tag"><span class="live-dot"></span>Projekt aktiv</span></div>
+</nav>
+
+<div class="page">
+  <div class="hero-section">
+    <div style="position:relative;z-index:1;">
+      <div class="page-tag">Rechtliches</div>
+      <h1 class="page-title">Datenschutzerklärung</h1>
+      <p style="font-size:.85rem;color:var(--ink-dim);margin-top:12px;max-width:560px;line-height:1.6;">Transparente Information nach Art. 13/14 DSGVO · Stand: September 2026 · Verantwortlicher: L8S-Projektteam, 5CN, HTL Wien 3 Rennweg</p>
+    </div>
+  </div>
+
+  <div class="content">
+    <div class="legal-card">
+      <h2>1. Verantwortlicher &amp; Kontakt</h2>
+      <p>Layer 8 Security — Projektteam der 5CN (Netzwerktechnik)<br>HTL Wien 3 Rennweg, Rennweg 89b, 1030 Wien, Österreich<br>
+      E-Mail: <a href="mailto:layer8security@student.htlrennweg.at">layer8security@student.htlrennweg.at</a> ·
+      Betreuung: Prof. Faik Nushi &amp; Prof. Bernhard Nickel<br>
+      Diese Website ist ein nicht-kommerzielles Schulprojekt (Diplomarbeit). Es ist kein Datenschutzbeauftragter bestellt (keine gesetzliche Pflicht).</p>
+    </div>
+
+    <div class="legal-card">
+      <h2>2. Grundsätze: datensparsam &amp; opt-in</h2>
+      <p>Wir setzen <strong style="color:var(--ink)">keine Tracking-, Werbe- oder Analyse-Cookies ohne Ihre ausdrückliche Einwilligung</strong>. Nicht-notwendige Speicherung erfolgt erst nach Opt-in über unser Consent-Banner (Rechtsgrundlage Art. 6 Abs. 1 lit. a DSGVO, § 165 TKG 2021). Eine erteilte Einwilligung können Sie jederzeit mit Wirkung für die Zukunft widerrufen — über „🍪 Cookie-Einstellungen“ (links unten) oder den Footer-Link „Cookie-Einstellungen“. Ablehnen ist genauso einfach wie Annehmen; alle Optionen sind voreingestellt auf „aus“ (keine Pre-Ticks).</p>
+    </div>
+
+    <div class="legal-card">
+      <h2>3. Lokale Speicherung im Detail</h2>
+      <table>
+        <tr><th>Key</th><th>Zweck · Kategorie</th><th>Rechtsgrundlage</th><th>Dauer</th></tr>
+        <tr><td><code>l8s-consent-v1</code></td><td>Nachweis Ihrer Consent-Auswahl (Version, Zeitstempel, Kategorien) · <strong>notwendig</strong></td><td>Art. 6 Abs. 1 lit. c/f DSGVO (Nachweispflicht Art. 7)</td><td>182 Tage, danach erneute Abfrage</td></tr>
+        <tr><td><code>l8s-dashboard-last-good-v1</code></td><td>Letzter funktionierender Jira-/Clockify-Stand für Offline-Anzeige · <strong>notwendig</strong></td><td>Art. 6 Abs. 1 lit. f (berechtigtes Interesse an funktionsfähiger Seite)</td><td>Bis Cache-Clear / Überschreiben</td></tr>
+        <tr><td>UI-Präferenzen (geplant)</td><td>z. B. ein-/ausgeklappte Tabellen · <strong>funktional (opt-in)</strong></td><td>Art. 6 Abs. 1 lit. a (nur nach Einwilligung)</td><td>je Einstellung, löschbar</td></tr>
+      </table>
+      <p style="margin-top:10px;">Wir setzen bewusst <strong style="color:var(--ink)">keine HTTP-Cookies</strong> für Tracking. Die Speicherung erfolgt ausschließlich lokal in Ihrem Browser (localStorage) und wird nicht an uns übertragen.</p>
+    </div>
+
+    <div class="legal-card">
+      <h2>4. Externe Dienste &amp; Empfänger</h2>
+      <ul>
+        <li><strong style="color:var(--ink)">Google Fonts (fonts.googleapis.com / fonts.gstatic.com):</strong> Beim Laden der Schriftarten wird technisch bedingt Ihre IP-Adresse an Google Ireland Ltd. (ggf. Weiterübertragung USA) übermittelt. Kategorie <strong>funktional</strong> — ohne Einwilligung nutzen wir System-Fonts als Fallback. Rechtsgrundlage nur mit Opt-in: Art. 6 Abs. 1 lit. a + Art. 49 Abs. 1 lit. a (Drittland). Alternativ werden Schriften künftig lokal gehostet.</li>
+        <li><strong style="color:var(--ink)">Dashboard-Backend (Cloudflare Worker, l8sec-dashboard-api.l8sec.workers.dev):</strong> Die Übersichts-Seite lädt aggregierte Jira-/Clockify-Daten über unseren eigenen Worker (keine Secrets im Browser). Dabei werden IP + technischer Request-Log verarbeitet. Rechtsgrundlage: Art. 6 Abs. 1 lit. f (Bereitstellung der ausdrücklich angeforderten Live-Übersicht). Auftragsverarbeitung mit Cloudflare; Logs werden minimal gehalten.</li>
+        <li><strong style="color:var(--ink)">Hosting (GitHub Pages / statisches Hosting):</strong> Server-Logs (IP, Zeit, URL) zur Sicherstellung des Betriebs, Art. 6 Abs. 1 lit. f, kurze Speicherung.</li>
+        <li><strong style="color:var(--ink)">Jira Cloud / Clockify (Atlassian / Clockify):</strong> Nur aggregierte Projektkennzahlen über den Worker; kein direktes Tracking im Browser, keine Einzelpersonen-Profile auf dieser Website.</li>
+      </ul>
+      <p>Statistik- und Marketing-Tools sind derzeit <strong style="color:var(--ink)">nicht aktiv</strong>. Die Kategorien existieren im Banner nur, damit ein künftiges Tool (z. B. selbstgehostetes, anonymes Matomo) erst nach Opt-in geladen werden dürfte.</p>
+    </div>
+
+    <div class="legal-card">
+      <h2>5. Kontakt per E-Mail</h2>
+      <p>Wenn Sie uns per E-Mail kontaktieren (siehe <a href="ueber-uns.html#kontakt">Kontakt</a>), verarbeiten wir Adresse, Inhalt und Metadaten zur Bearbeitung (Art. 6 Abs. 1 lit. b/f). Speicherung bis Abschluss + gesetzliche Aufbewahrung; keine Weitergabe ohne Anlass. Bitte senden Sie keine sensiblen Daten.</p>
+    </div>
+
+    <div class="legal-card">
+      <h2>6. Ihre Rechte</h2>
+      <p>Auskunft (Art. 15), Berichtigung (16), Löschung (17), Einschränkung (18), Datenübertragbarkeit (20), Widerspruch — insbesondere gegen Verarbeitung nach Art. 6 Abs. 1 lit. f — (Art. 21), Widerruf erteilter Einwilligungen (Art. 7 Abs. 3) sowie Beschwerde bei der Aufsichtsbehörde:</p>
+      <p>Österreichische Datenschutzbehörde (DSB), Barichgasse 40–42, 1030 Wien · <a href="https://www.dsb.gv.at" target="_blank" rel="noopener">dsb.gv.at</a>. Wir ersuchen um vorherige Kontaktaufnahme zur Klärung.</p>
+    </div>
+
+    <div class="legal-card">
+      <h2>7. Minderjährige, Sicherheit, Änderungen</h2>
+      <p>Dieses Angebot richtet sich an ein allgemeines Publikum im schulischen Kontext; bewusst kein Profiling von Minderjährigen. Wir treffen angemessene technische Maßnahmen (HTTPS, minimale Daten, kein Third-Party-Tracking ohne Opt-in). Diese Erklärung wird bei Projektänderungen aktualisiert (Versionsstand im Consent-Record <code>l8s-consent-v1</code>, aktuell v1.0).</p>
+      <p style="margin-top:12px;"><button class="l8s-btn l8s-btn-secondary" type="button" onclick="window.L8SConsent && window.L8SConsent.openSettings()">🍪 Cookie-Einstellungen öffnen</button></p>
+    </div>
+  </div>
+</div>
+
+<footer class="l8s-footer">
+  <span>© 2026 Layer 8 Security · HTL Wien 3 Rennweg · 5CN</span>
+  <span class="sep">·</span><a href="datenschutz.html">Datenschutz</a>
+  <span class="sep">·</span><a href="impressum.html">Impressum</a>
+  <span class="sep">·</span><button type="button" id="l8s-footer-cookies">Cookie-Einstellungen</button>
+</footer>
+<script src="cookies.js"></script>
+</body>
+</html>

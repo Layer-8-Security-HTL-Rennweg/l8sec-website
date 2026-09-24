@@ -5,6 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>L8S — Über uns</title>
 <link rel="stylesheet" href="shared.css">
+<link rel="stylesheet" href="cookies.css">
 <style>
   .page { min-height: 100vh; }
 
@@ -116,10 +117,44 @@
 
   .project-copy { opacity: 0; animation: fadein .5s .65s ease forwards; }
   .project-copy p { font-size:.88rem; color:var(--ink-dim); line-height:1.85; max-width:780px; }
-  .project-facts { display:grid; grid-template-columns:repeat(2,1fr); gap:12px; max-width:640px; }
+  .project-facts { display:grid; grid-template-columns:repeat(2,1fr); gap:12px; max-width:640px; margin-bottom:56px; }
   .fact-card { background:linear-gradient(160deg,#181818,#111); border:1px solid var(--border); border-radius:12px; padding:18px 20px; }
   .fact-label { font-family:'IBM Plex Mono',monospace; font-size:.6rem; font-weight:700; text-transform:uppercase; letter-spacing:2px; color:var(--ink-dim); margin-bottom:6px; }
   .fact-value { font-size:.85rem; color:var(--ink-mid); font-weight:600; }
+
+  .team-mail { margin-top:12px; }
+  .team-mail a {
+    font-family:'IBM Plex Mono',monospace; font-size:.68rem; color:var(--ink-dim);
+    text-decoration:none; word-break:break-all; border-bottom:1px dotted #404040;
+    transition:color .15s, border-color .15s;
+  }
+  .team-mail a:hover { color:var(--ink); border-bottom-color:var(--ink); }
+
+  /* ─── KONTAKT-Typografie (wird auch von der Partner-Sektion genutzt) ─── */
+  .contact-kicker {
+    font-family:'IBM Plex Mono',monospace; font-size:.68rem; font-weight:700;
+    text-transform:uppercase; letter-spacing:2.5px; color:var(--ink-mid); margin-bottom:12px;
+  }
+  .contact-title { font-size:1.5rem; font-weight:800; letter-spacing:-.8px; margin-bottom:10px; }
+  .contact-desc { font-size:.85rem; color:var(--ink-dim); line-height:1.7; max-width:640px; margin-bottom:28px; }
+
+  /* ─── PARTNER (erweiterbar: weitere .partner-card ergänzen) ─── */
+  .partner-section {
+    background:linear-gradient(160deg,#181818,#111);
+    border:1px solid var(--border); border-radius:16px; padding:36px;
+    margin-top:20px;
+    opacity:0; animation:fadein .5s .85s ease forwards;
+  }
+  .partner-grid { display:grid; grid-template-columns:repeat(2,1fr); gap:12px; }
+  .partner-card {
+    border:1px solid var(--border); border-radius:12px; padding:28px 20px;
+    background:#0c0c0c; display:flex; flex-direction:column; align-items:center; gap:14px;
+    transition:border-color .2s, transform .2s;
+  }
+  .partner-card:hover { border-color:#404040; transform:translateY(-2px); }
+  .partner-card img { height:56px; width:auto; max-width:100%; object-fit:contain; }
+  .partner-name { font-weight:700; font-size:.9rem; }
+  .partner-sub { font-family:'IBM Plex Mono',monospace; font-size:.62rem; text-transform:uppercase; letter-spacing:1.5px; color:var(--ink-dim); }
 
   @media (max-width: 900px) {
     .hero-section { padding-inline: 32px; }
@@ -154,6 +189,9 @@
     .project-copy p { font-size: .95rem !important; line-height: 1.75 !important; }
     .project-facts { grid-template-columns: 1fr; }
     .fact-card { padding: 16px 18px; }
+    .partner-section { padding: 24px 20px; }
+    .partner-grid { grid-template-columns: 1fr; }
+    .contact-title { font-size: 1.3rem; }
   }
 
   @media (hover: none) {
@@ -165,10 +203,12 @@
 
 <!-- NAV -->
 <nav class="sitenav">
+  <div class="brand-group">
   <a class="sitenav-brand" href="index.html">
-    <div class="logo-mark">L8S</div>
     <span class="brand-name">Layer 8 Security</span>
   </a>
+    <span class="nav-partner"><a class="partner-link" href="https://www.cancom.de/" target="_blank" rel="noopener" aria-label="Cancom Homepage (extern)"><img src="assets/cancom-logo.png" alt="Cancom" height="14" onerror="this.style.display='none'"></a><a class="partner-link" href="https://www.frequentis.com" target="_blank" rel="noopener" aria-label="Frequentis Homepage (extern)"><img class="logo-freq" src="assets/frequentis-logo.png" alt="Frequentis" height="14" onerror="this.style.display='none'"></a></span>
+  </div>
   <div class="sitenav-links">
     <a class="sitenav-link" href="index.html">Home</a>
     <a class="sitenav-link active" href="ueber-uns.html" aria-current="page">Über uns</a>
@@ -187,7 +227,7 @@
     <div style="position:relative;z-index:1;">
       <div class="page-tag">Über uns</div>
       <h1 class="page-title">Das Team</h1>
-      <p class="page-sub">Wer steckt hinter Layer 8 Security? </p>
+      <p class="page-sub">Wer steckt hinter Layer 8 Security?</p>
     </div>
   </div>
 
@@ -196,32 +236,44 @@
     <div class="team-grid">
       <div class="team-card">
         <div class="team-avatar"><img src="uploads/Diego.jpeg" alt="Diego Saadaoui Srioui"></div>
-        <div class="team-name">Diego Saadaoui Srioui</div>
-        <div class="team-role">Projektleiter</div>
+        <div>
+          <div class="team-name">Diego Saadaoui Srioui</div>
+          <div class="team-role">Projektleiter</div>
+          <div class="team-mail"><a href="mailto:diego.saadaoui_srioui@htl.rennweg.at">diego.saadaoui_srioui@htl.rennweg.at</a></div>
+        </div>
       </div>
       <div class="team-card">
         <div class="team-avatar"><img src="uploads/Andi.jpeg" alt="Andrija Pavlovic"></div>
-        <div class="team-name">Andrija Pavlovic</div>
-        <div class="team-role">Stellvertretender Projektleiter</div>
+        <div>
+          <div class="team-name">Andrija Pavlovic</div>
+          <div class="team-role">Stellv. Projektleiter</div>
+          <div class="team-mail"><a href="mailto:andrija.pavlovic@htl.rennweg.at">andrija.pavlovic@htl.rennweg.at</a></div>
+        </div>
       </div>
       <div class="team-card">
         <div class="team-avatar"><img src="uploads/Filip.jpeg" alt="Filip Tomsik" style="object-position: center 30%;"></div>
-        <div class="team-name">Filip Tomsik</div>
-        <div class="team-role">Mitglied</div>
+        <div>
+          <div class="team-name">Filip Tomsik</div>
+          <div class="team-role">Mitglied</div>
+          <div class="team-mail"><a href="mailto:filip.tomsik@htl.rennweg.at">filip.tomsik@htl.rennweg.at</a></div>
+        </div>
       </div>
       <div class="team-card">
         <div class="team-avatar"><img src="uploads/Berk.jpeg" alt="Berk Temür" style="object-position: center 10%;"></div>
-        <div class="team-name">Berk Temür</div>
-        <div class="team-role">Mitglied</div>
+        <div>
+          <div class="team-name">Berk Temür</div>
+          <div class="team-role">Mitglied</div>
+          <div class="team-mail"><a href="mailto:berk.temuer@htl.rennweg.at">berk.temuer@htl.rennweg.at</a></div>
+        </div>
       </div>        
     </div>
 
     <div class="project-copy">
       <p style="font-size:.88rem;color:var(--ink-dim);line-height:1.85;max-width:780px;margin:0 0 20px;">
-        Wir sind vier Schüler der Klasse 5CN an der HTL Wien 3 Rennweg im Ausbildungszweig Netzwerktechnik. Im Rahmen unseres Vorprojekts entwickeln wir Layer 8 Security, eine KI-gestützte Plattform zur Simulation von Social-Engineering-Angriffen.
+        Wir sind vier Schüler der 5CN an der HTL Wien 3 Rennweg im Ausbildungszweig Netzwerktechnik. Im Rahmen unserer Diplomarbeit entwickeln wir Layer 8 Security, eine KI-gestützte Plattform zur Simulation von Social-Engineering-Angriffen, für praxisnahes Security-Awareness-Training im schulischen und betrieblichen Umfeld.
       </p>
       <p style="font-size:.88rem;color:var(--ink-dim);line-height:1.85;max-width:780px;margin:0 0 32px;">
-        Die Idee entstand aus dem Alltag der Netzwerktechnik: Firewalls, IDS und Verschlüsselung schützen Systeme, aber nicht den Menschen dahinter. Unser Ziel ist es, genau diese Lücke zu schließen und dabei alles anzuwenden, was wir im Laufe unserer Ausbildung über Netzwerke, Sicherheit und Systemintegration gelernt haben.
+        Die Idee entstand aus unserem Ausbildungsalltag: Firewalls, IDS und Verschlüsselung schützen Systeme zuverlässig, aber nicht den Menschen dahinter. Genau dort setzt Layer 8 Security an: Wir verbinden lokales LLM-Deployment, Multi-Agenten-Systeme und fundierte Social-Engineering-Methodik, um die „menschliche Sicherheitslücke“ messbar zu schließen.
       </p>
       <div class="project-facts">
         <div class="fact-card">
@@ -234,16 +286,35 @@
         </div>
         <div class="fact-card">
           <div class="fact-label">Klasse</div>
-          <div class="fact-value">5CN — Schuljahr 2026/27</div>
+          <div class="fact-value">5CN, Schuljahr 2026/27</div>
         </div>
         <div class="fact-card">
           <div class="fact-label">Betreuer</div>
-          <div class="fact-value">Prof. Nushi Faik & Prof. Bernhard Nickel </div>
+          <div class="fact-value">Prof. Faik Nushi &amp; Prof. Bernhard Nickel</div>
+        </div>
+          </div>
+        </div>
+
+      <div class="partner-section">
+        <div class="contact-kicker">Kooperationspartner</div>
+        <div class="contact-title">Unterstützt von der Praxis</div>
+        <p class="contact-desc">Wir danken unseren Partnern aus der Wirtschaft für fachliche Unterstützung und Einblicke in reale Security-Prozesse.</p>
+        <!-- Weitere Partner hier als .partner-card ergänzen. Logo als Datei in assets/ ablegen. -->
+        <div class="partner-grid">
+          <div class="partner-card">
+            <img src="assets/cancom-logo.png" alt="Cancom Logo" loading="lazy" onerror="this.closest('.partner-card').style.display='none'">
+            <div class="partner-name">Cancom</div>
+            <div class="partner-sub">Kooperationspartner</div>
+          </div>
+          <div class="partner-card">
+            <img class="logo-freq" src="assets/frequentis-logo.png" alt="Frequentis Logo" loading="lazy" onerror="this.closest('.partner-card').style.display='none'">
+            <div class="partner-name">Frequentis</div>
+            <div class="partner-sub">Kooperationspartner</div>
+          </div>
         </div>
       </div>
     </div>
   </div>
-</div>
 
 <script>
 document.addEventListener('DOMContentLoaded', () => {
@@ -253,6 +324,21 @@ document.addEventListener('DOMContentLoaded', () => {
     const revealed = card.classList.toggle('revealed');
     btn.setAttribute('aria-expanded', String(revealed));
     card.setAttribute('aria-hidden', String(!revealed));
+  });
+
+  // E-Mail kopieren (Kontakt-Sektion)
+  document.querySelectorAll('[data-copy]').forEach(copyBtn => {
+    copyBtn.addEventListener('click', async () => {
+      const mail = copyBtn.getAttribute('data-copy');
+      try {
+        await navigator.clipboard.writeText(mail);
+        const orig = copyBtn.textContent;
+        copyBtn.textContent = 'Kopiert ✓';
+        setTimeout(() => { copyBtn.textContent = orig; }, 1600);
+      } catch {
+        window.location.href = 'mailto:' + mail;
+      }
+    });
   });
 });
 
@@ -268,5 +354,12 @@ document.addEventListener('mousemove', e => {
   }
 });
 </script>
+<footer class="l8s-footer">
+  <span>© 2026 Layer 8 Security · HTL Wien 3 Rennweg · 5CN</span>
+  <span class="sep">·</span><a href="datenschutz.html">Datenschutz</a>
+  <span class="sep">·</span><a href="impressum.html">Impressum</a>
+  <span class="sep">·</span><button type="button" id="l8s-footer-cookies">Cookie-Einstellungen</button>
+</footer>
+<script src="cookies.js"></script>
 </body>
 </html>
