@@ -153,6 +153,9 @@
   }
   .partner-card:hover { border-color:#404040; transform:translateY(-2px); }
   .partner-card img { height:56px; width:auto; max-width:100%; object-fit:contain; }
+  .partner-card.partner-main { grid-column:1 / -1; padding:40px 20px; border-color:#333; }
+  .partner-card.partner-main img { height:104px; }
+  .partner-card.partner-main .partner-name { font-size:1.1rem; }
   .partner-name { font-weight:700; font-size:.9rem; }
   .partner-sub { font-family:'IBM Plex Mono',monospace; font-size:.62rem; text-transform:uppercase; letter-spacing:1.5px; color:var(--ink-dim); }
 
@@ -207,7 +210,6 @@
   <a class="sitenav-brand" href="index.html">
     <span class="brand-name">Layer 8 Security</span>
   </a>
-    <span class="nav-partner"><a class="partner-link" href="https://www.cancom.de/" target="_blank" rel="noopener" aria-label="Cancom Homepage (extern)"><img src="assets/cancom-logo.png" alt="Cancom" height="14" onerror="this.style.display='none'"></a><a class="partner-link" href="https://www.frequentis.com" target="_blank" rel="noopener" aria-label="Frequentis Homepage (extern)"><img class="logo-freq" src="assets/frequentis-logo.png" alt="Frequentis" height="14" onerror="this.style.display='none'"></a></span>
   </div>
   <div class="sitenav-links">
     <a class="sitenav-link" href="index.html">Home</a>
@@ -296,11 +298,16 @@
         </div>
 
       <div class="partner-section">
-        <div class="contact-kicker">Kooperationspartner</div>
+        <div class="contact-kicker">Hauptsponsor &amp; Kooperationspartner</div>
         <div class="contact-title">Unterstützt von der Praxis</div>
         <p class="contact-desc">Wir danken unseren Partnern aus der Wirtschaft für fachliche Unterstützung und Einblicke in reale Security-Prozesse.</p>
         <!-- Weitere Partner hier als .partner-card ergänzen. Logo als Datei in assets/ ablegen. -->
         <div class="partner-grid">
+          <div class="partner-card partner-main">
+            <img src="assets/wienkanal-logo.png" alt="Wien Kanal Logo" loading="lazy" onerror="this.closest('.partner-card').style.display='none'">
+            <div class="partner-name">Wien Kanal</div>
+            <div class="partner-sub">Hauptsponsor</div>
+          </div>
           <div class="partner-card">
             <img src="assets/cancom-logo.png" alt="Cancom Logo" loading="lazy" onerror="this.closest('.partner-card').style.display='none'">
             <div class="partner-name">Cancom</div>

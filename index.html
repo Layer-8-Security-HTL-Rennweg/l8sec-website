@@ -121,17 +121,19 @@
     animation: bounce 2.2s 1.8s infinite;
   }
 
-  /* Kooperationspartner (erweiterbar: weitere .hp-logo ergänzen) */
+  /* Hauptsponsor + Kooperationspartner (erweiterbar: weitere .hp-logo ergänzen) */
   .hero-partners {
     position: absolute; bottom: 30px; left: 40px; z-index: 1;
-    display: flex; align-items: center; gap: 14px;
+    right: 40px; display: flex; justify-content: space-between; align-items: flex-end; gap: 24px;
     opacity: 0; animation: fadein .5s 1.5s ease forwards;
   }
+  .hp-row { display: flex; align-items: center; gap: 14px; }
   .hp-label {
     font-family: 'IBM Plex Mono', monospace; font-size: .58rem;
     text-transform: uppercase; letter-spacing: 2.5px; color: var(--ink-dim);
   }
   .hp-logo { height: 24px; width: auto; object-fit: contain; }
+  .hp-logo.logo-wk { height: 46px; }
 
   @media (max-width: 760px) {
     body { height: auto; overflow-x: hidden; overflow-y: auto; }
@@ -170,9 +172,11 @@
       padding: 18px 16px;
     }
     .scroll-hint { display: none; }
-    .hero-partners { position: static; margin-top: 28px; justify-content: center; flex-wrap: wrap; row-gap: 12px; padding: 0 8px; }
+    .hero-partners { position: static; margin-top: 28px; flex-direction: column; align-items: center; gap: 24px; padding: 0 8px; }
+    .hp-row { justify-content: center; flex-wrap: wrap; row-gap: 12px; }
     .hp-label { width: 100%; text-align: center; }
     .hp-logo { height: 20px; }
+    .hp-logo.logo-wk { height: 42px; }
   }
 
   @media (max-width: 390px) {
@@ -203,7 +207,6 @@
   <a class="sitenav-brand" href="index.html">
     <span class="brand-name">Layer 8 Security</span>
   </a>
-    <span class="nav-partner"><a class="partner-link" href="https://www.cancom.de/" target="_blank" rel="noopener" aria-label="Cancom Homepage (extern)"><img src="assets/cancom-logo.png" alt="Cancom" height="14" onerror="this.style.display='none'"></a><a class="partner-link" href="https://www.frequentis.com" target="_blank" rel="noopener" aria-label="Frequentis Homepage (extern)"><img class="logo-freq" src="assets/frequentis-logo.png" alt="Frequentis" height="14" onerror="this.style.display='none'"></a></span>
   </div>
   <div class="sitenav-links">
     <a class="sitenav-link active" href="index.html" aria-current="page">Home</a>
@@ -249,9 +252,15 @@
 
   <!-- Weitere Partner hier als .hp-logo ergänzen, sobald das Logo in assets/ liegt -->
   <div class="hero-partners" id="hero-partners">
-    <span class="hp-label">Kooperationspartner</span>
-    <img class="hp-logo" src="assets/cancom-logo.png" alt="Cancom" height="24" onerror="this.style.display='none'">
-    <img class="hp-logo logo-freq" src="assets/frequentis-logo.png" alt="Frequentis" height="24" onerror="this.style.display='none'">
+    <div class="hp-row">
+      <span class="hp-label">Hauptsponsor</span>
+      <img class="hp-logo logo-wk" src="assets/wienkanal-logo.png" alt="Wien Kanal" height="46" onerror="this.closest('.hp-row').style.display='none'">
+    </div>
+    <div class="hp-row">
+      <span class="hp-label">Kooperationspartner</span>
+      <img class="hp-logo" src="assets/cancom-logo.png" alt="Cancom" height="24" onerror="this.style.display='none'">
+      <img class="hp-logo logo-freq" src="assets/frequentis-logo.png" alt="Frequentis" height="24" onerror="this.style.display='none'">
+    </div>
   </div>
 
 </section>
