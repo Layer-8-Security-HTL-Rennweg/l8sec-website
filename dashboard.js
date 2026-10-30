@@ -2,6 +2,7 @@
   'use strict';
 
   const apiUrl = window.L8S_DASHBOARD_API || '';
+  const azbbUrl = window.L8S_AZBB_API || '';
   const refreshMs = Math.max(Number(window.L8S_REFRESH_MS) || 30000, 10000);
   const cacheKey = 'l8s-dashboard-last-good-v1';
   let timer;
@@ -147,11 +148,11 @@
 
   function renderClockify(clockify) {
     setText('clockify-total', fmtHours(clockify.totalSeconds));
-    setText('clockify-updated', clockify.syncedAt ? `Letzte Clockify-Abfrage: ${fmtDate(clockify.syncedAt)}` : '');
+    setText('clockify-updated', clockify.syncedAt ? `Letzte AZBB-Abfrage: ${fmtDate(clockify.syncedAt)}` : '');
     const list = $('member-hours');
     list.replaceChildren();
     if (!clockify.members.length) {
-      const empty = document.createElement('p'); empty.className = 'empty-state'; empty.textContent = 'Für dieses Clockify-Projekt wurden noch keine Zeiten erfasst.'; list.append(empty); return;
+      const empty = document.createElement('p'); empty.className = 'empty-state'; empty.textContent = 'In AZBB wurden noch keine Zeiten erfasst.'; list.append(empty); return;
     }
     const max = Math.max(...clockify.members.map(member => member.seconds), 1);
     clockify.members.forEach(member => {
@@ -175,7 +176,7 @@
     }
     if (data.clockify) renderClockify(data.clockify);
     setText('updated-at', `Synchronisiert: ${fmtDate(data.generatedAt)}`);
-    setText('dashboard-footer', `Stand: ${fmtDate(data.generatedAt)} · Datenquellen: Jira Cloud und Clockify · automatische Aktualisierung alle ${Math.round(refreshMs / 1000)} Sekunden`);
+    setText('dashboard-footer', `Stand: ${fmtDate(data.generatedAt)} · Datenquellen: Jira Cloud und AZBB · automatische Aktualisierung alle ${Math.round(refreshMs / 1000)} Sekunden`);
 
     const unavailable = data.unavailableSources || [];
     if (stale) {
@@ -185,7 +186,7 @@
       setLiveState('stale', 'Teilweise aktuell');
       showMessage(`Vorübergehend nicht verfügbar: ${unavailable.join(', ')}. Die übrigen Daten sind aktuell.`);
     } else {
-      setLiveState('live', 'Jira & Clockify live');
+      setLiveState('live', 'Jira & AZBB live');
       showMessage('');
     }
   }
@@ -198,9 +199,15 @@
     }
     setLiveState('loading', 'Wird aktualisiert');
     try {
-      const response = await fetch(apiUrl, { headers:{ Accept:'application/json' }, cache:'no-store' });
-      if (!response.ok) throw new Error(`HTTP ${response.status}`);
-      const data = await response.json();
+      // Jira über den Worker, Arbeitszeiten direkt aus AZBB (beide parallel)
+      const getJson = url => fetch(url, { headers:{ Accept:'application/json' }, cache:'no-store' })
+        .then(response => { if (!response.ok) throw new Error(`HTTP ${response.status}`); return response.json(); });
+      const [worker, azbb] = await Promise.allSettled([getJson(apiUrl), azbbUrl ? getJson(azbbUrl) : Promise.reject(new Error('keine AZBB-Adresse'))]);
+      if (worker.status === 'rejected' && azbb.status === 'rejected') throw worker.reason;
+      const data = worker.status === 'fulfilled' ? worker.value : { generatedAt: new Date().toISOString(), unavailableSources: ['Jira'] };
+      data.unavailableSources = (data.unavailableSources || []).filter(s => !/clockify/i.test(s));
+      if (azbb.status === 'fulfilled' && Array.isArray(azbb.value.members)) data.clockify = azbb.value;
+      else { delete data.clockify; data.unavailableSources.push('AZBB'); }
       if (!data.generatedAt || (!data.jira && !data.clockify)) throw new Error('Ungültige Antwort');
       localStorage.setItem(cacheKey, JSON.stringify(data));
       render(data);
