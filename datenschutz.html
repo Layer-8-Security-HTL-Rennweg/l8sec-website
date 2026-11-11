@@ -50,61 +50,70 @@
     <div style="position:relative;z-index:1;">
       <div class="page-tag">Rechtliches</div>
       <h1 class="page-title">Datenschutzerklärung</h1>
-      <p style="font-size:.85rem;color:var(--ink-dim);margin-top:12px;max-width:560px;line-height:1.6;">Transparente Information nach Art. 13/14 DSGVO · Stand: September 2026 · Verantwortlicher: L8S-Projektteam, 5CN, HTL Wien 3 Rennweg</p>
+      <p style="font-size:.85rem;color:var(--ink-dim);margin-top:12px;max-width:560px;line-height:1.6;">Information nach Art. 13 DSGVO · Stand: November 2026</p>
     </div>
   </div>
 
   <div class="content">
     <div class="legal-card">
       <h2>1. Verantwortlicher &amp; Kontakt</h2>
-      <p>Layer 8 Security — Projektteam der 5CN (Netzwerktechnik)<br>HTL Wien 3 Rennweg, Rennweg 89b, 1030 Wien, Österreich<br>
-      E-Mail: <a href="mailto:layer8security@student.htlrennweg.at">layer8security@student.htlrennweg.at</a> ·
-      Betreuung: Prof. Faik Nushi &amp; Prof. Bernhard Nickel<br>
-      Diese Website ist ein nicht-kommerzielles Schulprojekt (Diplomarbeit). Es ist kein Datenschutzbeauftragter bestellt (keine gesetzliche Pflicht).</p>
+      <p>Projektteam Layer 8 Security der 5CN (Netzwerktechnik): Diego Saadaoui Srioui, Andrija Pavlovic, Filip Tomsik, Berk Temür<br>
+      c/o HTL Wien 3 Rennweg, Rennweg 89b, 1030 Wien, Österreich<br>
+      E-Mail: <a href="mailto:contact@layer8security.live">contact@layer8security.live</a> · Betreuung: Prof. Faik Nushi &amp; Prof. Bernhard Nickel<br>
+      Diese Website ist ein nicht-kommerzielles Schulprojekt (Diplomarbeit). Ein Datenschutzbeauftragter ist nicht bestellt, weil dafür keine gesetzliche Pflicht besteht.</p>
     </div>
 
     <div class="legal-card">
-      <h2>2. Grundsätze: datensparsam &amp; opt-in</h2>
-      <p>Wir setzen <strong style="color:var(--ink)">keine Tracking-, Werbe- oder Analyse-Cookies ohne Ihre ausdrückliche Einwilligung</strong>. Nicht-notwendige Speicherung erfolgt erst nach Opt-in über unser Consent-Banner (Rechtsgrundlage Art. 6 Abs. 1 lit. a DSGVO, § 165 TKG 2021). Eine erteilte Einwilligung können Sie jederzeit mit Wirkung für die Zukunft widerrufen — über „🍪 Cookie-Einstellungen“ (links unten) oder den Footer-Link „Cookie-Einstellungen“. Ablehnen ist genauso einfach wie Annehmen; alle Optionen sind voreingestellt auf „aus“ (keine Pre-Ticks).</p>
-    </div>
-
-    <div class="legal-card">
-      <h2>3. Lokale Speicherung im Detail</h2>
-      <table>
-        <tr><th>Key</th><th>Zweck · Kategorie</th><th>Rechtsgrundlage</th><th>Dauer</th></tr>
-        <tr><td><code>l8s-consent-v1</code></td><td>Nachweis Ihrer Consent-Auswahl (Version, Zeitstempel, Kategorien) · <strong>notwendig</strong></td><td>Art. 6 Abs. 1 lit. c/f DSGVO (Nachweispflicht Art. 7)</td><td>182 Tage, danach erneute Abfrage</td></tr>
-        <tr><td><code>l8s-dashboard-last-good-v1</code></td><td>Letzter funktionierender Jira-/Clockify-Stand für Offline-Anzeige · <strong>notwendig</strong></td><td>Art. 6 Abs. 1 lit. f (berechtigtes Interesse an funktionsfähiger Seite)</td><td>Bis Cache-Clear / Überschreiben</td></tr>
-        <tr><td>UI-Präferenzen (geplant)</td><td>z. B. ein-/ausgeklappte Tabellen · <strong>funktional (opt-in)</strong></td><td>Art. 6 Abs. 1 lit. a (nur nach Einwilligung)</td><td>je Einstellung, löschbar</td></tr>
-      </table>
-      <p style="margin-top:10px;">Wir setzen bewusst <strong style="color:var(--ink)">keine HTTP-Cookies</strong> für Tracking. Die Speicherung erfolgt ausschließlich lokal in Ihrem Browser (localStorage) und wird nicht an uns übertragen.</p>
-    </div>
-
-    <div class="legal-card">
-      <h2>4. Externe Dienste &amp; Empfänger</h2>
+      <h2>2. Kurz gesagt</h2>
       <ul>
-        <li><strong style="color:var(--ink)">Google Fonts (fonts.googleapis.com / fonts.gstatic.com):</strong> Beim Laden der Schriftarten wird technisch bedingt Ihre IP-Adresse an Google Ireland Ltd. (ggf. Weiterübertragung USA) übermittelt. Kategorie <strong>funktional</strong> — ohne Einwilligung nutzen wir System-Fonts als Fallback. Rechtsgrundlage nur mit Opt-in: Art. 6 Abs. 1 lit. a + Art. 49 Abs. 1 lit. a (Drittland). Alternativ werden Schriften künftig lokal gehostet.</li>
-        <li><strong style="color:var(--ink)">Dashboard-Backend (Cloudflare Worker, l8sec-dashboard-api.l8sec.workers.dev):</strong> Die Übersichts-Seite lädt aggregierte Jira-/Clockify-Daten über unseren eigenen Worker (keine Secrets im Browser). Dabei werden IP + technischer Request-Log verarbeitet. Rechtsgrundlage: Art. 6 Abs. 1 lit. f (Bereitstellung der ausdrücklich angeforderten Live-Übersicht). Auftragsverarbeitung mit Cloudflare; Logs werden minimal gehalten.</li>
-        <li><strong style="color:var(--ink)">Hosting (GitHub Pages / statisches Hosting):</strong> Server-Logs (IP, Zeit, URL) zur Sicherstellung des Betriebs, Art. 6 Abs. 1 lit. f, kurze Speicherung.</li>
-        <li><strong style="color:var(--ink)">Jira Cloud / Clockify (Atlassian / Clockify):</strong> Nur aggregierte Projektkennzahlen über den Worker; kein direktes Tracking im Browser, keine Einzelpersonen-Profile auf dieser Website.</li>
+        <li>Keine Cookies, kein Tracking, keine Analyse- oder Werbedienste.</li>
+        <li>Schriften und alle Inhalte liegen auf unserem eigenen Webspace; beim Aufruf werden keine Daten an Google oder andere Dritte übertragen.</li>
+        <li>Nur die Seite <a href="uebersicht.html">Übersicht</a> lädt Projektkennzahlen von zwei Diensten nach (Abschnitt 5).</li>
+        <li>Was im Browser gespeichert wird, bleibt in Ihrem Browser (Abschnitt 4).</li>
       </ul>
-      <p>Statistik- und Marketing-Tools sind derzeit <strong style="color:var(--ink)">nicht aktiv</strong>. Die Kategorien existieren im Banner nur, damit ein künftiges Tool (z. B. selbstgehostetes, anonymes Matomo) erst nach Opt-in geladen werden dürfte.</p>
     </div>
 
     <div class="legal-card">
-      <h2>5. Kontakt per E-Mail</h2>
-      <p>Wenn Sie uns per E-Mail kontaktieren (siehe <a href="ueber-uns.html#kontakt">Kontakt</a>), verarbeiten wir Adresse, Inhalt und Metadaten zur Bearbeitung (Art. 6 Abs. 1 lit. b/f). Speicherung bis Abschluss + gesetzliche Aufbewahrung; keine Weitergabe ohne Anlass. Bitte senden Sie keine sensiblen Daten.</p>
+      <h2>3. Hosting und Server-Protokolle</h2>
+      <p>Die Website wird über <strong style="color:var(--ink)">GitHub Pages</strong> bereitgestellt. Anbieter: GitHub, Inc., 88 Colin P. Kelly Jr. Street, San Francisco, CA 94107, USA. Beim Aufruf verarbeitet GitHub technisch notwendige Zugriffsdaten (IP-Adresse, Zeitpunkt, aufgerufene Adresse, Browser-Kennung), um die Seite auszuliefern und vor Missbrauch zu schützen. Rechtsgrundlage: Art. 6 Abs. 1 lit. f DSGVO (berechtigtes Interesse an einem sicheren, funktionierenden Betrieb). Wir selbst haben keinen Zugriff auf diese Protokolle. Die Übermittlung in die USA stützt sich auf die Zertifizierung von GitHub unter dem EU-US Data Privacy Framework (Angemessenheitsbeschluss, Art. 45 DSGVO).</p>
     </div>
 
     <div class="legal-card">
-      <h2>6. Ihre Rechte</h2>
-      <p>Auskunft (Art. 15), Berichtigung (16), Löschung (17), Einschränkung (18), Datenübertragbarkeit (20), Widerspruch — insbesondere gegen Verarbeitung nach Art. 6 Abs. 1 lit. f — (Art. 21), Widerruf erteilter Einwilligungen (Art. 7 Abs. 3) sowie Beschwerde bei der Aufsichtsbehörde:</p>
-      <p>Österreichische Datenschutzbehörde (DSB), Barichgasse 40–42, 1030 Wien · <a href="https://www.dsb.gv.at" target="_blank" rel="noopener">dsb.gv.at</a>. Wir ersuchen um vorherige Kontaktaufnahme zur Klärung.</p>
+      <h2>4. Speicherung im Browser</h2>
+      <table>
+        <tr><th>Eintrag</th><th>Zweck</th><th>Rechtsgrundlage</th><th>Dauer</th></tr>
+        <tr><td><code>l8s-consent-v1</code></td><td>Ihre Auswahl im Datenschutz-Hinweis (Version, Zeitpunkt, Kategorien, Do-Not-Track-Einstellung, gekürzte Browser-Kennung), damit der Hinweis nicht bei jedem Aufruf erscheint</td><td>§ 165 Abs. 3 TKG 2021 (unbedingt erforderlich), Art. 6 Abs. 1 lit. c und f DSGVO</td><td>182 Tage, danach neue Abfrage</td></tr>
+        <tr><td><code>l8s-dashboard-last-good-v1</code></td><td>Zuletzt geladene Projektkennzahlen, damit die Übersicht auch ohne Verbindung etwas anzeigt</td><td>§ 165 Abs. 3 TKG 2021, Art. 6 Abs. 1 lit. f DSGVO</td><td>bis zum nächsten Laden oder Löschen der Browserdaten</td></tr>
+      </table>
+      <p style="margin-top:10px;">Wir setzen <strong style="color:var(--ink)">keine HTTP-Cookies</strong>. Beide Einträge liegen im lokalen Speicher (localStorage) Ihres Browsers und werden nicht an uns übertragen. Sie können sie jederzeit über die Browser-Einstellungen löschen. Die Kategorien „Funktional“, „Statistik“ und „Marketing“ im Hinweis sind derzeit ohne Funktion: Es ist kein solches Werkzeug eingebunden.</p>
     </div>
 
     <div class="legal-card">
-      <h2>7. Minderjährige, Sicherheit, Änderungen</h2>
-      <p>Dieses Angebot richtet sich an ein allgemeines Publikum im schulischen Kontext; bewusst kein Profiling von Minderjährigen. Wir treffen angemessene technische Maßnahmen (HTTPS, minimale Daten, kein Third-Party-Tracking ohne Opt-in). Diese Erklärung wird bei Projektänderungen aktualisiert (Versionsstand im Consent-Record <code>l8s-consent-v1</code>, aktuell v1.0).</p>
-      <p style="margin-top:12px;"><button class="l8s-btn l8s-btn-secondary" type="button" onclick="window.L8SConsent && window.L8SConsent.openSettings()">🍪 Cookie-Einstellungen öffnen</button></p>
+      <h2>5. Projektübersicht (nur Seite „Übersicht“)</h2>
+      <p>Beim Öffnen der Übersicht ruft Ihr Browser aktuelle Projektkennzahlen ab. Dabei erhalten die folgenden Server Ihre IP-Adresse und technische Anfragedaten:</p>
+      <ul>
+        <li><strong style="color:var(--ink)">Dashboard-Schnittstelle auf Cloudflare Workers</strong> (<code>l8sec-dashboard-api.l8sec.workers.dev</code>): liefert zusammengefasste Aufgaben-Kennzahlen aus unserem Jira-Projekt (Atlassian). Zugangsdaten zu Jira liegen nur im Worker, nicht im Browser. Anbieter: Cloudflare, Inc., 101 Townsend Street, San Francisco, CA 94107, USA; zertifiziert unter dem EU-US Data Privacy Framework (Art. 45 DSGVO).</li>
+        <li><strong style="color:var(--ink)">AZBB</strong> (<code>azbb.duckdns.org</code>): vom Projektteam selbst betriebene Arbeitszeit-Erfassung auf einem Server der Oracle Cloud Infrastructure in der EU. Abgerufen werden nur die Summen der Projektstunden je Teammitglied.</li>
+      </ul>
+      <p>Rechtsgrundlage: Art. 6 Abs. 1 lit. f DSGVO (Darstellung des Projektfortschritts, die Sie durch Aufruf der Seite anfordern). Wir werten diese Anfragen nicht aus. Die angezeigten Namen und Stunden betreffen nur das Projektteam.</p>
+    </div>
+
+    <div class="legal-card">
+      <h2>6. Kontakt per E-Mail</h2>
+      <p>Schreiben Sie uns an <a href="mailto:contact@layer8security.live">contact@layer8security.live</a> oder an eine persönliche Adresse <code>vorname.nachname@layer8security.live</code>, verarbeiten wir Ihre Adresse, den Inhalt und die Metadaten, um Ihr Anliegen zu beantworten. Rechtsgrundlage: Art. 6 Abs. 1 lit. b DSGVO (bei Anfragen zu einer Zusammenarbeit) bzw. lit. f (sonstige Anfragen). Wir speichern die Nachricht, bis das Anliegen erledigt ist, längstens bis zum Projektende, sofern keine Aufbewahrungspflicht besteht.</p>
+      <p style="margin-top:10px;">Technisch werden Mails an <code>@layer8security.live</code> vom Domain-Anbieter Name.com, Inc. (Denver, USA; über die Muttergesellschaft Identity Digital Inc. unter dem EU-US Data Privacy Framework zertifiziert) an die Schul-Postfächer der HTL Wien 3 Rennweg weitergeleitet, die über Microsoft 365 betrieben werden. Bitte senden Sie uns keine sensiblen Daten.</p>
+    </div>
+
+    <div class="legal-card">
+      <h2>7. Ihre Rechte</h2>
+      <p>Sie haben das Recht auf Auskunft (Art. 15 DSGVO), Berichtigung (Art. 16), Löschung (Art. 17), Einschränkung der Verarbeitung (Art. 18), Datenübertragbarkeit (Art. 20) und Widerspruch, insbesondere gegen Verarbeitungen nach Art. 6 Abs. 1 lit. f (Art. 21). Eine Einwilligung können Sie jederzeit mit Wirkung für die Zukunft widerrufen (Art. 7 Abs. 3). Schreiben Sie dazu an <a href="mailto:contact@layer8security.live">contact@layer8security.live</a>.</p>
+      <p style="margin-top:10px;">Außerdem können Sie sich bei der Aufsichtsbehörde beschweren: Österreichische Datenschutzbehörde, Barichgasse 40–42, 1030 Wien, <a href="mailto:dsb@dsb.gv.at">dsb@dsb.gv.at</a>, <a href="https://www.dsb.gv.at" target="_blank" rel="noopener">dsb.gv.at</a>.</p>
+    </div>
+
+    <div class="legal-card">
+      <h2>8. Änderungen</h2>
+      <p>Wir passen diese Erklärung an, wenn sich die Website ändert. Es gilt die jeweils hier veröffentlichte Fassung.</p>
+      <p style="margin-top:12px;"><button class="l8s-btn l8s-btn-secondary" type="button" onclick="window.L8SConsent && window.L8SConsent.openSettings()">Datenschutz-Einstellungen öffnen</button></p>
     </div>
   </div>
 </div>

@@ -44,7 +44,7 @@
 
   function apply(choices) {
     // Steuerung optionaler Funktionen — derzeit bewusst tracking-frei:
-    // functional=false  -> keine UI-Präferenzen speichern, System-Fonts bevorzugen
+    // functional=false  -> keine UI-Präferenzen speichern (Schriften sind lokal gehostet)
     // statistics=false  -> l8sTrack() bleibt No-Op (kein Analytics aktiv)
     // marketing=false   -> keine Marketing-Skripte (keine aktiv)
     document.body.dataset.consentFunctional = choices.functional ? '1' : '0';
@@ -112,7 +112,7 @@
         <div class="l8s-cat">
           <div><div class="l8s-cat-name">Funktional / Präferenzen</div><div class="l8s-cat-legal">Einwilligung · Art. 6 Abs. 1 lit. a</div></div>
           <div class="l8s-cat-status"><label class="l8s-switch"><input type="checkbox" data-cat="functional" aria-label="Funktionale Speicherung"><span class="l8s-slider"></span></label></div>
-          <div class="l8s-cat-desc">Merken von UI-Einstellungen (z.&nbsp;B. ein-/ausgeklappte Tabellen) + externe Schriftarten (Google Fonts, IP-Übertragung an Google). Aus = System-Fonts.</div>
+          <div class="l8s-cat-desc">Derzeit <strong>nicht genutzt</strong>. Reserviert für das Merken von UI-Einstellungen (z.&nbsp;B. ein-/ausgeklappte Tabellen). Schriften liegen auf unserem eigenen Webspace.</div>
         </div>
         <div class="l8s-cat">
           <div><div class="l8s-cat-name">Statistik</div><div class="l8s-cat-legal">Einwilligung · Art. 6 Abs. 1 lit. a</div></div>

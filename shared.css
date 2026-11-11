@@ -1,5 +1,5 @@
 /* ─── L8S SHARED STYLES ─── */
-@import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@300;400;500;600;700&family=Outfit:wght@200;300;400;500;600;700;800&display=swap');
+@import url('assets/fonts.css');
 
 :root {
   --bg:           #0a0a0a;
