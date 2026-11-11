@@ -5,7 +5,6 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>L8S — Datenschutz</title>
 <link rel="stylesheet" href="shared.css">
-<link rel="stylesheet" href="cookies.css">
 <style>
   .page { min-height: 100vh; }
   .hero-section { min-height: 32vh; display:flex; align-items:flex-end; padding:0 60px 40px;
@@ -69,7 +68,7 @@
         <li>Keine Cookies, kein Tracking, keine Analyse- oder Werbedienste.</li>
         <li>Schriften und alle Inhalte liegen auf unserem eigenen Webspace; beim Aufruf werden keine Daten an Google oder andere Dritte übertragen.</li>
         <li>Nur die Seite <a href="uebersicht.html">Übersicht</a> lädt Projektkennzahlen von zwei Diensten nach (Abschnitt 5).</li>
-        <li>Was im Browser gespeichert wird, bleibt in Ihrem Browser (Abschnitt 4).</li>
+        <li>Im Browser wird nur ein technisch notwendiger Zwischenspeicher der Übersicht abgelegt (Abschnitt 4).</li>
       </ul>
     </div>
 
@@ -82,10 +81,9 @@
       <h2>4. Speicherung im Browser</h2>
       <table>
         <tr><th>Eintrag</th><th>Zweck</th><th>Rechtsgrundlage</th><th>Dauer</th></tr>
-        <tr><td><code>l8s-consent-v1</code></td><td>Ihre Auswahl im Datenschutz-Hinweis (Version, Zeitpunkt, Kategorien, Do-Not-Track-Einstellung, gekürzte Browser-Kennung), damit der Hinweis nicht bei jedem Aufruf erscheint</td><td>§ 165 Abs. 3 TKG 2021 (unbedingt erforderlich), Art. 6 Abs. 1 lit. c und f DSGVO</td><td>182 Tage, danach neue Abfrage</td></tr>
-        <tr><td><code>l8s-dashboard-last-good-v1</code></td><td>Zuletzt geladene Projektkennzahlen, damit die Übersicht auch ohne Verbindung etwas anzeigt</td><td>§ 165 Abs. 3 TKG 2021, Art. 6 Abs. 1 lit. f DSGVO</td><td>bis zum nächsten Laden oder Löschen der Browserdaten</td></tr>
+        <tr><td><code>l8s-dashboard-last-good-v1</code></td><td>Zuletzt geladene Projektkennzahlen, damit die Übersicht auch ohne Verbindung etwas anzeigt</td><td>§ 165 Abs. 3 TKG 2021 (unbedingt erforderlich), Art. 6 Abs. 1 lit. f DSGVO</td><td>bis zum nächsten Laden oder Löschen der Browserdaten</td></tr>
       </table>
-      <p style="margin-top:10px;">Wir setzen <strong style="color:var(--ink)">keine HTTP-Cookies</strong>. Beide Einträge liegen im lokalen Speicher (localStorage) Ihres Browsers und werden nicht an uns übertragen. Sie können sie jederzeit über die Browser-Einstellungen löschen. Die Kategorien „Funktional“, „Statistik“ und „Marketing“ im Hinweis sind derzeit ohne Funktion: Es ist kein solches Werkzeug eingebunden.</p>
+      <p style="margin-top:10px;">Wir setzen <strong style="color:var(--ink)">keine Cookies</strong>. Der Eintrag liegt im lokalen Speicher (localStorage) Ihres Browsers, wird nur auf der Seite „Übersicht“ angelegt und nicht an uns übertragen. Sie können ihn jederzeit über die Browser-Einstellungen löschen. Weil nur technisch notwendige Daten gespeichert werden, ist keine Einwilligung nötig und es gibt kein Cookie-Banner.</p>
     </div>
 
     <div class="legal-card">
@@ -113,7 +111,6 @@
     <div class="legal-card">
       <h2>8. Änderungen</h2>
       <p>Wir passen diese Erklärung an, wenn sich die Website ändert. Es gilt die jeweils hier veröffentlichte Fassung.</p>
-      <p style="margin-top:12px;"><button class="l8s-btn l8s-btn-secondary" type="button" onclick="window.L8SConsent && window.L8SConsent.openSettings()">Datenschutz-Einstellungen öffnen</button></p>
     </div>
   </div>
 </div>
@@ -122,8 +119,6 @@
   <span>© 2026 Layer 8 Security · HTL Wien 3 Rennweg · 5CN</span>
   <span class="sep">·</span><a href="datenschutz.html">Datenschutz</a>
   <span class="sep">·</span><a href="impressum.html">Impressum</a>
-  <span class="sep">·</span><button type="button" id="l8s-footer-cookies">Cookie-Einstellungen</button>
 </footer>
-<script src="cookies.js"></script>
 </body>
 </html>
